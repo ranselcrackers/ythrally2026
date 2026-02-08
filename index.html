@@ -1,402 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YTH Rally 2026</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            background: #f5f5f5;
-            font-family: 'Courier New', monospace;
-            color: #000000;
-            line-height: 1.6;
-        }
-
-        /* Container */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        /* Navigation Bar */
-        .navbar {
-            background: #ffffff;
-            padding: 20px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 1px solid #e0e0e0;
-        }
-
-        .logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 24px;
-            font-weight: 700;
-            letter-spacing: 1px;
-            color: #000000;
-            text-decoration: none;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 40px;
-            list-style: none;
-        }
-
-        .nav-links a {
-            font-family: 'Courier New', monospace;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #000000;
-            text-decoration: none;
-            transition: opacity 0.3s ease;
-        }
-
-        .nav-links a:hover {
-            opacity: 0.6;
-        }
-
-        /* Mobile Menu Toggle */
-        .menu-toggle {
-            display: none;
-            flex-direction: column;
-            gap: 4px;
-            cursor: pointer;
-        }
-
-        .menu-toggle span {
-            width: 25px;
-            height: 2px;
-            background: #000000;
-            transition: all 0.3s ease;
-        }
-
-        /* Hero Section */
-        .hero {
-            background: #000000;
-            color: #ffffff;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 60px 20px;
-        }
-
-        .hero-content {
-            max-width: 800px;
-        }
-
-        .hero h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 96px;
-            letter-spacing: -2px;
-            margin-bottom: 30px;
-            font-weight: 400;
-            line-height: 0.95;
-        }
-
-        .hero-date {
-            font-family: 'Playfair Display', serif;
-            font-size: 24px;
-            margin: 40px 0;
-            letter-spacing: 2px;
-            font-weight: 400;
-        }
-
-        .hero-info {
-            font-family: 'Playfair Display', serif;
-            font-size: 18px;
-            margin: 30px 0 50px 0;
-            letter-spacing: 1px;
-        }
-
-        /* Button */
-        .btn {
-            background: #ffffff;
-            color: #000000;
-            border: none;
-            padding: 20px 60px;
-            font-size: 14px;
-            font-family: 'Courier New', monospace;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            display: inline-block;
-        }
-
-        .btn:hover {
-            background: #f5f5f5;
-            transform: scale(1.05);
-        }
-
-        /* Theme Section */
-        .theme-section {
-            height: 400px;
-            background: #ffffff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Playfair Display', serif;
-            font-size: 14px;
-            letter-spacing: 2px;
-            color: #999999;
-        }
-
-        /* Form Section */
-        .form-section {
-            background: #ffffff;
-            padding: 100px 20px;
-        }
-
-        .form-container {
-            max-width: 700px;
-            margin: 0 auto;
-        }
-
-        .section-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 48px;
-            margin-bottom: 60px;
-            font-weight: 400;
-            letter-spacing: -1px;
-        }
-
-        .form-group {
-            margin-bottom: 40px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 12px;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-weight: bold;
-        }
-
-        input[type="text"],
-        input[type="number"],
-        input[type="tel"],
-        select,
-        textarea {
-            width: 100%;
-            padding: 16px 0;
-            border: none;
-            border-bottom: 2px solid #000000;
-            background: transparent;
-            font-family: 'Courier New', monospace;
-            font-size: 16px;
-            transition: border-color 0.3s ease;
-        }
-
-        input[type="text"]:focus,
-        input[type="number"]:focus,
-        input[type="tel"]:focus,
-        select:focus,
-        textarea:focus {
-            outline: none;
-            border-bottom: 2px solid #666666;
-        }
-
-        textarea {
-            resize: vertical;
-            min-height: 80px;
-        }
-
-        /* Radio and Checkbox */
-        .radio-group {
-            display: flex;
-            gap: 40px;
-            margin-top: 20px;
-        }
-
-        .radio-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-        }
-
-        input[type="radio"] {
-            width: 24px;
-            height: 24px;
-            cursor: pointer;
-            accent-color: #000000;
-        }
-
-        .radio-item label {
-            margin: 0;
-            text-transform: none;
-            letter-spacing: 0;
-            font-weight: normal;
-            cursor: pointer;
-        }
-
-        /* Hidden sections */
-        .hidden {
-            display: none;
-        }
-
-        /* Grid for form fields */
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-        }
-
-        /* Divider */
-        .divider {
-            height: 1px;
-            background: #e0e0e0;
-            margin: 60px 0;
-        }
-
-        /* Submit button container */
-        .submit-container {
-            margin-top: 80px;
-        }
-
-        .submit-container .btn {
-            width: 100%;
-            padding: 24px;
-            background: #000000;
-            color: #ffffff;
-        }
-
-        .submit-container .btn:hover {
-            background: #333333;
-        }
-
-        /* Success message */
-        .success-message {
-            background: #000000;
-            color: #ffffff;
-            padding: 30px;
-            text-align: center;
-            margin-top: 40px;
-            display: none;
-            font-size: 14px;
-            letter-spacing: 2px;
-        }
-
-        /* Footer */
-        .footer {
-            background: #000000;
-            color: #ffffff;
-            text-align: center;
-            padding: 40px 20px;
-            font-family: 'Playfair Display', serif;
-            font-size: 11px;
-            letter-spacing: 2px;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 56px;
-            }
-
-            .form-row {
-                grid-template-columns: 1fr;
-                gap: 40px;
-            }
-
-            .section-title {
-                font-size: 36px;
-            }
-
-            .radio-group {
-                flex-direction: column;
-                gap: 20px;
-            }
-
-            .navbar {
-                padding: 20px;
-            }
-
-            .menu-toggle {
-                display: flex;
-            }
-
-            .nav-links {
-                display: none;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                right: 0;
-                background: #ffffff;
-                flex-direction: column;
-                gap: 0;
-                padding: 20px;
-                border-bottom: 1px solid #e0e0e0;
-            }
-
-            .nav-links.active {
-                display: flex;
-            }
-
-            .nav-links a {
-                padding: 15px 0;
-                border-bottom: 1px solid #f0f0f0;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .hero h1 {
-                font-size: 42px;
-            }
-
-            .hero-date {
-                font-size: 18px;
-            }
-
-            .btn {
-                padding: 18px 40px;
-                font-size: 12px;
-            }
-        }
-
-        /* Smooth scroll */
-        html {
-            scroll-behavior: smooth;
-        }
-
-        /* Select styling */
-        select {
-            cursor: pointer;
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='black' stroke-width='2'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 0 center;
-            padding-right: 30px;
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="CSS/style.css">
 </head>
+
 <body>
-    <!-- Navigation Bar -->
+    <!-- Navigation -->
     <nav class="navbar">
-        <a href="#" class="logo">YTH Rally</a>
+        <a href="#" class="logo">YTH RALLY</a>
         <ul class="nav-links" id="navLinks">
             <li><a href="#home">Home</a></li>
             <li><a href="#about">About</a></li>
             <li><a href="#registration">Register</a></li>
-            <li><a href="#contact">Contact</a></li>
         </ul>
         <div class="menu-toggle" onclick="toggleMenu()">
             <span></span>
@@ -409,23 +32,56 @@
     <section class="hero" id="home">
         <div class="hero-content">
             <h1>YTH Rally 2026</h1>
-            <div class="hero-date">APRIL 29 – MAY 01, 2026</div>
-            <div class="hero-info">AGES 13–21</div>
+            <p class="hero-date">April 29 - May 01, 2026</p>
+            <p class="hero-info">Ages 13–21 • Youth Conference</p>
             <button class="btn" onclick="scrollToRegistration()">Register Now</button>
         </div>
     </section>
 
     <!-- Theme Section -->
     <section class="theme-section">
-        [ CONFERENCE THEME IMAGE ]
+        THEME TO BE ANNOUNCED
+    </section>
+
+    <!-- Event Description Section -->
+    <section class="event-description" id="about">
+        <div class="description-container">
+            <h2 class="description-title">About the Event</h2>
+
+            <p class="description-content">
+                YTH Rally 2026 is a transformative youth gathering designed to inspire, unite, and empower young people
+                aged 13-21. This event brings together youth from different churches and communities for a weekend of
+                worship, fellowship, and spiritual growth.
+            </p>
+
+            <p class="description-content">
+                Throughout the rally, participants will engage in powerful worship sessions, hear inspiring messages
+                from dynamic speakers, participate in interactive workshops, and build lasting friendships with fellow
+                young believers. This is more than just an event—it's a movement where young hearts are ignited with
+                passion for faith and purpose.
+            </p>
+
+            <div class="description-highlight">
+                <p class="highlight-text">
+                    "Join us for an unforgettable experience that will challenge you to grow deeper in your faith,
+                    discover your God-given purpose, and connect with a community that will support you on your
+                    spiritual journey."
+                </p>
+            </div>
+
+            <p class="description-content" style="margin-top: 40px;">
+                Whether this is your first time attending or you're a returning participant, YTH Rally 2026 promises
+                to be an experience that will impact your life. Don't miss this opportunity to be part of something
+                extraordinary.
+            </p>
+        </div>
     </section>
 
     <!-- Registration Form -->
     <section class="form-section" id="registration">
         <div class="form-container">
             <h2 class="section-title">Registration</h2>
-            
-            <form id="registrationForm" onsubmit="handleSubmit(event)">
+            <form onsubmit="handleSubmit(event)">
                 <!-- Basic Information -->
                 <div class="form-group">
                     <label for="name">Full Name</label>
@@ -466,11 +122,13 @@
                     <label>First time attending?</label>
                     <div class="radio-group">
                         <div class="radio-item">
-                            <input type="radio" id="firstTimeYes" name="firstTime" value="yes" onchange="handleFirstTime()">
+                            <input type="radio" id="firstTimeYes" name="firstTime" value="yes"
+                                onchange="handleFirstTime()">
                             <label for="firstTimeYes">Yes</label>
                         </div>
                         <div class="radio-item">
-                            <input type="radio" id="firstTimeNo" name="firstTime" value="no" onchange="handleFirstTime()">
+                            <input type="radio" id="firstTimeNo" name="firstTime" value="no"
+                                onchange="handleFirstTime()">
                             <label for="firstTimeNo">No</label>
                         </div>
                     </div>
@@ -494,11 +152,13 @@
                     <label>Are you part of a church?</label>
                     <div class="radio-group">
                         <div class="radio-item">
-                            <input type="radio" id="partOfChurchYes" name="partOfChurch" value="yes" onchange="handleChurchMembership()">
+                            <input type="radio" id="partOfChurchYes" name="partOfChurch" value="yes"
+                                onchange="handleChurchMembership()">
                             <label for="partOfChurchYes">Yes</label>
                         </div>
                         <div class="radio-item">
-                            <input type="radio" id="partOfChurchNo" name="partOfChurch" value="no" onchange="handleChurchMembership()">
+                            <input type="radio" id="partOfChurchNo" name="partOfChurch" value="no"
+                                onchange="handleChurchMembership()">
                             <label for="partOfChurchNo">No</label>
                         </div>
                     </div>
@@ -539,101 +199,7 @@
         YTH RALLY 2026 — SYSTEM 1.0
     </footer>
 
-    <script>
-        function scrollToRegistration() {
-            document.getElementById('registration').scrollIntoView({ 
-                behavior: 'smooth',
-                block: 'start'
-            });
-        }
-
-        function toggleMenu() {
-            const navLinks = document.getElementById('navLinks');
-            navLinks.classList.toggle('active');
-        }
-
-        function handleFirstTime() {
-            const firstTimeYes = document.getElementById('firstTimeYes').checked;
-            const firstTimeNo = document.getElementById('firstTimeNo').checked;
-            
-            const referralSection = document.getElementById('referralSection');
-            const churchSection = document.getElementById('churchSection');
-            const whichChurchSection = document.getElementById('whichChurchSection');
-            const otherChurchSection = document.getElementById('otherChurchSection');
-            
-            // Reset all sections
-            churchSection.classList.add('hidden');
-            whichChurchSection.classList.add('hidden');
-            otherChurchSection.classList.add('hidden');
-            
-            if (firstTimeYes) {
-                referralSection.classList.remove('hidden');
-                document.getElementById('referral').required = true;
-            } else if (firstTimeNo) {
-                referralSection.classList.add('hidden');
-                churchSection.classList.remove('hidden');
-                document.getElementById('referral').required = false;
-            }
-        }
-
-        function handleChurchMembership() {
-            const partOfChurchYes = document.getElementById('partOfChurchYes').checked;
-            const whichChurchSection = document.getElementById('whichChurchSection');
-            const otherChurchSection = document.getElementById('otherChurchSection');
-            
-            otherChurchSection.classList.add('hidden');
-            
-            if (partOfChurchYes) {
-                whichChurchSection.classList.remove('hidden');
-                document.getElementById('whichChurch').required = true;
-            } else {
-                whichChurchSection.classList.add('hidden');
-                document.getElementById('whichChurch').required = false;
-            }
-        }
-
-        function handleChurchSelection() {
-            const whichChurch = document.getElementById('whichChurch').value;
-            const otherChurchSection = document.getElementById('otherChurchSection');
-            
-            if (whichChurch === 'Other') {
-                otherChurchSection.classList.remove('hidden');
-                document.getElementById('otherChurch').required = true;
-            } else {
-                otherChurchSection.classList.add('hidden');
-                document.getElementById('otherChurch').required = false;
-            }
-        }
-
-        function handleSubmit(event) {
-            event.preventDefault();
-            
-            // Get form data
-            const formData = new FormData(event.target);
-            const data = Object.fromEntries(formData.entries());
-            
-            // Log the data (in a real application, this would be sent to a server)
-            console.log('Registration Data:', data);
-            
-            // Show success message
-            const successMessage = document.getElementById('successMessage');
-            successMessage.style.display = 'block';
-            
-            // Scroll to success message
-            successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            
-            // Reset form after 3 seconds
-            setTimeout(() => {
-                event.target.reset();
-                successMessage.style.display = 'none';
-                
-                // Reset all conditional sections
-                document.getElementById('referralSection').classList.add('hidden');
-                document.getElementById('churchSection').classList.add('hidden');
-                document.getElementById('whichChurchSection').classList.add('hidden');
-                document.getElementById('otherChurchSection').classList.add('hidden');
-            }, 3000);
-        }
-    </script>
+    <script src="js/main.js"></script>
 </body>
+
 </html>
