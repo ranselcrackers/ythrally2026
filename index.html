@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YTH Rally 2026</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f5f5f5;
+            font-family: 'Courier New', monospace;
+            color: #000000;
+            line-height: 1.6;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: #000000;
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .hero-content {
+            max-width: 800px;
+        }
+
+        .hero h1 {
+            font-size: 96px;
+            letter-spacing: -2px;
+            margin-bottom: 30px;
+            font-weight: bold;
+            line-height: 0.95;
+        }
+
+        .hero-date {
+            font-size: 24px;
+            margin: 40px 0;
+            letter-spacing: 2px;
+        }
+
+        .hero-info {
+            font-size: 18px;
+            margin: 30px 0 50px 0;
+            letter-spacing: 1px;
+        }
+
+        /* Button */
+        .btn {
+            background: #ffffff;
+            color: #000000;
+            border: none;
+            padding: 20px 60px;
+            font-size: 14px;
+            font-family: 'Courier New', monospace;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background: #f5f5f5;
+            transform: scale(1.05);
+        }
+
+        /* Theme Section */
+        .theme-section {
+            height: 400px;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            letter-spacing: 2px;
+            color: #999999;
+        }
+
+        /* Form Section */
+        .form-section {
+            background: #ffffff;
+            padding: 100px 20px;
+        }
+
+        .form-container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 48px;
+            margin-bottom: 60px;
+            font-weight: bold;
+            letter-spacing: -1px;
+        }
+
+        .form-group {
+            margin-bottom: 40px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 12px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="tel"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 16px 0;
+            border: none;
+            border-bottom: 2px solid #000000;
+            background: transparent;
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        input[type="tel"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-bottom: 2px solid #666666;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        /* Radio and Checkbox */
+        .radio-group {
+            display: flex;
+            gap: 40px;
+            margin-top: 20px;
+        }
+
+        .radio-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+        }
+
+        input[type="radio"] {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            accent-color: #000000;
+        }
+
+        .radio-item label {
+            margin: 0;
+            text-transform: none;
+            letter-spacing: 0;
+            font-weight: normal;
+            cursor: pointer;
+        }
+
+        /* Hidden sections */
+        .hidden {
+            display: none;
+        }
+
+        /* Grid for form fields */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        /* Divider */
+        .divider {
+            height: 1px;
+            background: #e0e0e0;
+            margin: 60px 0;
+        }
+
+        /* Submit button container */
+        .submit-container {
+            margin-top: 80px;
+        }
+
+        .submit-container .btn {
+            width: 100%;
+            padding: 24px;
+            background: #000000;
+            color: #ffffff;
+        }
+
+        .submit-container .btn:hover {
+            background: #333333;
+        }
+
+        /* Success message */
+        .success-message {
+            background: #000000;
+            color: #ffffff;
+            padding: 30px;
+            text-align: center;
+            margin-top: 40px;
+            display: none;
+            font-size: 14px;
+            letter-spacing: 2px;
+        }
+
+        /* Footer */
+        .footer {
+            background: #000000;
+            color: #ffffff;
+            text-align: center;
+            padding: 40px 20px;
+            font-size: 11px;
+            letter-spacing: 2px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 56px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .section-title {
+                font-size: 36px;
+            }
+
+            .radio-group {
+                flex-direction: column;
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 42px;
+            }
+
+            .hero-date {
+                font-size: 18px;
+            }
+
+            .btn {
+                padding: 18px 40px;
+                font-size: 12px;
+            }
+        }
+
+        /* Smooth scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Select styling */
+        select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='black' stroke-width='2'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0 center;
+            padding-right: 30px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>YTH<br>RALLY<br>2026</h1>
+            <div class="hero-date">APRIL 29 – MAY 01, 2026</div>
+            <div class="hero-info">AGES 13–21</div>
+            <button class="btn" onclick="scrollToRegistration()">Register Now</button>
+        </div>
+    </section>
+
+    <!-- Theme Section -->
+    <section class="theme-section">
+        [ CONFERENCE THEME IMAGE ]
+    </section>
+
+    <!-- Registration Form -->
+    <section class="form-section" id="registration">
+        <div class="form-container">
+            <h2 class="section-title">Registration</h2>
+            
+            <form id="registrationForm" onsubmit="handleSubmit(event)">
+                <!-- Basic Information -->
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="address">Address</label>
+                    <textarea id="address" name="address" rows="2" required></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="age">Age</label>
+                        <input type="number" id="age" name="age" min="13" max="21" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sex">Sex</label>
+                        <select id="sex" name="sex" required>
+                            <option value="">Select</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="contact">Contact Number</label>
+                    <input type="tel" id="contact" name="contact" required>
+                </div>
+
+                <div class="divider"></div>
+
+                <!-- Questionnaire Section -->
+                <!-- First Time Question -->
+                <div class="form-group">
+                    <label>First time attending?</label>
+                    <div class="radio-group">
+                        <div class="radio-item">
+                            <input type="radio" id="firstTimeYes" name="firstTime" value="yes" onchange="handleFirstTime()">
+                            <label for="firstTimeYes">Yes</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="firstTimeNo" name="firstTime" value="no" onchange="handleFirstTime()">
+                            <label for="firstTimeNo">No</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Referral Section (shown if first time) -->
+                <div id="referralSection" class="form-group hidden">
+                    <label for="referral">How did you hear about us?</label>
+                    <select id="referral" name="referral">
+                        <option value="">Select</option>
+                        <option value="Friend">Friend</option>
+                        <option value="Social Media">Social Media</option>
+                        <option value="Church">Church</option>
+                        <option value="Family">Family</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <!-- Church Section (shown if not first time) -->
+                <div id="churchSection" class="form-group hidden">
+                    <label>Are you part of a church?</label>
+                    <div class="radio-group">
+                        <div class="radio-item">
+                            <input type="radio" id="partOfChurchYes" name="partOfChurch" value="yes" onchange="handleChurchMembership()">
+                            <label for="partOfChurchYes">Yes</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="partOfChurchNo" name="partOfChurch" value="no" onchange="handleChurchMembership()">
+                            <label for="partOfChurchNo">No</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Which Church Section -->
+                <div id="whichChurchSection" class="form-group hidden">
+                    <label for="whichChurch">What church?</label>
+                    <select id="whichChurch" name="whichChurch" onchange="handleChurchSelection()">
+                        <option value="">Select</option>
+                        <option value="New Life Sta Rosa">New Life Sta Rosa</option>
+                        <option value="Outreach Church">Outreach Church</option>
+                        <option value="Other">Other Church</option>
+                    </select>
+                </div>
+
+                <!-- Other Church Input -->
+                <div id="otherChurchSection" class="form-group hidden">
+                    <label for="otherChurch">Please specify your church</label>
+                    <input type="text" id="otherChurch" name="otherChurch">
+                </div>
+
+                <!-- Submit Button -->
+                <div class="submit-container">
+                    <button type="submit" class="btn">Submit Application</button>
+                </div>
+
+                <!-- Success Message -->
+                <div id="successMessage" class="success-message">
+                    APPLICATION SUBMITTED SUCCESSFULLY
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        YTH RALLY 2026 — SYSTEM 1.0
+    </footer>
+
+    <script>
+        function scrollToRegistration() {
+            document.getElementById('registration').scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+
+        function handleFirstTime() {
+            const firstTimeYes = document.getElementById('firstTimeYes').checked;
+            const firstTimeNo = document.getElementById('firstTimeNo').checked;
+            
+            const referralSection = document.getElementById('referralSection');
+            const churchSection = document.getElementById('churchSection');
+            const whichChurchSection = document.getElementById('whichChurchSection');
+            const otherChurchSection = document.getElementById('otherChurchSection');
+            
+            // Reset all sections
+            churchSection.classList.add('hidden');
+            whichChurchSection.classList.add('hidden');
+            otherChurchSection.classList.add('hidden');
+            
+            if (firstTimeYes) {
+                referralSection.classList.remove('hidden');
+                document.getElementById('referral').required = true;
+            } else if (firstTimeNo) {
+                referralSection.classList.add('hidden');
+                churchSection.classList.remove('hidden');
+                document.getElementById('referral').required = false;
+            }
+        }
+
+        function handleChurchMembership() {
+            const partOfChurchYes = document.getElementById('partOfChurchYes').checked;
+            const whichChurchSection = document.getElementById('whichChurchSection');
+            const otherChurchSection = document.getElementById('otherChurchSection');
+            
+            otherChurchSection.classList.add('hidden');
+            
+            if (partOfChurchYes) {
+                whichChurchSection.classList.remove('hidden');
+                document.getElementById('whichChurch').required = true;
+            } else {
+                whichChurchSection.classList.add('hidden');
+                document.getElementById('whichChurch').required = false;
+            }
+        }
+
+        function handleChurchSelection() {
+            const whichChurch = document.getElementById('whichChurch').value;
+            const otherChurchSection = document.getElementById('otherChurchSection');
+            
+            if (whichChurch === 'Other') {
+                otherChurchSection.classList.remove('hidden');
+                document.getElementById('otherChurch').required = true;
+            } else {
+                otherChurchSection.classList.add('hidden');
+                document.getElementById('otherChurch').required = false;
+            }
+        }
+
+        function handleSubmit(event) {
+            event.preventDefault();
+            
+            // Get form data
+            const formData = new FormData(event.target);
+            const data = Object.fromEntries(formData.entries());
+            
+            // Log the data (in a real application, this would be sent to a server)
+            console.log('Registration Data:', data);
+            
+            // Show success message
+            const successMessage = document.getElementById('successMessage');
+            successMessage.style.display = 'block';
+            
+            // Scroll to success message
+            successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            // Reset form after 3 seconds
+            setTimeout(() => {
+                event.target.reset();
+                successMessage.style.display = 'none';
+                
+                // Reset all conditional sections
+                document.getElementById('referralSection').classList.add('hidden');
+                document.getElementById('churchSection').classList.add('hidden');
+                document.getElementById('whichChurchSection').classList.add('hidden');
+                document.getElementById('otherChurchSection').classList.add('hidden');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
