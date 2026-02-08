@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YTH Rally 2026</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -24,6 +27,63 @@
             margin: 0 auto;
         }
 
+        /* Navigation Bar */
+        .navbar {
+            background: #ffffff;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #000000;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #000000;
+            text-decoration: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.6;
+        }
+
+        /* Mobile Menu Toggle */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            cursor: pointer;
+        }
+
+        .menu-toggle span {
+            width: 25px;
+            height: 2px;
+            background: #000000;
+            transition: all 0.3s ease;
+        }
+
         /* Hero Section */
         .hero {
             background: #000000;
@@ -41,20 +101,24 @@
         }
 
         .hero h1 {
+            font-family: 'Playfair Display', serif;
             font-size: 96px;
             letter-spacing: -2px;
             margin-bottom: 30px;
-            font-weight: bold;
+            font-weight: 400;
             line-height: 0.95;
         }
 
         .hero-date {
+            font-family: 'Playfair Display', serif;
             font-size: 24px;
             margin: 40px 0;
             letter-spacing: 2px;
+            font-weight: 400;
         }
 
         .hero-info {
+            font-family: 'Playfair Display', serif;
             font-size: 18px;
             margin: 30px 0 50px 0;
             letter-spacing: 1px;
@@ -88,6 +152,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            font-family: 'Playfair Display', serif;
             font-size: 14px;
             letter-spacing: 2px;
             color: #999999;
@@ -105,9 +170,10 @@
         }
 
         .section-title {
+            font-family: 'Playfair Display', serif;
             font-size: 48px;
             margin-bottom: 60px;
-            font-weight: bold;
+            font-weight: 400;
             letter-spacing: -1px;
         }
 
@@ -235,6 +301,7 @@
             color: #ffffff;
             text-align: center;
             padding: 40px 20px;
+            font-family: 'Playfair Display', serif;
             font-size: 11px;
             letter-spacing: 2px;
         }
@@ -257,6 +324,36 @@
             .radio-group {
                 flex-direction: column;
                 gap: 20px;
+            }
+
+            .navbar {
+                padding: 20px;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: #ffffff;
+                flex-direction: column;
+                gap: 0;
+                padding: 20px;
+                border-bottom: 1px solid #e0e0e0;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links a {
+                padding: 15px 0;
+                border-bottom: 1px solid #f0f0f0;
             }
         }
 
@@ -292,8 +389,24 @@
     </style>
 </head>
 <body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <a href="#" class="logo">YTH Rally</a>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#registration">Register</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+        <div class="menu-toggle" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
     <!-- Hero Section -->
-    <section class="hero">
+    <section class="hero" id="home">
         <div class="hero-content">
             <h1>YTH Rally 2026</h1>
             <div class="hero-date">APRIL 29 – MAY 01, 2026</div>
@@ -432,6 +545,11 @@
                 behavior: 'smooth',
                 block: 'start'
             });
+        }
+
+        function toggleMenu() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.toggle('active');
         }
 
         function handleFirstTime() {
