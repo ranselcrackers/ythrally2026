@@ -196,9 +196,7 @@ body {
     border: none; display: block;
 }
 
-/* YouTube IFrame API — landscape 16:9 video, chrome clipped.
-   The iframe is oversized: 400px extra on all sides.
-   overflow:hidden on .hero-video-wrapper clips the YouTube UI chrome. */
+/* YouTube IFrame API — oversized and centered to clip UI chrome on all sides */
 #ytPlayer {
     position: absolute;
     inset: 0;
@@ -209,11 +207,12 @@ body {
 }
 #ytPlayer iframe {
     position: absolute;
-    /* Push 300px beyond each edge — clips title bar top + logo bottom */
-    top:  -300px;
-    left: -300px;
+    /* Center the oversized iframe so video fills all edges equally */
+    top:  50%;
+    left: 50%;
     width:  calc(100% + 600px);
     height: calc(100% + 600px);
+    transform: translate(-50%, -50%);
     border: none;
     display: block;
     pointer-events: none;
@@ -266,7 +265,7 @@ body {
         top: 0; left: 0; right: 0; bottom: 0;
     }
 
-    /* Player fills the 16:9 box, iframe oversized to clip YouTube chrome */
+    /* Player fills the 16:9 box, iframe centered and oversized to clip YouTube chrome */
     #ytPlayer {
         position: absolute;
         inset: 0;
@@ -277,10 +276,11 @@ body {
     }
     #ytPlayer iframe {
         position: absolute;
-        top:  -300px;
-        left: -300px;
+        top:  50%;
+        left: 50%;
         width:  calc(100% + 600px);
         height: calc(100% + 600px);
+        transform: translate(-50%, -50%);
         border: none;
         display: block;
         pointer-events: none;
