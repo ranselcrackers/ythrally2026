@@ -41,10 +41,10 @@ body {
     position: fixed;
     top: 0; left: 0; right: 0;
     z-index: 1000;
-    /* Blur transparency always active */
-    background: rgba(10,10,10,0.25);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
+    /* Fully transparent on load */
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
     transition: background .45s ease, box-shadow .45s ease, backdrop-filter .45s ease;
 }
 .navbar.scrolled {
