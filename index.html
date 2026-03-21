@@ -1,205 +1,1071 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YTH Rally 2026</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+    --black:  #0a0a0a;
+    --white:  #f4f2ee;
+    --border: #d8d4cc;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+    background: var(--white);
+    font-family: 'Courier New', monospace;
+    color: var(--black);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+
+/* ════════════════════════════
+   NAVBAR
+   ════════════════════════════ */
+.navbar {
+    padding: clamp(14px,1.6vw,26px) clamp(20px,3.6vw,60px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    transition: background .45s ease, box-shadow .45s ease;
+}
+.navbar.scrolled {
+    background: rgba(244,242,238,0.97);
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 2px 12px rgba(0,0,0,.07);
+}
+.logo { display: flex; align-items: center; text-decoration: none; flex-shrink: 0; }
+.logo-img {
+    height: clamp(40px,5vw,84px);
+    width: auto;
+    display: block;
+    filter: brightness(0) invert(1);
+    opacity: .92;
+    transition: filter .45s ease, opacity .45s ease;
+}
+.navbar.scrolled .logo-img { filter: brightness(0); opacity: .82; }
+
+.nav-links { display: flex; gap: clamp(20px,2.8vw,44px); list-style: none; }
+.nav-links a {
+    font-size: clamp(11px,0.9vw,14px);
+    text-transform: uppercase;
+    letter-spacing: .18em;
+    color: rgba(255,255,255,.88);
+    text-decoration: none;
+    transition: opacity .3s;
+    white-space: nowrap;
+}
+.navbar.scrolled .nav-links a { color: var(--black); }
+.nav-links a:hover { opacity: .5; }
+
+.menu-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    padding: 6px;
+    z-index: 1001;
+}
+.menu-toggle span {
+    width: clamp(22px,1.8vw,28px);
+    height: 2px;
+    background: #fff;
+    transition: background .45s, transform .3s, opacity .3s;
+    display: block;
+}
+.navbar.scrolled .menu-toggle span { background: var(--black); }
+.menu-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.menu-toggle.open span:nth-child(2) { opacity: 0; }
+.menu-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* ════════════════════════════════════════════════
+   HERO — DESKTOP (> 860px)
+   Left: text panel, flex: 1 (takes remaining width)
+   Right: video panel, EXACTLY 4:3 aspect ratio,
+          sized to match the hero height.
+   ════════════════════════════════════════════════ */
+.hero {
+    background: var(--black);
+    color: var(--white);
+    display: flex;
+    align-items: stretch;
+    overflow: hidden;
+    position: relative;
+    /* Height is driven by the 4:3 video panel.
+       The video panel width = hero height × (4/3).
+       We use min-height: 100vh as the floor. */
+    min-height: 100vh;
+}
+
+/* LEFT panel — narrower text column, aligned with navbar logo indent */
+.hero-left {
+    /* Fixed width that mirrors the navbar left padding so title aligns with logo */
+    flex: 0 0 clamp(280px, 36vw, 560px);
+    display: flex;
+    align-items: center;
+    /* Left padding matches navbar left padding exactly so headline aligns under logo */
+    padding: clamp(100px,10vw,160px)
+             clamp(24px,2.8vw,44px)   /* right — snug to video edge */
+             clamp(60px,6vw,100px)
+             clamp(20px,3.6vw,60px);  /* left = same as navbar left padding */
+    position: relative;
+    z-index: 2;
+}
+/* Subtle vertical rule at right edge where text meets video */
+.hero-left::after {
+    content: '';
+    position: absolute;
+    top: 10%; right: 0;
+    height: 80%; width: 1px;
+    background: rgba(255,255,255,.10);
+}
+
+.hero-content { max-width: 100%; width: 100%; }
+
+.hero-headline {
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: 400;
+    /* Large — fills the text column width */
+    font-size: clamp(52px,6.8vw,112px);
+    line-height: .88;
+    letter-spacing: -0.055em;
+    color: var(--white);
+    margin-bottom: clamp(28px,3vw,52px);
+    display: block;
+    transform: scaleX(.78);
+    transform-origin: left center;
+}
+
+.hero-date {
+    font-family: 'Courier New', monospace;
+    font-size: clamp(13px,1.05vw,16px);
+    letter-spacing: .28em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.82);
+    margin-bottom: clamp(36px,4vw,60px);
+    display: block;
+}
+
+.btn {
+    background: var(--white);
+    color: var(--black);
+    border: none;
+    padding: clamp(14px,1.2vw,20px) clamp(32px,3.6vw,60px);
+    font-size: clamp(11px,0.9vw,14px);
+    font-family: 'Courier New', monospace;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: .3em;
+    transition: opacity .3s, transform .2s;
+    display: inline-block;
+    touch-action: manipulation;
+}
+.btn:hover  { opacity: .80; transform: scale(1.03); }
+.btn:active { transform: scale(.97); }
+
+/* RIGHT panel — 4:3 dominant video panel.
+   Takes ALL remaining width after the text panel.
+   The video fills it with object-fit: cover. */
+.hero-right {
+    flex: 1 1 auto;          /* fills all leftover space */
+    position: relative;
+    overflow: hidden;
+    align-self: stretch;
+    /* No margin — flush against text panel */
+    margin-left: 0;
+}
+
+.hero-video-wrapper {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+}
+
+.hero-video {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center center;
+    border: none; display: block;
+}
+/* YouTube IFrame API player fills the wrapper */
+#ytPlayer {
+    position: absolute;
+    top: 50%; left: 50%;
+    /* 16:9 video scaled up to cover a 4:3 frame without letterboxing */
+    width: 177.78%;
+    height: 177.78%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+#ytPlayer iframe {
+    width: 100%; height: 100%;
+    border: none; display: block;
+}
+
+/* Desktop overlay: subtle left-edge blend into text panel */
+.video-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(
+        to right,
+        rgba(10,10,10,.60)  0%,
+        rgba(10,10,10,.15) 28%,
+        rgba(10,10,10,.03) 60%,
+        transparent        100%
+    );
+    pointer-events: none;
+}
+
+/* ════════════════════════════════════════════════
+   HERO — MOBILE / PORTRAIT (≤ 860px)
+   Video becomes fullscreen background.
+   Top of video = 100% opacity.
+   Text sits at bottom; black gradient fades UP
+   from the bottom so text is readable.
+   ════════════════════════════════════════════════ */
+@media (max-width: 860px) {
+    .hero {
+        flex-direction: column;
+        min-height: 100svh;
+        position: relative;
+    }
+
+    /* Video: absolute, fills entire hero */
+    .hero-right {
+        position: absolute;
+        inset: 0;
+        flex: none;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+    }
+    .hero-video-wrapper { position: absolute; inset: 0; }
+
+    /* object-position: top shows the most interesting part of 4:3 video */
+    .hero-video { object-position: center top; }
+
+    /* Overlay: TOP is completely transparent (video 100% visible),
+       BOTTOM fades to near-black where the headline sits */
+    .video-overlay {
+        background: linear-gradient(
+            to bottom,
+            rgba(10,10,10,0)    0%,     /* fully transparent — video shows */
+            rgba(10,10,10,0)    25%,    /* still clear */
+            rgba(10,10,10,.40)  52%,    /* gentle start of fade */
+            rgba(10,10,10,.82)  72%,    /* heavy fade — headline area */
+            rgba(10,10,10,.95)  88%,
+            rgba(10,10,10,.98)  100%
+        );
+    }
+
+    /* Text panel: on top, anchored to bottom of hero */
+    .hero-left {
+        position: relative;
+        z-index: 2;
+        flex: none;
+        width: 100%;
+        align-self: flex-end;
+        /* padding-top creates space so layout is tall enough for video bg */
+        padding: 56vh clamp(24px,6vw,48px) clamp(44px,8vw,72px);
+    }
+    .hero-left::after { display: none; }
+
+    .hero-headline { font-size: clamp(48px,11vw,80px); }
+    .hero-date {
+        font-size: clamp(13px,3.5vw,18px);
+        color: rgba(255,255,255,.90);
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-headline { font-size: clamp(40px,12.5vw,58px); }
+    .hero-left { padding-left: 22px; padding-right: 22px; }
+}
+
+/* ════════════════════════════
+   LOGO CRAWL
+   ════════════════════════════ */
+.logo-crawl-section {
+    background: var(--white);
+    padding: clamp(36px,4vw,60px) 0 clamp(28px,3vw,48px);
+    overflow: hidden;
+    border-bottom: 1px solid #e2dfd8;
+}
+.crawl-label {
+    text-align: center;
+    font-size: clamp(11px,0.85vw,14px);
+    letter-spacing: .42em;
+    text-transform: uppercase;
+    /* readable dark grey — not faint */
+    color: #555;
+    margin-bottom: clamp(24px,2.5vw,40px);
+}
+.crawl-viewport {
+    overflow: hidden;
+    position: relative;
+}
+.crawl-viewport::before,
+.crawl-viewport::after {
+    content: '';
+    position: absolute; top: 0; bottom: 0;
+    width: clamp(60px,8vw,130px);
+    z-index: 2; pointer-events: none;
+}
+.crawl-viewport::before { left:  0; background: linear-gradient(to right, var(--white), transparent); }
+.crawl-viewport::after  { right: 0; background: linear-gradient(to left,  var(--white), transparent); }
+
+.crawl-belt {
+    display: flex;
+    position: relative;
+    will-change: left;
+}
+.crawl-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(6px,0.6vw,12px);
+    padding: 0 clamp(32px,4.5vw,72px);
+    border-right: 1px solid #ddd;
+    flex-shrink: 0;
+}
+.crawl-item img {
+    height: clamp(44px,4.8vw,72px);
+    width: auto;
+    filter: brightness(0);
+    opacity: .38;
+    transition: opacity .4s;
+    user-select: none;
+    pointer-events: none;
+    display: block;
+}
+.crawl-item:hover img { opacity: .75; }
+.crawl-item span {
+    font-size: clamp(10px,0.75vw,13px);
+    letter-spacing: .28em;
+    text-transform: uppercase;
+    /* readable — not washed out */
+    color: #666;
+    user-select: none;
+}
+.crawl-item.crawl-current img  { opacity: 1; }
+.crawl-item.crawl-current span { color: var(--black); font-weight: bold; }
+
+/* ════════════════════════════
+   THEME
+   ════════════════════════════ */
+.theme-section {
+    min-height: clamp(140px,16vw,240px);
+    background: var(--white);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: clamp(13px,1.1vw,17px);
+    letter-spacing: .4em;
+    text-transform: uppercase;
+    /* solid readable dark — not grey */
+    color: #444;
+    border-top: 1px solid #e2dfd8;
+    padding: 40px 24px;
+    text-align: center;
+}
+
+/* ════════════════════════════
+   ABOUT
+   ════════════════════════════ */
+.event-description {
+    background: var(--black);
+    color: var(--white);
+    padding: clamp(64px,7.5vw,120px) clamp(24px,4vw,60px);
+}
+.description-container {
+    max-width: min(900px, 90%);
+    margin: 0 auto;
+}
+.description-title {
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: 400;
+    font-size: clamp(32px,3.8vw,58px);
+    letter-spacing: -0.04em;
+    transform: scaleX(.82);
+    transform-origin: left center;
+    display: block;
+    margin-bottom: clamp(32px,3.5vw,52px);
+    /* full white — no dimming */
+    color: var(--white);
+}
+.description-content {
+    font-size: clamp(14px,1.15vw,17px);
+    line-height: 1.9;
+    letter-spacing: .02em;
+    margin-bottom: clamp(20px,2vw,32px);
+    /* high contrast on dark bg */
+    color: rgba(244,242,238,.92);
+}
+.description-highlight {
+    border-left: 2px solid rgba(255,255,255,.40);
+    padding: clamp(24px,2.5vw,40px) clamp(20px,2.8vw,44px);
+    margin-top: clamp(32px,3.5vw,52px);
+}
+.highlight-text {
+    font-family: 'Times New Roman', Times, serif;
+    font-style: italic;
+    font-size: clamp(17px,1.6vw,24px);
+    line-height: 1.65;
+    /* clearly legible italic quote */
+    color: rgba(244,242,238,.88);
+    letter-spacing: -0.01em;
+}
+
+/* ════════════════════════════
+   FORM
+   ════════════════════════════ */
+.form-section {
+    background: var(--white);
+    padding: clamp(64px,7.5vw,120px) clamp(24px,4vw,60px);
+}
+.form-container {
+    max-width: min(700px, 90%);
+    margin: 0 auto;
+}
+.section-title {
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: 400;
+    font-size: clamp(32px,3.8vw,58px);
+    letter-spacing: -0.04em;
+    transform: scaleX(.82);
+    transform-origin: left center;
+    display: block;
+    margin-bottom: clamp(40px,4.5vw,68px);
+    color: var(--black);
+}
+.form-group { margin-bottom: clamp(32px,3.5vw,52px); }
+
+label {
+    display: block;
+    margin-bottom: clamp(10px,0.9vw,16px);
+    font-size: clamp(13px,1.05vw,16px);
+    text-transform: uppercase;
+    letter-spacing: .18em;
+    color: var(--black);
+}
+input[type="text"],
+input[type="number"],
+input[type="tel"],
+select,
+textarea {
+    width: 100%;
+    padding: clamp(14px,1.3vw,22px) 0;
+    border: none;
+    border-bottom: 1.5px solid var(--black);
+    background: transparent;
+    font-family: 'Courier New', monospace;
+    font-size: clamp(17px,1.4vw,22px);
+    color: var(--black);
+    transition: border-color .3s;
+    border-radius: 0;
+    -webkit-appearance: none;
+    appearance: none;
+}
+select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%230a0a0a'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 4px center;
+    padding-right: 24px;
+    cursor: pointer;
+}
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-bottom-color: #555;
+}
+textarea { resize: vertical; min-height: 56px; }
+
+.radio-group { display: flex; gap: clamp(24px,2.5vw,44px); margin-top: clamp(14px,1.4vw,22px); flex-wrap: wrap; }
+.radio-item { display: flex; align-items: center; gap: 12px; cursor: pointer; }
+.radio-item input[type="radio"] {
+    width: clamp(18px,1.5vw,22px);
+    height: clamp(18px,1.5vw,22px);
+    cursor: pointer;
+    flex-shrink: 0;
+    accent-color: var(--black);
+}
+.radio-item label {
+    margin-bottom: 0;
+    font-size: clamp(15px,1.2vw,19px);
+    cursor: pointer;
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--black);
+}
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(20px,2.8vw,44px); }
+.divider { height: 1px; background: #ccc; margin: clamp(40px,4.5vw,68px) 0; }
+.hidden { display: none !important; }
+.submit-container { margin-top: clamp(40px,4.5vw,68px); text-align: center; }
+
+.submit-btn {
+    background: var(--black);
+    color: var(--white);
+    border: none;
+    padding: clamp(16px,1.4vw,22px) clamp(40px,4.5vw,72px);
+    font-family: 'Courier New', monospace;
+    font-size: clamp(11px,0.9vw,14px);
+    text-transform: uppercase;
+    letter-spacing: .3em;
+    cursor: pointer;
+    transition: opacity .3s, transform .2s;
+    touch-action: manipulation;
+}
+.submit-btn:hover  { opacity: .75; transform: scale(1.03); }
+.submit-btn:active { transform: scale(.97); }
+
+.success-message {
+    display: none;
+    background: var(--black);
+    color: var(--white);
+    padding: clamp(20px,2vw,32px) 24px;
+    text-align: center;
+    margin-top: clamp(24px,2.5vw,40px);
+    font-size: clamp(12px,1vw,15px);
+    letter-spacing: .28em;
+}
+
+/* ════════════════════════════
+   FOOTER
+   ════════════════════════════ */
+.footer {
+    background: var(--black);
+    color: rgba(255,255,255,.60);
+    padding: clamp(36px,4.5vw,64px) 24px;
+    text-align: center;
+    font-size: clamp(13px,1vw,16px);
+    letter-spacing: .22em;
+    text-transform: uppercase;
+}
+
+/* ════════════════════════════
+   REMAINING BREAKPOINTS
+   ════════════════════════════ */
+
+/* Mobile nav drawer */
+@media (max-width: 860px) {
+    .nav-links {
+        position: fixed;
+        top: 0; right: -100%; bottom: 0;
+        background: var(--white);
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 80px 44px 40px;
+        width: min(280px,76vw);
+        box-shadow: -4px 0 24px rgba(0,0,0,.14);
+        transition: right .35s cubic-bezier(.4,0,.2,1);
+        gap: 36px;
+        z-index: 999;
+    }
+    .nav-links.active { right: 0; }
+    .nav-links a {
+        color: var(--black);
+        font-size: clamp(15px,4vw,18px);
+        letter-spacing: .18em;
+    }
+    .menu-toggle { display: flex; }
+
+    .nav-overlay {
+        display: none;
+        position: fixed; inset: 0;
+        background: rgba(0,0,0,.4);
+        z-index: 998;
+    }
+    .nav-overlay.active { display: block; }
+}
+
+@media (max-width: 680px) {
+    .form-row { grid-template-columns: 1fr; }
+    .description-title,
+    .section-title { transform: scaleX(.9); }
+}
+@media (max-width: 480px) {
+    .navbar { padding: 14px 20px; }
+    .radio-group { flex-direction: column; gap: 16px; }
+    .description-title,
+    .section-title { transform: none; letter-spacing: -0.03em; }
+}
+@media (min-width: 1400px) {
+    .description-container { max-width: 1000px; }
+    .form-container        { max-width: 800px; }
+}
+
+/* Disable hover states on touch screens */
+@media (hover: none) {
+    .btn:hover, .submit-btn:hover { opacity: 1; transform: none; }
+    .crawl-item:hover img { opacity: .38; }
+    .crawl-item.crawl-current:hover img { opacity: 1; }
+}
+</style>
 </head>
-
 <body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <a href="#" class="logo">YTH RALLY</a>
-        <ul class="nav-links" id="navLinks">
-            <li><a href="#home">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#registration">Register</a></li>
-        </ul>
-        <div class="menu-toggle" onclick="toggleMenu()">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
-    </nav>
 
-    <!-- Hero Section -->
-    <section class="hero" id="home">
+<div class="nav-overlay" id="navOverlay" onclick="closeMenu()"></div>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+    <a href="#home" class="logo">
+        <img src="assets/images/yr26-logo.png" alt="YTH Rally Logo" class="logo-img">
+    </a>
+    <ul class="nav-links" id="navLinks">
+        <li><a href="#home"         onclick="closeMenu()">Home</a></li>
+        <li><a href="#about"        onclick="closeMenu()">About</a></li>
+        <li><a href="#registration" onclick="closeMenu()">Register</a></li>
+    </ul>
+    <div class="menu-toggle" id="menuToggle" onclick="toggleMenu()" aria-label="Menu" role="button" tabindex="0">
+        <span></span><span></span><span></span>
+    </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+
+    <!-- Text panel (left on desktop, bottom-overlay on mobile) -->
+    <div class="hero-left">
         <div class="hero-content">
-            <h1>YTH Rally 2026</h1>
-            <p class="hero-date">April 29 - May 01, 2026</p>
-            <p class="hero-info">Ages 13–21 • Youth Conference</p>
-            <button class="btn" onclick="scrollToRegistration()">Register Now</button>
+            <span class="hero-headline">It's our<br>5th year.</span>
+            <span class="hero-date">April 29 – May 01, 2026</span>
+            <button class="btn" onclick="scrollToSection('registration')">Register Now</button>
         </div>
-    </section>
+    </div>
 
-    <!-- Theme Section -->
-    <section class="theme-section">
-        THEME TO BE ANNOUNCED
-    </section>
+    <!-- Video panel (right on desktop, fullscreen bg on mobile) -->
+    <div class="hero-right">
+        <div class="hero-video-wrapper">
+            <!--
+            ┌──────────────────────────────────────────────────────┐
+            │  VIDEO OPTIONS — pick one and uncomment              │
+            │                                                      │
+            │  A) Local file (recommended for 4:3):               │
+            │     <video class="hero-video" autoplay muted loop    │
+            │            playsinline>                              │
+            │       <source src="assets/video/hero.mp4"           │
+            │               type="video/mp4">                      │
+            │     </video>                                         │
+            │                                                      │
+            │  B) YouTube embed (replace YOUR_ID twice):          │
+            │     <iframe class="hero-video"                       │
+            │       src="https://www.youtube.com/embed/YOUR_ID    │
+            │            ?autoplay=1&mute=1&loop=1                 │
+            │            &playlist=YOUR_ID&controls=0&rel=0"      │
+            │       frameborder="0"                                │
+            │       allow="autoplay; encrypted-media"              │
+            │       allowfullscreen></iframe>                      │
+            └──────────────────────────────────────────────────────┘
+            -->
+            <div id="ytPlayer"></div>
+            <div class="video-overlay"></div>
+        </div>
+    </div>
 
-    <!-- Event Description Section -->
-    <section class="event-description" id="about">
-        <div class="description-container">
-            <h2 class="description-title">About the Event</h2>
+</section>
 
-            <p class="description-content">
-                YTH Rally 2026 is a transformative youth gathering designed to inspire, unite, and empower young people
-                aged 13-21. This event brings together youth from different churches and communities for a weekend of
-                worship, fellowship, and spiritual growth.
+<!-- LOGO CRAWL -->
+<section class="logo-crawl-section">
+    <p class="crawl-label">Five Years of Faith</p>
+    <div class="crawl-viewport">
+        <div class="crawl-belt" id="crawlBelt">
+            <div class="crawl-item" data-year="2022">
+                <img src="assets/images/yr22-logo.png"
+                     onerror="this.src='assets/images/yr26-logo.png'" alt="2022">
+                <span>2022</span>
+            </div>
+            <div class="crawl-item" data-year="2023">
+                <img src="assets/images/yr23-logo.png"
+                     onerror="this.src='assets/images/yr26-logo.png'" alt="2023">
+                <span>2023</span>
+            </div>
+            <div class="crawl-item" data-year="2024">
+                <img src="assets/images/yr24-logo.png"
+                     onerror="this.src='assets/images/yr26-logo.png'" alt="2024">
+                <span>2024</span>
+            </div>
+            <div class="crawl-item" data-year="2025">
+                <img src="assets/images/yr25-logo.png"
+                     onerror="this.src='assets/images/yr26-logo.png'" alt="2025">
+                <span>2025</span>
+            </div>
+            <div class="crawl-item crawl-current" data-year="2026">
+                <img src="assets/images/yr26-logo.png" alt="2026">
+                <span>2026 ★</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- THEME -->
+<section class="theme-section">Theme to be announced</section>
+
+<!-- ABOUT -->
+<section class="event-description" id="about">
+    <div class="description-container">
+        <span class="description-title">About the Event</span>
+        <p class="description-content">
+            YTH Rally 2026 is a transformative youth gathering designed to inspire, unite, and empower young people
+            aged 13–21. This event brings together youth from different churches and communities for a weekend of
+            worship, fellowship, and spiritual growth.
+        </p>
+        <p class="description-content">
+            Throughout the rally, participants will engage in powerful worship sessions, hear inspiring messages
+            from dynamic speakers, participate in interactive workshops, and build lasting friendships with fellow
+            young believers. This is more than just an event — it's a movement where young hearts are ignited with
+            passion for faith and purpose.
+        </p>
+        <div class="description-highlight">
+            <p class="highlight-text">
+                "Join us for an unforgettable experience that will challenge you to grow deeper in your faith,
+                discover your God-given purpose, and connect with a community that will support you on your journey."
             </p>
+        </div>
+        <p class="description-content" style="margin-top:clamp(24px,2.8vw,44px)">
+            Whether this is your first time attending or you're a returning participant, YTH Rally 2026 promises
+            to be an experience that will impact your life. Don't miss this opportunity to be part of something
+            extraordinary.
+        </p>
+    </div>
+</section>
 
-            <p class="description-content">
-                Throughout the rally, participants will engage in powerful worship sessions, hear inspiring messages
-                from dynamic speakers, participate in interactive workshops, and build lasting friendships with fellow
-                young believers. This is more than just an event—it's a movement where young hearts are ignited with
-                passion for faith and purpose.
-            </p>
+<!-- REGISTRATION -->
+<section class="form-section" id="registration">
+    <div class="form-container">
+        <span class="section-title">Registration</span>
+        <form onsubmit="handleSubmit(event)" novalidate>
 
-            <div class="description-highlight">
-                <p class="highlight-text">
-                    "Join us for an unforgettable experience that will challenge you to grow deeper in your faith,
-                    discover your God-given purpose, and connect with a community that will support you on your
-                    spiritual journey."
-                </p>
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" autocomplete="name" required>
             </div>
 
-            <p class="description-content" style="margin-top: 40px;">
-                Whether this is your first time attending or you're a returning participant, YTH Rally 2026 promises
-                to be an experience that will impact your life. Don't miss this opportunity to be part of something
-                extraordinary.
-            </p>
-        </div>
-    </section>
+            <div class="form-group">
+                <label for="address">Address</label>
+                <textarea id="address" name="address" rows="2" autocomplete="street-address" required></textarea>
+            </div>
 
-    <!-- Registration Form -->
-    <section class="form-section" id="registration">
-        <div class="form-container">
-            <h2 class="section-title">Registration</h2>
-            <form onsubmit="handleSubmit(event)">
-                <!-- Basic Information -->
+            <div class="form-row">
                 <div class="form-group">
-                    <label for="name">Full Name</label>
-                    <input type="text" id="name" name="name" required>
+                    <label for="age">Age</label>
+                    <input type="number" id="age" name="age" min="13" max="21" inputmode="numeric" required>
                 </div>
-
                 <div class="form-group">
-                    <label for="address">Address</label>
-                    <textarea id="address" name="address" rows="2" required></textarea>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="age">Age</label>
-                        <input type="number" id="age" name="age" min="13" max="21" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="sex">Sex</label>
-                        <select id="sex" name="sex" required>
-                            <option value="">Select</option>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="contact">Contact Number</label>
-                    <input type="tel" id="contact" name="contact" required>
-                </div>
-
-                <div class="divider"></div>
-
-                <!-- Questionnaire Section -->
-                <!-- First Time Question -->
-                <div class="form-group">
-                    <label>First time attending?</label>
-                    <div class="radio-group">
-                        <div class="radio-item">
-                            <input type="radio" id="firstTimeYes" name="firstTime" value="yes"
-                                onchange="handleFirstTime()">
-                            <label for="firstTimeYes">Yes</label>
-                        </div>
-                        <div class="radio-item">
-                            <input type="radio" id="firstTimeNo" name="firstTime" value="no"
-                                onchange="handleFirstTime()">
-                            <label for="firstTimeNo">No</label>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Referral Section (shown if first time) -->
-                <div id="referralSection" class="form-group hidden">
-                    <label for="referral">How did you hear about us?</label>
-                    <select id="referral" name="referral">
+                    <label for="sex">Sex</label>
+                    <select id="sex" name="sex" required>
                         <option value="">Select</option>
-                        <option value="Friend">Friend</option>
-                        <option value="Social Media">Social Media</option>
-                        <option value="Church">Church</option>
-                        <option value="Family">Family</option>
-                        <option value="Other">Other</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
                     </select>
                 </div>
+            </div>
 
-                <!-- Church Section (shown if not first time) -->
-                <div id="churchSection" class="form-group hidden">
-                    <label>Are you part of a church?</label>
-                    <div class="radio-group">
-                        <div class="radio-item">
-                            <input type="radio" id="partOfChurchYes" name="partOfChurch" value="yes"
-                                onchange="handleChurchMembership()">
-                            <label for="partOfChurchYes">Yes</label>
-                        </div>
-                        <div class="radio-item">
-                            <input type="radio" id="partOfChurchNo" name="partOfChurch" value="no"
-                                onchange="handleChurchMembership()">
-                            <label for="partOfChurchNo">No</label>
-                        </div>
+            <div class="form-group">
+                <label for="contact">Contact Number</label>
+                <input type="tel" id="contact" name="contact" autocomplete="tel" inputmode="tel" required>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="form-group">
+                <label>First time attending?</label>
+                <div class="radio-group">
+                    <div class="radio-item">
+                        <input type="radio" id="firstTimeYes" name="firstTime" value="yes" onchange="handleFirstTime()">
+                        <label for="firstTimeYes">Yes</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="firstTimeNo" name="firstTime" value="no" onchange="handleFirstTime()">
+                        <label for="firstTimeNo">No</label>
                     </div>
                 </div>
+            </div>
 
-                <!-- Which Church Section -->
-                <div id="whichChurchSection" class="form-group hidden">
-                    <label for="whichChurch">What church?</label>
-                    <select id="whichChurch" name="whichChurch" onchange="handleChurchSelection()">
-                        <option value="">Select</option>
-                        <option value="New Life Sta Rosa">New Life Sta Rosa</option>
-                        <option value="Outreach Church">Outreach Church</option>
-                        <option value="Other">Other Church</option>
-                    </select>
+            <div id="referralSection" class="form-group hidden">
+                <label for="referral">How did you hear about us?</label>
+                <select id="referral" name="referral">
+                    <option value="">Select</option>
+                    <option value="Friend">Friend</option>
+                    <option value="Social Media">Social Media</option>
+                    <option value="Church">Church</option>
+                    <option value="Family">Family</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <div id="churchSection" class="form-group hidden">
+                <label>Are you part of a church?</label>
+                <div class="radio-group">
+                    <div class="radio-item">
+                        <input type="radio" id="partOfChurchYes" name="partOfChurch" value="yes" onchange="handleChurchMembership()">
+                        <label for="partOfChurchYes">Yes</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="partOfChurchNo" name="partOfChurch" value="no" onchange="handleChurchMembership()">
+                        <label for="partOfChurchNo">No</label>
+                    </div>
                 </div>
+            </div>
 
-                <!-- Other Church Input -->
-                <div id="otherChurchSection" class="form-group hidden">
-                    <label for="otherChurch">Please specify your church</label>
-                    <input type="text" id="otherChurch" name="otherChurch">
-                </div>
+            <div id="whichChurchSection" class="form-group hidden">
+                <label for="whichChurch">What church?</label>
+                <select id="whichChurch" name="whichChurch" onchange="handleChurchSelection()">
+                    <option value="">Select</option>
+                    <option value="New Life Sta Rosa">New Life Sta Rosa</option>
+                    <option value="Outreach Church">Outreach Church</option>
+                    <option value="Other">Other Church</option>
+                </select>
+            </div>
 
-                <!-- Submit Button -->
-                <div class="submit-container">
-                    <button type="submit" class="btn">Submit Application</button>
-                </div>
+            <!-- Outreach sub-location — shown when Outreach Church is selected -->
+            <div id="outreachLocationSection" class="form-group hidden">
+                <label for="outreachLocation">Which Outreach Church?</label>
+                <select id="outreachLocation" name="outreachLocation" onchange="handleOutreachLocation()">
+                    <option value="">Select location</option>
+                    <option value="New Life Biñan Outreach">New Life Biñan Outreach</option>
+                    <option value="New Life Cabuyao Outreach">New Life Cabuyao Outreach</option>
+                    <option value="New Life Calamba Outreach">New Life Calamba Outreach</option>
+                    <option value="New Life Camiling Outreach">New Life Camiling Outreach</option>
+                    <option value="New Life San Pedro Outreach">New Life San Pedro Outreach</option>
+                    <option value="New Life Villasis Outreach">New Life Villasis Outreach</option>
+                    <option value="New Life Saskatoon">New Life Saskatoon</option>
+                </select>
+            </div>
 
-                <!-- Success Message -->
-                <div id="successMessage" class="success-message">
-                    APPLICATION SUBMITTED SUCCESSFULLY
-                </div>
-            </form>
-        </div>
-    </section>
+            <div id="otherChurchSection" class="form-group hidden">
+                <label for="otherChurch">Please specify your church</label>
+                <input type="text" id="otherChurch" name="otherChurch" autocomplete="organization">
+            </div>
 
-    <!-- Footer -->
-    <footer class="footer">
-        YTH RALLY 2026 — SYSTEM 1.0
-    </footer>
+            <div class="submit-container">
+                <button type="submit" class="submit-btn">Submit Application</button>
+            </div>
 
-    <script src="js/main.js"></script>
+            <div id="successMessage" class="success-message">
+                Application Submitted Successfully
+            </div>
+        </form>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+    YTH Rally 2026 &nbsp;|&nbsp; New Life Sta. Rosa
+</footer>
+
+<script>
+/* ── YOUTUBE IFRAME API — force autoplay + mute + loop ── */
+var ytPlayerReady = false;
+
+// Called automatically by the API once it loads
+window.onYouTubeIframeAPIReady = function () {
+    new YT.Player('ytPlayer', {
+        videoId: 'A7W9aGTx0c0',
+        playerVars: {
+            autoplay:        1,
+            mute:            1,
+            loop:            1,
+            playlist:        'A7W9aGTx0c0',
+            controls:        0,
+            rel:             0,
+            modestbranding:  1,
+            playsinline:     1,
+            disablekb:       1,
+            fs:              0,
+            iv_load_policy:  3,   // hide video annotations
+            showinfo:        0
+        },
+        events: {
+            onReady: function (e) {
+                e.target.mute();
+                e.target.playVideo();
+            },
+            onStateChange: function (e) {
+                // YT.PlayerState.ENDED = 0 — restart immediately
+                if (e.data === 0) e.target.playVideo();
+                // YT.PlayerState.PAUSED = 2 — browsers may pause; resume
+                if (e.data === 2) e.target.playVideo();
+            }
+        }
+    });
+};
+
+// Inject the YouTube IFrame API script tag
+(function () {
+    var tag = document.createElement('script');
+    tag.src = 'https://www.youtube.com/iframe_api';
+    document.head.appendChild(tag);
+})();
+const navbar     = document.getElementById('navbar');
+const navLinks   = document.getElementById('navLinks');
+const menuToggle = document.getElementById('menuToggle');
+const navOverlay = document.getElementById('navOverlay');
+
+window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 40);
+}, { passive: true });
+
+function toggleMenu() {
+    const open = navLinks.classList.toggle('active');
+    menuToggle.classList.toggle('open', open);
+    navOverlay.classList.toggle('active', open);
+    document.body.style.overflow = open ? 'hidden' : '';
+}
+function closeMenu() {
+    navLinks.classList.remove('active');
+    menuToggle.classList.remove('open');
+    navOverlay.classList.remove('active');
+    document.body.style.overflow = '';
+}
+function scrollToSection(id) {
+    closeMenu();
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* ── LOGO CRAWL — true infinite portal ──
+   The "scrolled" counter only ever increases.
+   belt.style.left tracks −scrolled.
+   When the first child's right edge exits the left side,
+   it's re-appended at the end with margin-left corrected
+   so it sits gap-free after the previous last item.
+   No translateX reset = zero visible snap.
+*/
+(function initCrawl() {
+    const belt    = document.getElementById('crawlBelt');
+    const vp      = belt.parentElement;
+    if (!belt) return;
+
+    const SPEED = 48; // px / second
+
+    /* Snapshot originals, clear belt */
+    const originals = Array.from(belt.children);
+    originals.forEach(el => belt.removeChild(el));
+
+    /* Clone enough rounds so belt is always wider than viewport × 3 */
+    function fill() {
+        while (belt.scrollWidth < vp.clientWidth * 3) {
+            originals.forEach(src => {
+                const c = src.cloneNode(true);
+                c.style.marginLeft = '';
+                belt.appendChild(c);
+            });
+        }
+        /* one extra look-ahead buffer round */
+        originals.forEach(src => {
+            const c = src.cloneNode(true);
+            c.style.marginLeft = '';
+            belt.appendChild(c);
+        });
+    }
+    fill();
+
+    let scrolled = 0, lastTs = null, paused = false;
+
+    vp.addEventListener('mouseenter', () => { paused = true;  });
+    vp.addEventListener('mouseleave', () => { paused = false; });
+    vp.addEventListener('touchstart', () => { paused = true;  }, { passive: true });
+    vp.addEventListener('touchend',   () => { setTimeout(() => { paused = false; }, 800); }, { passive: true });
+
+    function tick(ts) {
+        if (lastTs !== null && !paused) {
+            scrolled += SPEED * (ts - lastTs) / 1000;
+            belt.style.left = '-' + scrolled + 'px';
+
+            /* Portal: re-queue any item that exited the left edge */
+            while (true) {
+                const first = belt.firstElementChild;
+                if (!first) break;
+                /* right edge in screen coords = offsetLeft + width - scrolled */
+                if (first.offsetLeft + first.offsetWidth - scrolled > 0) break;
+
+                const last    = belt.lastElementChild;
+                const lastEnd = last.offsetLeft + last.offsetWidth;
+
+                belt.removeChild(first);
+                first.style.marginLeft = '';
+                belt.appendChild(first);
+
+                /* Correct any gap or overlap caused by reflow */
+                const gap = lastEnd - first.offsetLeft;
+                if (Math.abs(gap) > 0.5) first.style.marginLeft = gap + 'px';
+            }
+        }
+        lastTs = ts;
+        requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+
+    /* Refill on resize / orientation change */
+    window.addEventListener('resize', () => {
+        if (belt.scrollWidth < vp.clientWidth * 2) fill();
+    }, { passive: true });
+})();
+
+/* ── FORM ── */
+function show(id)   { document.getElementById(id).classList.remove('hidden'); }
+function hide(id)   { document.getElementById(id).classList.add('hidden'); }
+function req(id, v) { document.getElementById(id).required = v; }
+
+function handleFirstTime() {
+    const yes = document.getElementById('firstTimeYes').checked;
+    hide('whichChurchSection'); hide('outreachLocationSection'); hide('otherChurchSection');
+    if (yes) {
+        show('referralSection'); req('referral', true); hide('churchSection');
+    } else {
+        hide('referralSection'); req('referral', false); show('churchSection');
+    }
+}
+function handleChurchMembership() {
+    hide('outreachLocationSection'); hide('otherChurchSection');
+    if (document.getElementById('partOfChurchYes').checked) {
+        show('whichChurchSection'); req('whichChurch', true);
+    } else {
+        hide('whichChurchSection'); req('whichChurch', false);
+    }
+}
+function handleChurchSelection() {
+    const val = document.getElementById('whichChurch').value;
+    const isOutreach = val === 'Outreach Church';
+    const isOther    = val === 'Other';
+
+    isOutreach ? show('outreachLocationSection') : hide('outreachLocationSection');
+    req('outreachLocation', isOutreach);
+
+    isOther ? show('otherChurchSection') : hide('otherChurchSection');
+    req('otherChurch', isOther);
+
+    /* Reset sub-selections when top-level changes */
+    if (!isOutreach) document.getElementById('outreachLocation').value = '';
+    if (!isOther)    document.getElementById('otherChurch').value = '';
+}
+function handleOutreachLocation() {
+    /* Nothing conditional downstream — placeholder for future logic */
+}
+function handleSubmit(e) {
+    e.preventDefault();
+    console.log('Registration:', Object.fromEntries(new FormData(e.target).entries()));
+    const msg = document.getElementById('successMessage');
+    msg.style.display = 'block';
+    msg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    setTimeout(() => {
+        e.target.reset();
+        msg.style.display = 'none';
+        ['referralSection','churchSection','whichChurchSection','outreachLocationSection','otherChurchSection']
+            .forEach(id => hide(id));
+    }, 3500);
+}
+</script>
 </body>
-
 </html>
