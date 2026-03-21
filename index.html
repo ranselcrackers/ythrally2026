@@ -10,6 +10,8 @@
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
+html, body { margin: 0; padding: 0; }
+
 :root {
     --black:  #0a0a0a;
     --white:  #f4f2ee;
@@ -92,9 +94,8 @@ body {
 
 /* ════════════════════════════════════════════════
    HERO — DESKTOP (> 860px)
-   Left: text column. Right: portrait video panel.
-   Video is 1080×1920 (9:16 vertical).
-   Panel height = 100vh. Panel width = 100vh × (9/16).
+   Left: narrow text column. Right: landscape 16:9 video.
+   Hero starts at very top of page — navbar floats over it.
    ════════════════════════════════════════════════ */
 .hero {
     background: var(--black);
@@ -103,7 +104,11 @@ body {
     align-items: stretch;
     overflow: hidden;
     position: relative;
-    min-height: 100vh;
+    height: 100vh;
+    min-height: 0;
+    /* flush to top — sits under the fixed transparent navbar */
+    margin-top: 0;
+    padding-top: 0;
 }
 
 /* LEFT panel — fixed narrow text column ~30% */
@@ -168,15 +173,16 @@ body {
 .btn:hover  { opacity: .80; transform: scale(1.03); }
 .btn:active { transform: scale(.97); }
 
-/* RIGHT panel — 16:9 landscape video fills all remaining space */
+/* RIGHT panel — takes all remaining width */
 .hero-right {
     flex: 1 1 auto;
     position: relative;
     overflow: hidden;
     align-self: stretch;
-    margin-left: 0;
+    margin: 0;
 }
 
+/* Video wrapper fills the entire hero panel, edge to edge */
 .hero-video-wrapper {
     position: absolute;
     inset: 0;
@@ -190,23 +196,27 @@ body {
     border: none; display: block;
 }
 
-/* YouTube IFrame API — landscape 16:9 video covers the full panel.
-   The panel is wider than it is tall (landscape), so we anchor to width.
-   height = width × (9/16). If that's still shorter than panel, anchor to height instead. */
+/* YouTube IFrame API — must cover panel completely.
+   Panel is ~70vw wide × 100vh tall (landscape, wider than 16:9).
+   We oversize the iframe so it always covers:
+   - width-driven: height = width × (9/16)
+   - height-driven: width = height × (16/9)
+   We use the larger of both, centered. */
 #ytPlayer {
     position: absolute;
-    top: 0; left: 0;
+    inset: 0;
     width: 100%;
     height: 100%;
     pointer-events: none;
+    overflow: hidden;
 }
 #ytPlayer iframe {
     position: absolute;
     top: 50%; left: 50%;
-    /* Fill whichever dimension is the constraint */
-    width: 100%;
-    height: 56.25vw;      /* 9/16 of viewport width — landscape fill */
-    min-width: 177.78vh;  /* ensure it fills if panel is tall */
+    /* Oversize: always at least as wide as panel AND at least as tall */
+    width: 177.78%;    /* 16/9 × 100% of panel height */
+    height: 177.78%;   /* same — guarantees no black bar in either axis */
+    min-width: 100%;
     min-height: 100%;
     transform: translate(-50%, -50%);
     border: none;
@@ -228,9 +238,8 @@ body {
 
 /* ════════════════════════════════════════════════
    HERO — MOBILE PORTRAIT (≤ 860px)
-   Video at top, flush under transparent navbar.
-   Text sits BELOW the video — no overlay.
-   Gentle fade only at the bottom edge of the video.
+   Video at very top — navbar is transparent and floats over it.
+   Exact 16:9, zero black gaps. Text flows below.
    ════════════════════════════════════════════════ */
 @media (max-width: 860px) {
     .hero {
@@ -239,22 +248,26 @@ body {
         position: relative;
         background: var(--black);
         min-height: 0;
+        height: auto;
+        /* ensure hero starts at absolute top of page */
+        margin-top: 0;
+        padding-top: 0;
     }
 
-    /* Video first — exact 16:9 intrinsic ratio, no black gaps */
+    /* Video flush to top — no gap above */
     .hero-right {
         position: relative;
         width: 100%;
-        padding-top: 56.25%;  /* 9/16 × 100% = 16:9 */
+        padding-top: 56.25%;  /* 16:9 ratio */
         flex: none;
         overflow: hidden;
         z-index: 1;
-        margin-top: 0;
+        margin: 0;
         order: 0;
     }
     .hero-video-wrapper {
         position: absolute;
-        inset: 0;
+        top: 0; left: 0; right: 0; bottom: 0;
     }
 
     /* Player fills the 16:9 box */
