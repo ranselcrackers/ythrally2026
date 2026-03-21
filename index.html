@@ -4,22 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YTH Rally 2026</title>
+    <link rel="icon" type="image/png" href="assets/images/yr26-logo.png">
+    <link rel="shortcut icon" type="image/png" href="assets/images/yr26-logo.png">
+    <link rel="apple-touch-icon" href="assets/images/yr26-logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
 html, body { margin: 0; padding: 0; }
-
 :root {
     --black:  #0a0a0a;
     --white:  #f4f2ee;
     --border: #d8d4cc;
+    --accent: #c8a96e;
 }
-
 html { scroll-behavior: smooth; }
-
 body {
     background: var(--white);
     font-family: 'Courier New', monospace;
@@ -41,7 +41,6 @@ body {
     position: fixed;
     top: 0; left: 0; right: 0;
     z-index: 1000;
-    /* Fully transparent on load */
     background: transparent;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
@@ -64,7 +63,6 @@ body {
     transition: filter .45s ease, opacity .45s ease;
 }
 .navbar.scrolled .logo-img { filter: brightness(0); opacity: .82; }
-
 .nav-links { display: flex; gap: clamp(20px,2.8vw,44px); list-style: none; }
 .nav-links a {
     font-size: clamp(11px,0.9vw,14px);
@@ -77,7 +75,6 @@ body {
 }
 .navbar.scrolled .nav-links a { color: var(--black); }
 .nav-links a:hover { opacity: .5; }
-
 .menu-toggle {
     display: none;
     flex-direction: column;
@@ -98,11 +95,9 @@ body {
 .menu-toggle.open span:nth-child(2) { opacity: 0; }
 .menu-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-/* ════════════════════════════════════════════════
-   HERO — DESKTOP (> 860px)
-   Left: text column with indent. Right: video fills edge to edge.
-   The entire hero section starts at y=0 — navbar is fixed and floats over it.
-   ════════════════════════════════════════════════ */
+/* ════════════════════════════
+   HERO
+   ════════════════════════════ */
 .hero {
     background: var(--black);
     color: var(--white);
@@ -112,19 +107,13 @@ body {
     position: relative;
     height: 100vh;
     min-height: 0;
-    margin: 0;
-    padding: 0;
+    margin: 0; padding: 0;
 }
-
-/* LEFT panel — wider so headline fits 2 lines, with left indent */
 .hero-left {
     flex: 0 0 clamp(360px, 38vw, 580px);
     display: flex;
     align-items: center;
-    padding: clamp(100px,10vw,160px)
-             clamp(32px,3.5vw,56px)
-             clamp(60px,6vw,100px)
-             clamp(48px,5vw,88px);
+    padding: clamp(100px,10vw,160px) clamp(32px,3.5vw,56px) clamp(60px,6vw,100px) clamp(48px,5vw,88px);
     position: relative;
     z-index: 2;
 }
@@ -135,13 +124,10 @@ body {
     height: 80%; width: 1px;
     background: rgba(255,255,255,.10);
 }
-
 .hero-content { max-width: 100%; width: 100%; }
-
 .hero-headline {
     font-family: 'Times New Roman', Times, serif;
     font-weight: 400;
-    /* Tuned so "It's our" and "5th year." each sit on one line */
     font-size: clamp(72px, 7.8vw, 138px);
     line-height: .86;
     letter-spacing: -0.055em;
@@ -151,7 +137,6 @@ body {
     transform: scaleX(.78);
     transform-origin: left center;
 }
-
 .hero-date {
     font-family: 'Courier New', monospace;
     font-size: clamp(13px,1.05vw,16px);
@@ -161,7 +146,6 @@ body {
     margin-bottom: clamp(36px,4vw,60px);
     display: block;
 }
-
 .btn {
     background: var(--white);
     color: var(--black);
@@ -175,11 +159,10 @@ body {
     transition: opacity .3s, transform .2s;
     display: inline-block;
     touch-action: manipulation;
+    text-decoration: none;
 }
 .btn:hover  { opacity: .80; transform: scale(1.03); }
 .btn:active { transform: scale(.97); }
-
-/* RIGHT panel — takes all remaining width, black bg hides YouTube placeholder */
 .hero-right {
     flex: 1 1 auto;
     position: relative;
@@ -188,157 +171,38 @@ body {
     margin: 0;
     background: var(--black);
 }
-
-/* Video wrapper — absolute inset:0 fills the panel completely including top */
 .hero-video-wrapper {
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
     overflow: hidden;
     background: var(--black);
 }
-
 .hero-video {
     width: 100%; height: 100%;
     object-fit: cover;
     object-position: center center;
     border: none; display: block;
 }
-
-/* YouTube IFrame API — oversized and centered to clip UI chrome on all sides */
 #ytPlayer {
     position: absolute;
     inset: 0;
-    width: 100%;
-    height: 100%;
+    width: 100%; height: 100%;
     pointer-events: none;
     overflow: hidden;
 }
 #ytPlayer iframe {
     position: absolute;
-    /* Center the oversized iframe so video fills all edges equally */
-    top:  50%;
-    left: 50%;
+    top: 50%; left: 50%;
     width:  calc(100% + 600px);
     height: calc(100% + 600px);
     transform: translate(-50%, -50%);
-    border: none;
-    display: block;
+    border: none; display: block;
     pointer-events: none;
 }
-
-/* Desktop overlay: left-edge fade into text panel */
 .video-overlay {
     position: absolute; inset: 0;
-    background: linear-gradient(
-        to right,
-        rgba(10,10,10,.65)  0%,
-        rgba(10,10,10,.18) 30%,
-        rgba(10,10,10,.03) 65%,
-        transparent        100%
-    );
+    background: linear-gradient(to right, rgba(10,10,10,.65) 0%, rgba(10,10,10,.18) 30%, rgba(10,10,10,.03) 65%, transparent 100%);
     pointer-events: none;
-}
-
-/* ════════════════════════════════════════════════
-   HERO — MOBILE PORTRAIT (≤ 860px)
-   Video at very top — navbar is transparent and floats over it.
-   Exact 16:9, zero black gaps. Text flows below.
-   ════════════════════════════════════════════════ */
-@media (max-width: 860px) {
-    .hero {
-        display: flex;
-        flex-direction: column;
-        position: relative;
-        background: var(--black);
-        min-height: 0;
-        height: auto;
-        /* ensure hero starts at absolute top of page */
-        margin-top: 0;
-        padding-top: 0;
-    }
-
-    /* Video flush to top — no gap above */
-    .hero-right {
-        position: relative;
-        width: 100%;
-        padding-top: 56.25%;  /* 16:9 ratio */
-        flex: none;
-        overflow: hidden;
-        z-index: 1;
-        margin: 0;
-        order: 0;
-    }
-    .hero-video-wrapper {
-        position: absolute;
-        top: 0; left: 0; right: 0; bottom: 0;
-    }
-
-    /* Player fills the 16:9 box, iframe centered and oversized to clip YouTube chrome */
-    #ytPlayer {
-        position: absolute;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-        pointer-events: none;
-        overflow: hidden;
-    }
-    #ytPlayer iframe {
-        position: absolute;
-        top:  50%;
-        left: 50%;
-        width:  calc(100% + 600px);
-        height: calc(100% + 600px);
-        transform: translate(-50%, -50%);
-        border: none;
-        display: block;
-        pointer-events: none;
-    }
-
-    /* Subtle fade only at bottom edge of video — not covering text */
-    .video-overlay {
-        background: linear-gradient(
-            to bottom,
-            transparent          0%,
-            transparent         70%,
-            rgba(10,10,10,.55)  88%,
-            rgba(10,10,10,.92) 100%
-        );
-    }
-
-    /* Text sits BELOW the video, normal document flow */
-    .hero-left {
-        position: relative;
-        order: 1;
-        z-index: 2;
-        flex: none;
-        width: 100%;
-        padding: clamp(32px,6vw,52px) clamp(24px,6vw,44px) clamp(40px,7vw,64px);
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    .hero-left::after { display: none; }
-
-    .hero-headline {
-        /* Big enough to fill the phone width — pushes content below fold */
-        font-size: clamp(68px, 16vw, 108px);
-        transform: scaleX(.78);
-        transform-origin: left center;
-        line-height: .86;
-    }
-    .hero-date {
-        font-size: clamp(13px,3.5vw,18px);
-        color: rgba(255,255,255,.85);
-    }
-    .btn {
-        padding: 16px 40px;
-        font-size: 12px;
-    }
-}
-
-@media (max-width: 480px) {
-    .hero-headline { font-size: clamp(64px,15vw,96px); }
-    .hero-left { padding-left: 20px; padding-right: 20px; }
 }
 
 /* ════════════════════════════
@@ -364,30 +228,23 @@ body {
     overflow: hidden;
     position: relative;
 }
-.crawl-viewport::before,
-.crawl-viewport::after {
+.crawl-viewport::before, .crawl-viewport::after {
     content: '';
     position: absolute; top: 0; bottom: 0;
     width: clamp(60px,8vw,130px);
     z-index: 2; pointer-events: none;
 }
-.crawl-viewport::before { left:  0; background: linear-gradient(to right, var(--white), transparent); }
-.crawl-viewport::after  { right: 0; background: linear-gradient(to left,  var(--white), transparent); }
-
+.crawl-viewport::before { left: 0; background: linear-gradient(to right, var(--white), transparent); }
+.crawl-viewport::after  { right: 0; background: linear-gradient(to left, var(--white), transparent); }
 .crawl-belt {
     display: flex;
-    /* width of ONE set of items — JS not needed, CSS handles it */
     width: max-content;
     animation: crawl-scroll 30s linear infinite;
 }
 .crawl-belt:hover { animation-play-state: paused; }
-
 @keyframes crawl-scroll {
     0%   { transform: translateX(0); }
     100% { transform: translateX(-50%); }
-    /* -50% works because the belt contains exactly 2 identical sets of items.
-       When the first set has fully scrolled off, we're at the start of the
-       second set — which looks identical. The loop is seamless. */
 }
 .crawl-item {
     display: flex;
@@ -399,7 +256,6 @@ body {
     flex-shrink: 0;
 }
 .crawl-item img {
-    /* Portrait PNGs (1080×1920) — constrain by height, auto width */
     height: clamp(56px,5.5vw,88px);
     width: auto;
     filter: none;
@@ -410,7 +266,6 @@ body {
     display: block;
     object-fit: contain;
 }
-.crawl-item:hover img { opacity: 1; }
 .crawl-item span {
     font-size: clamp(10px,0.75vw,13px);
     letter-spacing: .22em;
@@ -432,18 +287,8 @@ body {
 /* ════════════════════════════
    THEME
    ════════════════════════════ */
-.theme-section {
-    background: var(--black);
-    position: relative;
-    overflow: hidden;
-    border-top: none;
-}
-.theme-section img {
-    width: 100%;
-    height: auto;
-    display: block;
-    object-fit: cover;
-}
+.theme-section { background: var(--black); position: relative; overflow: hidden; border-top: none; }
+.theme-section img { width: 100%; height: auto; display: block; object-fit: cover; }
 
 /* ════════════════════════════
    ABOUT
@@ -453,10 +298,7 @@ body {
     color: var(--white);
     padding: clamp(64px,7.5vw,120px) clamp(24px,4vw,60px);
 }
-.description-container {
-    max-width: min(900px, 90%);
-    margin: 0 auto;
-}
+.description-container { max-width: min(900px, 90%); margin: 0 auto; }
 .description-title {
     font-family: 'Times New Roman', Times, serif;
     font-weight: 400;
@@ -466,7 +308,6 @@ body {
     transform-origin: left center;
     display: block;
     margin-bottom: clamp(32px,3.5vw,52px);
-    /* full white — no dimming */
     color: var(--white);
 }
 .description-content {
@@ -474,7 +315,6 @@ body {
     line-height: 1.9;
     letter-spacing: .02em;
     margin-bottom: clamp(20px,2vw,32px);
-    /* high contrast on dark bg */
     color: rgba(244,242,238,.92);
 }
 .description-highlight {
@@ -487,22 +327,18 @@ body {
     font-style: italic;
     font-size: clamp(17px,1.6vw,24px);
     line-height: 1.65;
-    /* clearly legible italic quote */
     color: rgba(244,242,238,.88);
     letter-spacing: -0.01em;
 }
 
 /* ════════════════════════════
-   FORM
+   FORM SECTION — MULTI-STEP
    ════════════════════════════ */
 .form-section {
     background: var(--white);
     padding: clamp(64px,7.5vw,120px) clamp(24px,4vw,60px);
 }
-.form-container {
-    max-width: min(700px, 90%);
-    margin: 0 auto;
-}
+.form-container { max-width: min(700px, 90%); margin: 0 auto; }
 .section-title {
     font-family: 'Times New Roman', Times, serif;
     font-weight: 400;
@@ -511,26 +347,117 @@ body {
     transform: scaleX(.82);
     transform-origin: left center;
     display: block;
-    margin-bottom: clamp(40px,4.5vw,68px);
+    margin-bottom: 12px;
     color: var(--black);
 }
-.form-group { margin-bottom: clamp(32px,3.5vw,52px); }
 
+/* Progress bar */
+.form-progress {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-bottom: clamp(40px,4.5vw,68px);
+}
+.progress-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    flex: 1;
+    position: relative;
+}
+.progress-step::after {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    width: 100%;
+    height: 1.5px;
+    background: #ddd;
+    z-index: 0;
+}
+.progress-step:last-child::after { display: none; }
+.progress-dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1.5px solid #ccc;
+    background: var(--white);
+    position: relative;
+    z-index: 1;
+    transition: all .35s ease;
+    flex-shrink: 0;
+}
+.progress-step.active .progress-dot {
+    border-color: var(--black);
+    background: var(--black);
+}
+.progress-step.done .progress-dot {
+    border-color: var(--black);
+    background: var(--black);
+}
+.progress-step.done .progress-dot::after {
+    content: '✓';
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    font-size: 10px;
+    line-height: 1;
+}
+.progress-step.done::after { background: var(--black); }
+.progress-label {
+    font-size: 9px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: #bbb;
+    text-align: center;
+    line-height: 1.3;
+    transition: color .35s;
+}
+.progress-step.active .progress-label,
+.progress-step.done  .progress-label { color: var(--black); }
+
+/* Form steps */
+.form-step {
+    display: none;
+    animation: stepIn .4s cubic-bezier(.4,0,.2,1);
+}
+.form-step.active { display: block; }
+@keyframes stepIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.step-heading {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: clamp(18px,1.8vw,26px);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    color: var(--black);
+    margin-bottom: clamp(28px,3vw,44px);
+    display: block;
+}
+
+.form-group { margin-bottom: clamp(28px,3vw,44px); }
 label {
     display: block;
     margin-bottom: clamp(10px,0.9vw,16px);
-    font-size: clamp(13px,1.05vw,16px);
+    font-size: clamp(11px,0.9vw,13px);
     text-transform: uppercase;
-    letter-spacing: .18em;
-    color: var(--black);
+    letter-spacing: .20em;
+    color: #888;
 }
 input[type="text"],
 input[type="number"],
 input[type="tel"],
+input[type="email"],
 select,
 textarea {
     width: 100%;
-    padding: clamp(14px,1.3vw,22px) 0;
+    padding: clamp(14px,1.3vw,20px) 0;
     border: none;
     border-bottom: 1.5px solid var(--black);
     background: transparent;
@@ -549,13 +476,9 @@ select {
     padding-right: 24px;
     cursor: pointer;
 }
-input:focus, select:focus, textarea:focus {
-    outline: none;
-    border-bottom-color: #555;
-}
+input:focus, select:focus, textarea:focus { outline: none; border-bottom-color: #555; }
 textarea { resize: vertical; min-height: 56px; }
-
-.radio-group { display: flex; gap: clamp(24px,2.5vw,44px); margin-top: clamp(14px,1.4vw,22px); flex-wrap: wrap; }
+.radio-group { display: flex; gap: clamp(16px,2vw,32px); margin-top: clamp(14px,1.4vw,22px); flex-wrap: wrap; }
 .radio-item { display: flex; align-items: center; gap: 12px; cursor: pointer; }
 .radio-item input[type="radio"] {
     width: clamp(18px,1.5vw,22px);
@@ -566,44 +489,612 @@ textarea { resize: vertical; min-height: 56px; }
 }
 .radio-item label {
     margin-bottom: 0;
-    font-size: clamp(15px,1.2vw,19px);
+    font-size: clamp(15px,1.2vw,18px);
     cursor: pointer;
     text-transform: none;
     letter-spacing: 0;
     color: var(--black);
 }
-
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(20px,2.8vw,44px); }
-.divider { height: 1px; background: #ccc; margin: clamp(40px,4.5vw,68px) 0; }
 .hidden { display: none !important; }
-.submit-container { margin-top: clamp(40px,4.5vw,68px); text-align: center; }
 
-.submit-btn {
+/* Next / Submit buttons */
+.step-nav { margin-top: clamp(36px,4vw,56px); display: flex; gap: 16px; align-items: center; }
+.next-btn {
     background: var(--black);
     color: var(--white);
     border: none;
-    padding: clamp(16px,1.4vw,22px) clamp(40px,4.5vw,72px);
+    padding: clamp(15px,1.3vw,20px) clamp(36px,4vw,64px);
     font-family: 'Courier New', monospace;
-    font-size: clamp(11px,0.9vw,14px);
+    font-size: clamp(11px,0.9vw,13px);
     text-transform: uppercase;
     letter-spacing: .3em;
     cursor: pointer;
     transition: opacity .3s, transform .2s;
     touch-action: manipulation;
 }
-.submit-btn:hover  { opacity: .75; transform: scale(1.03); }
-.submit-btn:active { transform: scale(.97); }
-
-.success-message {
-    display: none;
+.next-btn:hover  { opacity: .75; transform: scale(1.02); }
+.next-btn:active { transform: scale(.97); }
+.back-btn {
+    background: transparent;
+    color: #888;
+    border: none;
+    font-family: 'Courier New', monospace;
+    font-size: clamp(11px,0.9vw,12px);
+    text-transform: uppercase;
+    letter-spacing: .22em;
+    cursor: pointer;
+    padding: 8px 0;
+    transition: color .25s;
+}
+.back-btn:hover { color: var(--black); }
+.submit-btn {
     background: var(--black);
     color: var(--white);
-    padding: clamp(20px,2vw,32px) 24px;
-    text-align: center;
-    margin-top: clamp(24px,2.5vw,40px);
-    font-size: clamp(12px,1vw,15px);
-    letter-spacing: .28em;
+    border: none;
+    padding: clamp(15px,1.3vw,20px) clamp(36px,4vw,64px);
+    font-family: 'Courier New', monospace;
+    font-size: clamp(11px,0.9vw,13px);
+    text-transform: uppercase;
+    letter-spacing: .3em;
+    cursor: pointer;
+    transition: opacity .3s, transform .2s;
+    touch-action: manipulation;
 }
+.submit-btn:hover  { opacity: .75; transform: scale(1.02); }
+.submit-btn:active { transform: scale(.97); }
+
+/* ── Date Picker ── */
+.date-picker-wrap { position: relative; user-select: none; }
+.date-display {
+    width: 100%;
+    padding: clamp(14px,1.3vw,20px) 0;
+    border: none;
+    border-bottom: 1.5px solid var(--black);
+    background: transparent;
+    font-family: 'Courier New', monospace;
+    font-size: clamp(17px,1.4vw,22px);
+    color: var(--black);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: border-color .3s;
+}
+.date-display.placeholder { color: #bbb; }
+.date-display-arrow { font-size: 14px; color: #999; flex-shrink: 0; }
+.date-display:hover { border-bottom-color: #555; }
+
+.calendar-popup {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    width: min(340px, 100vw - 48px);
+    background: #fff;
+    border: 1.5px solid var(--black);
+    z-index: 500;
+    box-shadow: 0 8px 32px rgba(0,0,0,.12);
+    animation: calPop .2s ease;
+}
+.calendar-popup.open { display: block; }
+@keyframes calPop {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Calendar nav header */
+.cal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px 10px;
+    border-bottom: 1px solid #e8e5e0;
+}
+.cal-nav-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    color: var(--black);
+    padding: 4px 10px;
+    line-height: 1;
+    transition: opacity .2s;
+}
+.cal-nav-btn:hover { opacity: .5; }
+.cal-month-year {
+    display: flex;
+    gap: 6px;
+}
+.cal-select {
+    border: none;
+    background: transparent;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: .08em;
+    color: var(--black);
+    cursor: pointer;
+    padding: 2px 4px;
+    border-bottom: 1px solid #ccc;
+    -webkit-appearance: none;
+    appearance: none;
+}
+.cal-select:focus { outline: none; border-bottom-color: var(--black); }
+
+/* Day grid */
+.cal-days-header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    padding: 10px 12px 4px;
+    gap: 2px;
+}
+.cal-day-label {
+    text-align: center;
+    font-size: 10px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: #aaa;
+    padding: 4px 0;
+}
+.cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    padding: 4px 12px 14px;
+    gap: 2px;
+}
+.cal-cell {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-family: 'Courier New', monospace;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: background .15s, color .15s;
+    color: var(--black);
+}
+.cal-cell:hover:not(.cal-empty):not(.cal-disabled) { background: #eee; }
+.cal-cell.cal-empty { cursor: default; }
+.cal-cell.cal-disabled { color: #ddd; cursor: not-allowed; }
+.cal-cell.cal-today { font-weight: bold; color: #888; }
+.cal-cell.cal-selected { background: var(--black); color: var(--white); }
+.cal-cell.cal-selected:hover { background: #333; }
+
+/* Age auto-display */
+.age-display {
+    margin-top: 10px;
+    font-size: 13px;
+    letter-spacing: .12em;
+    color: #888;
+    min-height: 20px;
+    transition: all .3s;
+}
+.age-display.valid { color: #4a7c59; }
+.age-display.invalid { color: #c0392b; }
+
+/* Consent boxes */
+.consent-box {
+    border: 1.5px solid #e2dfd8;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    cursor: pointer;
+    transition: border-color .25s, background .25s;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+}
+.consent-box:hover { border-color: var(--black); }
+.consent-box.checked { border-color: var(--black); background: #fafaf8; }
+.consent-checkbox {
+    width: 20px;
+    height: 20px;
+    border: 1.5px solid #ccc;
+    border-radius: 3px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all .2s;
+    margin-top: 2px;
+}
+.consent-box.checked .consent-checkbox {
+    background: var(--black);
+    border-color: var(--black);
+}
+.consent-check-icon {
+    color: var(--white);
+    font-size: 12px;
+    opacity: 0;
+    transition: opacity .2s;
+}
+.consent-box.checked .consent-check-icon { opacity: 1; }
+.consent-text {
+    font-size: clamp(13px,1vw,15px);
+    line-height: 1.7;
+    color: var(--black);
+    letter-spacing: .02em;
+}
+
+/* Error shake */
+@keyframes shake {
+    0%,100% { transform: translateX(0); }
+    20%,60%  { transform: translateX(-6px); }
+    40%,80%  { transform: translateX(6px); }
+}
+.shake { animation: shake .4s ease; }
+
+/* ════════════════════════════
+   PAYMENT OVERLAY PAGES
+   ════════════════════════════ */
+.overlay-page {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: var(--white);
+    z-index: 2000;
+    overflow-y: auto;
+    animation: fadeInPage .4s ease;
+}
+.overlay-page.active { display: block; }
+@keyframes fadeInPage {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+.overlay-inner {
+    max-width: 560px;
+    margin: 0 auto;
+    padding: clamp(48px,6vw,80px) clamp(24px,5vw,48px);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.overlay-logo {
+    height: 56px;
+    width: auto;
+    object-fit: contain;
+    margin-bottom: 40px;
+    filter: brightness(0);
+    opacity: .8;
+}
+.overlay-title {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: clamp(28px,3.5vw,48px);
+    font-weight: 400;
+    letter-spacing: -0.04em;
+    transform: scaleX(.82);
+    transform-origin: center;
+    color: var(--black);
+    text-align: center;
+    margin-bottom: 12px;
+}
+.overlay-sub {
+    font-size: clamp(12px,0.9vw,14px);
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: #888;
+    text-align: center;
+    margin-bottom: clamp(36px,4vw,56px);
+}
+
+/* ── Payment Method Selection ── */
+.payment-amount-box {
+    background: var(--black);
+    color: var(--white);
+    width: 100%;
+    padding: 28px 32px;
+    text-align: center;
+    margin-bottom: 40px;
+}
+.payment-amount-label {
+    font-size: 11px;
+    letter-spacing: .32em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.55);
+    margin-bottom: 8px;
+    display: block;
+}
+.payment-amount-value {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: clamp(40px,5vw,64px);
+    letter-spacing: -0.04em;
+    color: var(--white);
+    display: block;
+    line-height: 1;
+}
+.payment-name-display {
+    font-size: 13px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.5);
+    margin-top: 10px;
+    display: block;
+}
+
+.payment-method-label {
+    font-size: 11px;
+    letter-spacing: .28em;
+    text-transform: uppercase;
+    color: #999;
+    margin-bottom: 16px;
+    text-align: center;
+}
+.payment-methods {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    width: 100%;
+    margin-bottom: 40px;
+}
+.payment-method-btn {
+    border: 1.5px solid var(--black);
+    background: transparent;
+    padding: 24px 16px;
+    cursor: pointer;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: .22em;
+    color: var(--black);
+    transition: all .25s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+.payment-method-btn:hover, .payment-method-btn.selected {
+    background: var(--black);
+    color: var(--white);
+}
+.payment-method-icon { font-size: 28px; line-height: 1; }
+
+/* ── GCash QR Page ── */
+.gcash-qr-box {
+    width: 220px;
+    height: 220px;
+    border: 1.5px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px;
+    background: #fafafa;
+    position: relative;
+    overflow: hidden;
+}
+.gcash-qr-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+.gcash-qr-grid {
+    display: grid;
+    grid-template-columns: repeat(7,24px);
+    grid-template-rows: repeat(7,24px);
+    gap: 2px;
+}
+.qr-cell {
+    background: var(--black);
+    border-radius: 1px;
+}
+.qr-cell.light { background: transparent; }
+.gcash-label-box {
+    text-align: center;
+    margin-bottom: 32px;
+}
+.gcash-name {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 20px;
+    letter-spacing: -0.02em;
+    color: var(--black);
+    display: block;
+    margin-bottom: 4px;
+}
+.gcash-number {
+    font-size: 12px;
+    letter-spacing: .28em;
+    color: #888;
+    text-transform: uppercase;
+}
+.gcash-note {
+    font-size: 12px;
+    letter-spacing: .12em;
+    color: #888;
+    text-align: center;
+    line-height: 1.8;
+    margin-bottom: 28px;
+    max-width: 340px;
+}
+.gcash-badge {
+    display: inline-block;
+    background: #007bff;
+    color: #fff;
+    font-size: 11px;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    padding: 6px 18px;
+    margin-bottom: 32px;
+    border-radius: 2px;
+}
+
+/* ── E-Receipt ── */
+.receipt-wrapper {
+    width: 100%;
+    border: 1.5px solid var(--black);
+    padding: 0;
+    margin-bottom: 32px;
+}
+.receipt-header {
+    background: var(--black);
+    color: var(--white);
+    padding: 28px 32px;
+    text-align: center;
+}
+.receipt-event-name {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: clamp(22px,3vw,36px);
+    letter-spacing: -0.03em;
+    display: block;
+    margin-bottom: 4px;
+}
+.receipt-event-year {
+    font-size: 11px;
+    letter-spacing: .32em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.5);
+}
+.receipt-body { padding: 28px 32px; }
+.receipt-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 10px 0;
+    border-bottom: 1px solid #e2dfd8;
+    font-size: 13px;
+}
+.receipt-row:last-child { border-bottom: none; }
+.receipt-row-label {
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: #888;
+    font-size: 11px;
+}
+.receipt-row-value {
+    color: var(--black);
+    font-weight: bold;
+    letter-spacing: .06em;
+    text-align: right;
+    max-width: 60%;
+}
+.receipt-total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 18px 0 0;
+    margin-top: 4px;
+}
+.receipt-total-label {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 18px;
+    letter-spacing: -0.02em;
+}
+.receipt-total-value {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 28px;
+    letter-spacing: -0.04em;
+}
+.receipt-payment-badge {
+    display: inline-block;
+    border: 1.5px solid var(--black);
+    font-size: 10px;
+    letter-spacing: .28em;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    margin-top: 12px;
+}
+.receipt-payment-badge.cash-badge { border-color: #c8a96e; color: #8a7040; }
+.receipt-payment-badge.gcash-badge-style { border-color: #007bff; color: #007bff; }
+
+/* Schedule */
+.schedule-wrapper {
+    width: 100%;
+    margin-bottom: 32px;
+}
+.schedule-title {
+    font-size: 11px;
+    letter-spacing: .32em;
+    text-transform: uppercase;
+    color: #888;
+    margin-bottom: 16px;
+    text-align: center;
+}
+.schedule-day {
+    border: 1px solid #e2dfd8;
+    margin-bottom: 8px;
+}
+.schedule-day-header {
+    background: #f4f2ee;
+    border-bottom: 1px solid #e2dfd8;
+    padding: 10px 18px;
+    font-size: 11px;
+    letter-spacing: .28em;
+    text-transform: uppercase;
+    color: var(--black);
+    font-weight: bold;
+}
+.schedule-sessions { padding: 0; }
+.schedule-session {
+    display: flex;
+    align-items: center;
+    padding: 12px 18px;
+    border-bottom: 1px solid #f0ede8;
+    font-size: 12px;
+    letter-spacing: .08em;
+}
+.schedule-session:last-child { border-bottom: none; }
+.session-time {
+    color: #888;
+    min-width: 90px;
+    font-size: 11px;
+    letter-spacing: .16em;
+}
+.session-desc { color: var(--black); }
+
+/* Cash reminder */
+.cash-reminder {
+    background: #fffbf0;
+    border: 1.5px solid #c8a96e;
+    padding: 20px 24px;
+    width: 100%;
+    margin-bottom: 28px;
+    text-align: center;
+}
+.cash-reminder-icon { font-size: 24px; margin-bottom: 8px; display: block; }
+.cash-reminder-text {
+    font-size: 13px;
+    letter-spacing: .08em;
+    color: #6b5430;
+    line-height: 1.7;
+}
+
+.register-another-btn {
+    background: transparent;
+    color: var(--black);
+    border: 1.5px solid var(--black);
+    padding: 16px 44px;
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .3em;
+    cursor: pointer;
+    transition: all .25s;
+    touch-action: manipulation;
+    width: 100%;
+    margin-bottom: 16px;
+}
+.register-another-btn:hover { background: var(--black); color: var(--white); }
+
+.receipt-done-btn {
+    background: var(--black);
+    color: var(--white);
+    border: none;
+    padding: 16px 44px;
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .3em;
+    cursor: pointer;
+    transition: opacity .25s;
+    touch-action: manipulation;
+    width: 100%;
+    margin-bottom: 40px;
+    text-decoration: none;
+    display: block;
+    text-align: center;
+}
+.receipt-done-btn:hover { opacity: .75; }
 
 /* ════════════════════════════
    FOOTER
@@ -619,11 +1110,58 @@ textarea { resize: vertical; min-height: 56px; }
 }
 
 /* ════════════════════════════
-   REMAINING BREAKPOINTS
+   BREAKPOINTS
    ════════════════════════════ */
-
-/* Mobile nav drawer */
 @media (max-width: 860px) {
+    .hero {
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        background: var(--black);
+        min-height: 0;
+        height: auto;
+        margin-top: 0;
+        padding-top: 0;
+    }
+    .hero-right {
+        position: relative;
+        width: 100%;
+        padding-top: 56.25%;
+        flex: none;
+        overflow: hidden;
+        z-index: 1;
+        margin: 0;
+        order: 0;
+    }
+    .hero-video-wrapper { position: absolute; top: 0; left: 0; right: 0; bottom: 0; }
+    #ytPlayer { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; }
+    #ytPlayer iframe {
+        position: absolute;
+        top: 50%; left: 50%;
+        width:  calc(100% + 600px);
+        height: calc(100% + 600px);
+        transform: translate(-50%, -50%);
+        border: none; display: block;
+        pointer-events: none;
+    }
+    .video-overlay {
+        background: linear-gradient(to bottom, transparent 0%, transparent 70%, rgba(10,10,10,.55) 88%, rgba(10,10,10,.92) 100%);
+    }
+    .hero-left {
+        position: relative;
+        order: 1;
+        z-index: 2;
+        flex: none;
+        width: 100%;
+        padding: clamp(32px,6vw,52px) clamp(24px,6vw,44px) clamp(40px,7vw,64px);
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .hero-left::after { display: none; }
+    .hero-headline { font-size: clamp(68px, 16vw, 108px); transform: scaleX(.78); transform-origin: left center; line-height: .86; }
+    .hero-date { font-size: clamp(13px,3.5vw,18px); color: rgba(255,255,255,.85); }
+    .btn { padding: 16px 40px; font-size: 12px; }
     .nav-links {
         position: fixed;
         top: 0; right: -100%; bottom: 0;
@@ -639,43 +1177,30 @@ textarea { resize: vertical; min-height: 56px; }
         z-index: 999;
     }
     .nav-links.active { right: 0; }
-    .nav-links a {
-        color: var(--black);
-        font-size: clamp(15px,4vw,18px);
-        letter-spacing: .18em;
-    }
+    .nav-links a { color: var(--black); font-size: clamp(15px,4vw,18px); letter-spacing: .18em; }
     .menu-toggle { display: flex; }
-
-    .nav-overlay {
-        display: none;
-        position: fixed; inset: 0;
-        background: rgba(0,0,0,.4);
-        z-index: 998;
-    }
+    .nav-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 998; }
     .nav-overlay.active { display: block; }
 }
-
 @media (max-width: 680px) {
     .form-row { grid-template-columns: 1fr; }
-    .description-title,
-    .section-title { transform: scaleX(.9); }
+    .description-title, .section-title { transform: scaleX(.9); }
+    .payment-methods { grid-template-columns: 1fr 1fr; }
+    .calendar-popup { width: calc(100vw - 48px); }
 }
 @media (max-width: 480px) {
     .navbar { padding: 14px 20px; }
     .radio-group { flex-direction: column; gap: 16px; }
-    .description-title,
-    .section-title { transform: none; letter-spacing: -0.03em; }
+    .description-title, .section-title { transform: none; letter-spacing: -0.03em; }
+    .hero-headline { font-size: clamp(64px,15vw,96px); }
+    .hero-left { padding-left: 20px; padding-right: 20px; }
 }
 @media (min-width: 1400px) {
     .description-container { max-width: 1000px; }
-    .form-container        { max-width: 800px; }
+    .form-container { max-width: 800px; }
 }
-
-/* Disable hover states on touch screens */
 @media (hover: none) {
     .btn:hover, .submit-btn:hover { opacity: 1; transform: none; }
-    .crawl-item:hover img { opacity: .38; }
-    .crawl-item.crawl-current:hover img { opacity: 1; }
 }
 </style>
 </head>
@@ -698,10 +1223,8 @@ textarea { resize: vertical; min-height: 56px; }
     </div>
 </nav>
 
-<!-- HERO -->
+<!-- ════════════ HERO ════════════ -->
 <section class="hero" id="home">
-
-    <!-- Text panel (left on desktop, bottom-overlay on mobile) -->
     <div class="hero-left">
         <div class="hero-content">
             <span class="hero-headline">It's our<br>5th year.</span>
@@ -709,115 +1232,44 @@ textarea { resize: vertical; min-height: 56px; }
             <button class="btn" onclick="scrollToSection('registration')">Register Now</button>
         </div>
     </div>
-
-    <!-- Video panel (right on desktop, fullscreen bg on mobile) -->
     <div class="hero-right">
         <div class="hero-video-wrapper">
-            <!--
-            ┌──────────────────────────────────────────────────────┐
-            │  VIDEO OPTIONS — pick one and uncomment              │
-            │                                                      │
-            │  A) Local file (recommended for 4:3):               │
-            │     <video class="hero-video" autoplay muted loop    │
-            │            playsinline>                              │
-            │       <source src="assets/video/hero.mp4"           │
-            │               type="video/mp4">                      │
-            │     </video>                                         │
-            │                                                      │
-            │  B) YouTube embed (replace YOUR_ID twice):          │
-            │     <iframe class="hero-video"                       │
-            │       src="https://www.youtube.com/embed/YOUR_ID    │
-            │            ?autoplay=1&mute=1&loop=1                 │
-            │            &playlist=YOUR_ID&controls=0&rel=0"      │
-            │       frameborder="0"                                │
-            │       allow="autoplay; encrypted-media"              │
-            │       allowfullscreen></iframe>                      │
-            └──────────────────────────────────────────────────────┘
-            -->
             <div id="ytPlayer"></div>
             <div class="video-overlay"></div>
         </div>
     </div>
-
 </section>
 
-<!-- LOGO CRAWL -->
+<!-- ════════════ LOGO CRAWL ════════════ -->
 <section class="logo-crawl-section">
     <p class="crawl-label">Five Years of Awakening</p>
     <div class="crawl-viewport">
         <div class="crawl-belt" id="crawlBelt">
-            <!-- Set 1 — original -->
-            <div class="crawl-item">
-                <img src="assets/images/1.png" alt="Original Mark 2022">
-                <span>Original Mark</span>
-                <span class="crawl-year">2022</span>
-            </div>
-            <div class="crawl-item">
-                <img src="assets/images/2.png" alt="2022">
-                <span>2022</span>
-            </div>
-            <div class="crawl-item">
-                <img src="assets/images/3.png" alt="2023">
-                <span>2023</span>
-            </div>
-            <div class="crawl-item">
-                <img src="assets/images/4.png" alt="2024">
-                <span>2024</span>
-            </div>
-            <div class="crawl-item">
-                <img src="assets/images/5.png" alt="2025">
-                <span>2025</span>
-            </div>
-            <div class="crawl-item crawl-current">
-                <img src="assets/images/6.png" alt="Present Mark 2026">
-                <span>Present Mark</span>
-                <span class="crawl-year">2026 ★</span>
-            </div>
-            <div class="crawl-item">
-                <img src="assets/images/7.png" alt="2026">
-                <span>2026</span>
-            </div>
-            <!-- Set 2 — exact duplicate for seamless CSS loop -->
-            <div class="crawl-item" aria-hidden="true">
-                <img src="assets/images/1.png" alt="">
-                <span>Original Mark</span>
-                <span class="crawl-year">2022</span>
-            </div>
-            <div class="crawl-item" aria-hidden="true">
-                <img src="assets/images/2.png" alt="">
-                <span>2022</span>
-            </div>
-            <div class="crawl-item" aria-hidden="true">
-                <img src="assets/images/3.png" alt="">
-                <span>2023</span>
-            </div>
-            <div class="crawl-item" aria-hidden="true">
-                <img src="assets/images/4.png" alt="">
-                <span>2024</span>
-            </div>
-            <div class="crawl-item" aria-hidden="true">
-                <img src="assets/images/5.png" alt="">
-                <span>2025</span>
-            </div>
-            <div class="crawl-item crawl-current" aria-hidden="true">
-                <img src="assets/images/6.png" alt="">
-                <span>Present Mark</span>
-                <span class="crawl-year">2026 ★</span>
-            </div>
-            <div class="crawl-item" aria-hidden="true">
-                <img src="assets/images/7.png" alt="">
-                <span>2026</span>
-            </div>
+            <div class="crawl-item"><img src="assets/images/1.png" alt="2022"><span>Original Mark</span><span class="crawl-year">2022</span></div>
+            <div class="crawl-item"><img src="assets/images/2.png" alt="2022"><span>2022</span></div>
+            <div class="crawl-item"><img src="assets/images/3.png" alt="2023"><span>2023</span></div>
+            <div class="crawl-item"><img src="assets/images/4.png" alt="2024"><span>2024</span></div>
+            <div class="crawl-item"><img src="assets/images/5.png" alt="2025"><span>2025</span></div>
+            <div class="crawl-item crawl-current"><img src="assets/images/6.png" alt="2026"><span>Present Mark</span><span class="crawl-year">2026 ★</span></div>
+            <div class="crawl-item"><img src="assets/images/7.png" alt="2026"><span>2026</span></div>
+            <!-- Duplicate for seamless loop -->
+            <div class="crawl-item" aria-hidden="true"><img src="assets/images/1.png" alt=""><span>Original Mark</span><span class="crawl-year">2022</span></div>
+            <div class="crawl-item" aria-hidden="true"><img src="assets/images/2.png" alt=""><span>2022</span></div>
+            <div class="crawl-item" aria-hidden="true"><img src="assets/images/3.png" alt=""><span>2023</span></div>
+            <div class="crawl-item" aria-hidden="true"><img src="assets/images/4.png" alt=""><span>2024</span></div>
+            <div class="crawl-item" aria-hidden="true"><img src="assets/images/5.png" alt=""><span>2025</span></div>
+            <div class="crawl-item crawl-current" aria-hidden="true"><img src="assets/images/6.png" alt=""><span>Present Mark</span><span class="crawl-year">2026 ★</span></div>
+            <div class="crawl-item" aria-hidden="true"><img src="assets/images/7.png" alt=""><span>2026</span></div>
         </div>
     </div>
 </section>
 
-<!-- THEME -->
+<!-- ════════════ THEME ════════════ -->
 <section class="theme-section">
-    <img src="assets/images/theme-reveal.png" alt="God's timeless message is... — YTH Rally 2026 Theme Reveal">
+    <img src="assets/images/theme-reveal.png" alt="YTH Rally 2026 Theme Reveal">
 </section>
 
-<!-- ABOUT -->
+<!-- ════════════ ABOUT ════════════ -->
 <section class="event-description" id="about">
     <div class="description-container">
         <span class="description-title">About the Event</span>
@@ -840,262 +1292,849 @@ textarea { resize: vertical; min-height: 56px; }
         </div>
         <p class="description-content" style="margin-top:clamp(24px,2.8vw,44px)">
             Whether this is your first time attending or you're a returning participant, YTH Rally 2026 promises
-            to be an experience that will impact your life. Don't miss this opportunity to be part of something
-            extraordinary.
+            to be an experience that will impact your life. Don't miss this opportunity to be part of something extraordinary.
         </p>
     </div>
 </section>
 
-<!-- REGISTRATION -->
+<!-- ════════════ REGISTRATION ════════════ -->
 <section class="form-section" id="registration">
     <div class="form-container">
         <span class="section-title">Registration</span>
-        <form onsubmit="handleSubmit(event)" novalidate>
 
-            <div class="form-group">
-                <label for="name">Full Name</label>
-                <input type="text" id="name" name="name" autocomplete="name" required>
+        <!-- Progress indicator -->
+        <div class="form-progress" id="formProgress">
+            <div class="progress-step active" id="pstep1">
+                <div class="progress-dot"></div>
+                <span class="progress-label">Personal<br>Info</span>
             </div>
-
-            <div class="form-group">
-                <label for="address">Address</label>
-                <textarea id="address" name="address" rows="2" autocomplete="street-address" required></textarea>
+            <div class="progress-step" id="pstep2">
+                <div class="progress-dot"></div>
+                <span class="progress-label">Contact<br>&amp; Church</span>
             </div>
+            <div class="progress-step" id="pstep3">
+                <div class="progress-dot"></div>
+                <span class="progress-label">Accom-<br>modation</span>
+            </div>
+            <div class="progress-step" id="pstep4">
+                <div class="progress-dot"></div>
+                <span class="progress-label">Guardian<br>Consent</span>
+            </div>
+        </div>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="age">Age</label>
-                    <input type="number" id="age" name="age" min="13" max="21" inputmode="numeric" required>
+        <form id="regForm" novalidate>
+
+            <!-- ══ STEP 1: Personal Info ══ -->
+            <div class="form-step active" id="step1">
+                <span class="step-heading">Who's joining us?</span>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" id="lastName" name="lastName" autocomplete="family-name">
+                    </div>
+                    <div class="form-group">
+                        <label for="firstName">First Name</label>
+                        <input type="text" id="firstName" name="firstName" autocomplete="given-name">
+                    </div>
                 </div>
+
                 <div class="form-group">
-                    <label for="sex">Sex</label>
-                    <select id="sex" name="sex" required>
-                        <option value="">Select</option>
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
+                    <label for="nickname">Nickname</label>
+                    <input type="text" id="nickname" name="nickname">
+                </div>
+
+                <!-- Date picker -->
+                <div class="form-group">
+                    <label>Birthdate</label>
+                    <div class="date-picker-wrap" id="datePickerWrap">
+                        <div class="date-display placeholder" id="dateDisplay" onclick="toggleCalendar()">
+                            <span id="dateDisplayText">Select date</span>
+                            <span class="date-display-arrow">▾</span>
+                        </div>
+                        <div class="calendar-popup" id="calendarPopup">
+                            <div class="cal-header">
+                                <button type="button" class="cal-nav-btn" onclick="calNav(-1)">‹</button>
+                                <div class="cal-month-year">
+                                    <select class="cal-select" id="calMonthSel" onchange="calMonthChange()">
+                                        <option value="0">January</option><option value="1">February</option>
+                                        <option value="2">March</option><option value="3">April</option>
+                                        <option value="4">May</option><option value="5">June</option>
+                                        <option value="6">July</option><option value="7">August</option>
+                                        <option value="8">September</option><option value="9">October</option>
+                                        <option value="10">November</option><option value="11">December</option>
+                                    </select>
+                                    <select class="cal-select" id="calYearSel" onchange="calYearChange()"></select>
+                                </div>
+                                <button type="button" class="cal-nav-btn" onclick="calNav(1)">›</button>
+                            </div>
+                            <div class="cal-days-header">
+                                <div class="cal-day-label">Su</div><div class="cal-day-label">Mo</div>
+                                <div class="cal-day-label">Tu</div><div class="cal-day-label">We</div>
+                                <div class="cal-day-label">Th</div><div class="cal-day-label">Fr</div>
+                                <div class="cal-day-label">Sa</div>
+                            </div>
+                            <div class="cal-grid" id="calGrid"></div>
+                        </div>
+                        <input type="hidden" id="birthdate" name="birthdate">
+                    </div>
+                    <div class="age-display" id="ageDisplay"></div>
+                    <input type="hidden" id="age" name="age">
+                </div>
+
+                <div class="form-group">
+                    <label>Gender</label>
+                    <div class="radio-group">
+                        <div class="radio-item">
+                            <input type="radio" id="genderMale" name="gender" value="Male">
+                            <label for="genderMale">Male</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="genderFemale" name="gender" value="Female">
+                            <label for="genderFemale">Female</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step-nav">
+                    <button type="button" class="next-btn" onclick="goNext(1)">Continue →</button>
+                </div>
+            </div>
+
+            <!-- ══ STEP 2: Contact & Church ══ -->
+            <div class="form-step" id="step2">
+                <span class="step-heading">How can we reach you?</span>
+
+                <div class="form-group">
+                    <label for="address">Address</label>
+                    <textarea id="address" name="address" rows="2" autocomplete="street-address"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="contact">Mobile Number</label>
+                    <input type="tel" id="contact" name="contact" autocomplete="tel" inputmode="numeric" maxlength="11" placeholder="09XXXXXXXXX" oninput="this.value=this.value.replace(/\D/g,'').slice(0,11)">
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" autocomplete="email" inputmode="email" placeholder="for updates &amp; confirmation">
+                </div>
+
+                <div class="form-group" style="margin-top:clamp(32px,3.5vw,48px);">
+                    <label for="localChurch">Local Church</label>
+                    <select id="localChurch" name="localChurch" onchange="handleChurchSelect()">
+                        <option value="">Select your church</option>
+                        <option value="New Life Sta. Rosa">New Life Sta. Rosa</option>
+                        <option value="New Life Cabuyao Outreach">New Life Cabuyao Outreach</option>
+                        <option value="New Life Biñan Outreach">New Life Biñan Outreach</option>
+                        <option value="New Life Calamba Outreach">New Life Calamba Outreach</option>
+                        <option value="New Life San Pedro Outreach">New Life San Pedro Outreach</option>
+                        <option value="New Life Camiling Outreach">New Life Camiling Outreach</option>
+                        <option value="New Life Villasis Outreach">New Life Villasis Outreach</option>
+                        <option value="Others">Others</option>
                     </select>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <label for="contact">Contact Number</label>
-                <input type="tel" id="contact" name="contact" autocomplete="tel" inputmode="tel" required>
-            </div>
+                <div id="otherChurchSection" class="form-group hidden">
+                    <label for="otherChurch">Name of Church</label>
+                    <input type="text" id="otherChurch" name="otherChurch" autocomplete="organization">
+                </div>
 
-            <div class="divider"></div>
+                <div class="form-group">
+                    <label for="role">You are</label>
+                    <select id="role" name="role">
+                        <option value="">Select</option>
+                        <option value="Youth">Youth</option>
+                        <option value="Youth Leader">Youth Leader</option>
+                        <option value="Pastor">Pastor</option>
+                        <option value="Parent / Guardian">Parent / Guardian</option>
+                    </select>
+                </div>
 
-            <div class="form-group">
-                <label>First time attending?</label>
-                <div class="radio-group">
-                    <div class="radio-item">
-                        <input type="radio" id="firstTimeYes" name="firstTime" value="yes" onchange="handleFirstTime()">
-                        <label for="firstTimeYes">Yes</label>
-                    </div>
-                    <div class="radio-item">
-                        <input type="radio" id="firstTimeNo" name="firstTime" value="no" onchange="handleFirstTime()">
-                        <label for="firstTimeNo">No</label>
-                    </div>
+                <div class="step-nav">
+                    <button type="button" class="next-btn" onclick="goNext(2)">Continue →</button>
+                    <button type="button" class="back-btn" onclick="goBack(2)">← Back</button>
                 </div>
             </div>
 
-            <div id="referralSection" class="form-group hidden">
-                <label for="referral">How did you hear about us?</label>
-                <select id="referral" name="referral">
-                    <option value="">Select</option>
-                    <option value="Friend">Friend</option>
-                    <option value="Social Media">Social Media</option>
-                    <option value="Church">Church</option>
-                    <option value="Family">Family</option>
-                    <option value="Other">Other</option>
-                </select>
-            </div>
+            <!-- ══ STEP 3: Accommodation ══ -->
+            <div class="form-step" id="step3">
+                <span class="step-heading">Will you be staying with us?</span>
 
-            <div id="churchSection" class="form-group hidden">
-                <label>Are you part of a church?</label>
-                <div class="radio-group">
-                    <div class="radio-item">
-                        <input type="radio" id="partOfChurchYes" name="partOfChurch" value="yes" onchange="handleChurchMembership()">
-                        <label for="partOfChurchYes">Yes</label>
+                <div class="form-group">
+                    <label>Avail in-house accommodation?</label>
+                    <p style="font-size:12px;color:#888;letter-spacing:.06em;margin-bottom:20px;line-height:1.8;">Rooms only. Food packs are optional — look for Michelle Macabocsit on the day of the event.</p>
+                    <div class="radio-group">
+                        <div class="radio-item">
+                            <input type="radio" id="accomYes" name="accommodation" value="Yes">
+                            <label for="accomYes">Yes, I'll stay</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="accomNo" name="accommodation" value="No">
+                            <label for="accomNo">No, day only</label>
+                        </div>
                     </div>
-                    <div class="radio-item">
-                        <input type="radio" id="partOfChurchNo" name="partOfChurch" value="no" onchange="handleChurchMembership()">
-                        <label for="partOfChurchNo">No</label>
-                    </div>
+                </div>
+
+                <div class="step-nav">
+                    <button type="button" class="next-btn" onclick="goNext(3)">Continue →</button>
+                    <button type="button" class="back-btn" onclick="goBack(3)">← Back</button>
                 </div>
             </div>
 
-            <div id="whichChurchSection" class="form-group hidden">
-                <label for="whichChurch">What church?</label>
-                <select id="whichChurch" name="whichChurch" onchange="handleChurchSelection()">
-                    <option value="">Select</option>
-                    <option value="New Life Sta Rosa">New Life Sta Rosa</option>
-                    <option value="Outreach Church">Outreach Church</option>
-                    <option value="Other">Other Church</option>
-                </select>
+            <!-- ══ STEP 4: Guardian Consent ══ -->
+            <div class="form-step" id="step4">
+                <span class="step-heading">Parent / Guardian Consent</span>
+
+                <div class="form-group">
+                    <label for="guardianName">Parent / Guardian Full Name</label>
+                    <input type="text" id="guardianName" name="guardianName" autocomplete="name">
+                </div>
+
+                <div class="form-group">
+                    <label for="guardianContact">Parent / Guardian Mobile Number</label>
+                    <input type="tel" id="guardianContact" name="guardianContact" autocomplete="tel" inputmode="numeric" maxlength="11" placeholder="09XXXXXXXXX" oninput="this.value=this.value.replace(/\D/g,'').slice(0,11)">
+                </div>
+
+                <div class="form-group">
+                    <label>Does your child have medical conditions / allergies?</label>
+                    <div class="radio-group">
+                        <div class="radio-item">
+                            <input type="radio" id="medYes" name="medicalCondition" value="Yes" onchange="handleMedical()">
+                            <label for="medYes">Yes</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="medNo" name="medicalCondition" value="No" onchange="handleMedical()">
+                            <label for="medNo">No</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="medicalDetail" class="form-group hidden">
+                    <label for="medicalInfo">Please specify condition / medication</label>
+                    <textarea id="medicalInfo" name="medicalInfo" rows="2"></textarea>
+                </div>
+
+                <div class="form-group" style="margin-top:clamp(28px,3vw,40px);">
+                    <label style="margin-bottom:16px;">Please read and check each statement</label>
+
+                    <div class="consent-box" id="cboxA" onclick="toggleConsent('cboxA','consentA')">
+                        <div class="consent-checkbox"><span class="consent-check-icon">✓</span></div>
+                        <span class="consent-text">I understand that the YTH Rally programs and activities include interaction with fellow young believers.</span>
+                    </div>
+                    <input type="hidden" id="consentA" name="consentInteraction" value="">
+
+                    <div class="consent-box" id="cboxB" onclick="toggleConsent('cboxB','consentB')">
+                        <div class="consent-checkbox"><span class="consent-check-icon">✓</span></div>
+                        <span class="consent-text">I am secure that my son/daughter will be in good company that promotes a righteous life in Christ Jesus and demonstrates the power of God.</span>
+                    </div>
+                    <input type="hidden" id="consentB" name="consentCommunity" value="">
+
+                    <div class="consent-box" id="cboxC" onclick="toggleConsent('cboxC','consentC')">
+                        <div class="consent-checkbox"><span class="consent-check-icon">✓</span></div>
+                        <span class="consent-text">In all liberty, I am allowing my child to join the Youth Rally.</span>
+                    </div>
+                    <input type="hidden" id="consentC" name="consentJoin" value="">
+                </div>
+
+                <div class="form-group">
+                    <label for="guardianSignature">Guardian Signature (Type Full Name)</label>
+                    <input type="text" id="guardianSignature" name="guardianSignature" placeholder="Type your full name">
+                </div>
+
+                <div class="step-nav">
+                    <button type="button" class="submit-btn" onclick="handleSubmit()">Proceed to Payment →</button>
+                    <button type="button" class="back-btn" onclick="goBack(4)">← Back</button>
+                </div>
             </div>
 
-            <!-- Outreach sub-location — shown when Outreach Church is selected -->
-            <div id="outreachLocationSection" class="form-group hidden">
-                <label for="outreachLocation">Which Outreach Church?</label>
-                <select id="outreachLocation" name="outreachLocation" onchange="handleOutreachLocation()">
-                    <option value="">Select location</option>
-                    <option value="New Life Biñan Outreach">New Life Biñan Outreach</option>
-                    <option value="New Life Cabuyao Outreach">New Life Cabuyao Outreach</option>
-                    <option value="New Life Calamba Outreach">New Life Calamba Outreach</option>
-                    <option value="New Life Camiling Outreach">New Life Camiling Outreach</option>
-                    <option value="New Life San Pedro Outreach">New Life San Pedro Outreach</option>
-                    <option value="New Life Villasis Outreach">New Life Villasis Outreach</option>
-                    <option value="New Life Saskatoon">New Life Saskatoon</option>
-                </select>
-            </div>
-
-            <div id="otherChurchSection" class="form-group hidden">
-                <label for="otherChurch">Please specify your church</label>
-                <input type="text" id="otherChurch" name="otherChurch" autocomplete="organization">
-            </div>
-
-            <div class="submit-container">
-                <button type="submit" class="submit-btn">Submit Application</button>
-            </div>
-
-            <div id="successMessage" class="success-message">
-                Application Submitted Successfully
-            </div>
         </form>
     </div>
 </section>
 
-<!-- FOOTER -->
+<!-- ════════════ FOOTER ════════════ -->
 <footer class="footer">
     YTH Rally 2026 &nbsp;|&nbsp; New Life Sta. Rosa
 </footer>
 
-<script>
-/* ── YOUTUBE IFRAME API — force autoplay + mute + loop ── */
-var ytPlayerReady = false;
+<!-- ══════════════════════════════════════
+     OVERLAY: PAYMENT METHOD SELECTION
+     ══════════════════════════════════════ -->
+<div class="overlay-page" id="paymentPage">
+    <div class="overlay-inner">
+        <img src="assets/images/yr26-logo.png" alt="YTH Rally" class="overlay-logo">
+        <h2 class="overlay-title">Payment</h2>
+        <p class="overlay-sub">Registration Fee</p>
 
-// Called automatically by the API once it loads
+        <div class="payment-amount-box">
+            <span class="payment-amount-label">Amount Due</span>
+            <span class="payment-amount-value">₱350</span>
+            <span class="payment-name-display" id="paymentNameDisplay">—</span>
+        </div>
+
+        <p class="payment-method-label">Select payment method</p>
+        <div class="payment-methods">
+            <button class="payment-method-btn" onclick="selectPayment('cash')">
+                <span class="payment-method-icon">💵</span>
+                Cash
+            </button>
+            <button class="payment-method-btn" onclick="selectPayment('gcash')">
+                <span class="payment-method-icon">📱</span>
+                GCash
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     OVERLAY: GCASH QR
+     ══════════════════════════════════════ -->
+<div class="overlay-page" id="gcashPage">
+    <div class="overlay-inner">
+        <img src="assets/images/yr26-logo.png" alt="YTH Rally" class="overlay-logo">
+        <h2 class="overlay-title">Scan to Pay</h2>
+        <p class="overlay-sub">GCash · ₱350</p>
+
+        <div class="gcash-badge">GCash</div>
+
+        <!-- Placeholder QR — replace src with actual QR image -->
+        <div class="gcash-qr-box">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+                <svg width="160" height="160" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Finder pattern TL -->
+                    <rect x="10" y="10" width="42" height="42" fill="none" stroke="#0a0a0a" stroke-width="5"/>
+                    <rect x="20" y="20" width="22" height="22" fill="#0a0a0a"/>
+                    <!-- Finder pattern TR -->
+                    <rect x="108" y="10" width="42" height="42" fill="none" stroke="#0a0a0a" stroke-width="5"/>
+                    <rect x="118" y="20" width="22" height="22" fill="#0a0a0a"/>
+                    <!-- Finder pattern BL -->
+                    <rect x="10" y="108" width="42" height="42" fill="none" stroke="#0a0a0a" stroke-width="5"/>
+                    <rect x="20" y="118" width="22" height="22" fill="#0a0a0a"/>
+                    <!-- Random data cells (placeholder pattern) -->
+                    <rect x="60" y="10" width="8" height="8" fill="#0a0a0a"/>
+                    <rect x="76" y="10" width="8" height="8" fill="#0a0a0a"/>
+                    <rect x="92" y="10" width="8" height="8" fill="#0a0a0a"/>
+                    <rect x="60" y="26" width="8" height="8" fill="#0a0a0a"/>
+                    <rect x="92" y="26" width="8" height="8" fill="#0a0a0a"/>
+                    <rect x="68" y="42" width="8" height="8" fill="#0a0a0a"/>
+                    <rect x="84" y="42" width="8" height="8" fill="#0a0a0a"/>
+                    <!-- middle rows -->
+                    <rect x="10"  y="60" width="8" height="8" fill="#0a0a0a"/>
+                    <rect x="26"  y="60" width="8" height="8" fill="#0a0a0a"/>
+                    <rect x="42"  y="60" width="8" height="8" fill="#0a0a0a"/>
+                    <rect x="60"  y="60" width="8" height="8" fill="#0a0a0a"/>
+                    <rect x="84"  y="60" width="8" height="8" fill="#0a0a0a"/>
+                    <rect x="108" y="60" width="8" height="8" fill="#0a0a0a"/>
+                    <rect x="132" y="60" width="8" height="8" fill="#0a0a0a"/>
+                    <rect x="18"  y="76" width="8" height="8" fill="#0a0a0a"/>
+                    <rect x="50"  y="76" width="8" height="8" fill="#0a0a0a"/>
+                    <rect x="68"  y="76" width="8" height="8" fill="#0a0a0a"/>
+                    <rect x="92"  y="76" width="8" height="8" fill="#0a0a0a"/>
+                    <rect x="116" y="76" width="8" height="8" fill="#0a0a0a"/>
+                    <rect x="140" y="76" width="8" height="8" fill="#0a0a0a"/>
+                    <rect x="10"  y="92" width="8" height="8" fill="#0a0a0a"/>
+                    <rect x="34"  y="92" width="8" height="8" fill="#0a0a0a"/>
+                    <rect x="60"  y="92" width="8" height="8" fill="#0a0a0a"/>
+                    <rect x="84"  y="92" width="8" height="8" fill="#0a0a0a"/>
+                    <rect x="100" y="92" width="8" height="8" fill="#0a0a0a"/>
+                    <rect x="124" y="92" width="8" height="8" fill="#0a0a0a"/>
+                    <!-- bottom data -->
+                    <rect x="60"  y="108" width="8" height="8" fill="#0a0a0a"/>
+                    <rect x="76"  y="108" width="8" height="8" fill="#0a0a0a"/>
+                    <rect x="60"  y="124" width="8" height="8" fill="#0a0a0a"/>
+                    <rect x="92"  y="124" width="8" height="8" fill="#0a0a0a"/>
+                    <rect x="108" y="124" width="8" height="8" fill="#0a0a0a"/>
+                    <rect x="68"  y="140" width="8" height="8" fill="#0a0a0a"/>
+                    <rect x="84"  y="140" width="8" height="8" fill="#0a0a0a"/>
+                    <rect x="132" y="140" width="8" height="8" fill="#0a0a0a"/>
+                    <!-- center alignment -->
+                    <rect x="76" y="76" width="8" height="8" fill="#0a0a0a"/>
+                </svg>
+                <span style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#aaa;">Replace with actual QR</span>
+            </div>
+        </div>
+
+        <div class="gcash-label-box">
+            <span class="gcash-name">New Life Sta. Rosa</span>
+            <span class="gcash-number">09XX XXX XXXX · Replace with actual number</span>
+        </div>
+
+        <p class="gcash-note">
+            Please scan the QR code above and send exactly <strong>₱350</strong>.<br>
+            Screenshot your GCash receipt — you may need it for verification.
+        </p>
+
+        <button class="submit-btn" style="width:100%;" onclick="showReceipt('gcash')">I've Sent the Payment →</button>
+        <br><br>
+        <button class="register-another-btn" style="margin-top:8px;" onclick="goBackToPayment()">← Change Payment Method</button>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     OVERLAY: E-RECEIPT
+     ══════════════════════════════════════ -->
+<div class="overlay-page" id="receiptPage">
+    <div class="overlay-inner">
+        <img src="assets/images/yr26-logo.png" alt="YTH Rally" class="overlay-logo">
+        <h2 class="overlay-title">You're In!</h2>
+        <p class="overlay-sub">Registration confirmed</p>
+
+        <!-- Receipt -->
+        <div class="receipt-wrapper">
+            <div class="receipt-header">
+                <span class="receipt-event-name">YTH Rally 2026</span>
+                <span class="receipt-event-year">New Life Sta. Rosa · April 29 – May 1, 2026</span>
+            </div>
+            <div class="receipt-body">
+                <div class="receipt-row">
+                    <span class="receipt-row-label">Name</span>
+                    <span class="receipt-row-value" id="rcptName">—</span>
+                </div>
+                <div class="receipt-row">
+                    <span class="receipt-row-label">Nickname</span>
+                    <span class="receipt-row-value" id="rcptNickname">—</span>
+                </div>
+                <div class="receipt-row">
+                    <span class="receipt-row-label">Age</span>
+                    <span class="receipt-row-value" id="rcptAge">—</span>
+                </div>
+                <div class="receipt-row">
+                    <span class="receipt-row-label">Church</span>
+                    <span class="receipt-row-value" id="rcptChurch">—</span>
+                </div>
+                <div class="receipt-row">
+                    <span class="receipt-row-label">Accommodation</span>
+                    <span class="receipt-row-value" id="rcptAccom">—</span>
+                </div>
+                <div class="receipt-row">
+                    <span class="receipt-row-label">Reference No.</span>
+                    <span class="receipt-row-value" id="rcptRef">—</span>
+                </div>
+                <div class="receipt-total-row">
+                    <span class="receipt-total-label">Registration Fee</span>
+                    <span class="receipt-total-value">₱350</span>
+                </div>
+                <div>
+                    <span class="receipt-payment-badge" id="rcptPayBadge">Cash</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cash reminder (shown only for cash payment) -->
+        <div class="cash-reminder" id="cashReminder">
+            <span class="cash-reminder-icon">💵</span>
+            <p class="cash-reminder-text">
+                You selected <strong>Cash</strong>. Please bring <strong>₱350</strong> and pay your ticket directly to your Youth Leader or Pastor on the day of the event.
+            </p>
+        </div>
+
+        <!-- Schedule -->
+        <div class="schedule-wrapper">
+            <p class="schedule-title">Event Schedule</p>
+
+            <div class="schedule-day">
+                <div class="schedule-day-header">April 29, 2026 · Wednesday</div>
+                <div class="schedule-sessions">
+                    <div class="schedule-session">
+                        <span class="session-time">7:00 PM</span>
+                        <span class="session-desc">Opening Night — Open to All</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="schedule-day">
+                <div class="schedule-day-header">April 30, 2026 · Thursday</div>
+                <div class="schedule-sessions">
+                    <div class="schedule-session">
+                        <span class="session-time">9:00 AM</span>
+                        <span class="session-desc">Morning Session</span>
+                    </div>
+                    <div class="schedule-session">
+                        <span class="session-time">1:30 PM</span>
+                        <span class="session-desc">Afternoon Session</span>
+                    </div>
+                    <div class="schedule-session">
+                        <span class="session-time">7:00 PM</span>
+                        <span class="session-desc">Evening Session</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="schedule-day">
+                <div class="schedule-day-header">May 1, 2026 · Friday</div>
+                <div class="schedule-sessions">
+                    <div class="schedule-session">
+                        <span class="session-time">9:00 AM</span>
+                        <span class="session-desc">Morning Session</span>
+                    </div>
+                    <div class="schedule-session">
+                        <span class="session-time">1:30 PM</span>
+                        <span class="session-desc">Afternoon Session</span>
+                    </div>
+                    <div class="schedule-session">
+                        <span class="session-time">7:00 PM</span>
+                        <span class="session-desc">Closing Night</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button class="register-another-btn" onclick="registerAnother()">+ Register Another Attendee</button>
+        <a href="#home" class="receipt-done-btn" onclick="closeDone()">Back to Home</a>
+    </div>
+</div>
+
+<script>
+/* ══════════════════════════════
+   YOUTUBE
+   ══════════════════════════════ */
 window.onYouTubeIframeAPIReady = function () {
     new YT.Player('ytPlayer', {
         videoId: 'A7W9aGTx0c0',
         host: 'https://www.youtube-nocookie.com',
-        playerVars: {
-            autoplay:        1,
-            mute:            1,
-            loop:            1,
-            playlist:        'A7W9aGTx0c0',
-            controls:        0,
-            rel:             0,
-            modestbranding:  1,
-            playsinline:     1,
-            disablekb:       1,
-            fs:              0,
-            iv_load_policy:  3,
-            showinfo:        0,
-            origin:          window.location.origin
-        },
+        playerVars: { autoplay:1,mute:1,loop:1,playlist:'A7W9aGTx0c0',controls:0,rel:0,modestbranding:1,playsinline:1,disablekb:1,fs:0,iv_load_policy:3,showinfo:0,origin:window.location.origin },
         events: {
-            onReady: function (e) {
-                e.target.mute();
-                e.target.playVideo();
-            },
-            onStateChange: function (e) {
-                // YT.PlayerState.ENDED = 0 — restart immediately
-                if (e.data === 0) e.target.playVideo();
-                // YT.PlayerState.PAUSED = 2 — browsers may pause; resume
-                if (e.data === 2) e.target.playVideo();
-            }
+            onReady: e => { e.target.mute(); e.target.playVideo(); },
+            onStateChange: e => { if(e.data===0||e.data===2) e.target.playVideo(); }
         }
     });
 };
+(function(){ var t=document.createElement('script'); t.src='https://www.youtube.com/iframe_api'; document.head.appendChild(t); })();
 
-// Inject the YouTube IFrame API script tag
-(function () {
-    var tag = document.createElement('script');
-    tag.src = 'https://www.youtube.com/iframe_api';
-    document.head.appendChild(tag);
-})();
-const navbar     = document.getElementById('navbar');
-const navLinks   = document.getElementById('navLinks');
-const menuToggle = document.getElementById('menuToggle');
-const navOverlay = document.getElementById('navOverlay');
+/* ══════════════════════════════
+   NAVBAR
+   ══════════════════════════════ */
+const navbar=document.getElementById('navbar'),navLinks=document.getElementById('navLinks'),menuToggle=document.getElementById('menuToggle'),navOverlay=document.getElementById('navOverlay');
+window.addEventListener('scroll',()=>{ navbar.classList.toggle('scrolled',window.scrollY>40); },{passive:true});
+function toggleMenu(){ const o=navLinks.classList.toggle('active'); menuToggle.classList.toggle('open',o); navOverlay.classList.toggle('active',o); document.body.style.overflow=o?'hidden':''; }
+function closeMenu(){ navLinks.classList.remove('active'); menuToggle.classList.remove('open'); navOverlay.classList.remove('active'); document.body.style.overflow=''; }
+function scrollToSection(id){ closeMenu(); const el=document.getElementById(id); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); }
 
-window.addEventListener('scroll', () => {
-    navbar.classList.toggle('scrolled', window.scrollY > 40);
-}, { passive: true });
+/* ══════════════════════════════
+   CALENDAR / DATE PICKER
+   ══════════════════════════════ */
+var cal = {
+    viewYear: 2010, viewMonth: 0,
+    selYear: null, selMonth: null, selDay: null,
+    open: false
+};
 
-function toggleMenu() {
-    const open = navLinks.classList.toggle('active');
-    menuToggle.classList.toggle('open', open);
-    navOverlay.classList.toggle('active', open);
-    document.body.style.overflow = open ? 'hidden' : '';
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+function initCalendar() {
+    // Populate year dropdown: 2003–2013 (ages 13–21 relative to event April 2026)
+    const ySel = document.getElementById('calYearSel');
+    ySel.innerHTML = '';
+    for (let y = 2013; y >= 2003; y--) {
+        const o = document.createElement('option'); o.value = y; o.textContent = y; ySel.appendChild(o);
+    }
+    cal.viewYear = 2010; cal.viewMonth = 0;
+    syncCalSelects(); renderCalGrid();
 }
-function closeMenu() {
-    navLinks.classList.remove('active');
-    menuToggle.classList.remove('open');
-    navOverlay.classList.remove('active');
+
+function syncCalSelects() {
+    document.getElementById('calMonthSel').value = cal.viewMonth;
+    document.getElementById('calYearSel').value  = cal.viewYear;
+}
+
+function toggleCalendar() {
+    cal.open = !cal.open;
+    document.getElementById('calendarPopup').classList.toggle('open', cal.open);
+    if (cal.open) {
+        // close on outside click
+        setTimeout(() => { document.addEventListener('click', outsideCalClick); }, 10);
+    } else {
+        document.removeEventListener('click', outsideCalClick);
+    }
+}
+function outsideCalClick(e) {
+    if (!document.getElementById('datePickerWrap').contains(e.target)) {
+        closeCalendar();
+    }
+}
+function closeCalendar() {
+    cal.open = false;
+    document.getElementById('calendarPopup').classList.remove('open');
+    document.removeEventListener('click', outsideCalClick);
+}
+
+function calNav(dir) {
+    cal.viewMonth += dir;
+    if (cal.viewMonth > 11) { cal.viewMonth = 0; cal.viewYear++; }
+    if (cal.viewMonth < 0)  { cal.viewMonth = 11; cal.viewYear--; }
+    // clamp to year range
+    cal.viewYear = Math.max(2003, Math.min(2013, cal.viewYear));
+    syncCalSelects(); renderCalGrid();
+}
+function calMonthChange() { cal.viewMonth = +document.getElementById('calMonthSel').value; renderCalGrid(); }
+function calYearChange()  { cal.viewYear  = +document.getElementById('calYearSel').value;  renderCalGrid(); }
+
+function renderCalGrid() {
+    const grid = document.getElementById('calGrid');
+    grid.innerHTML = '';
+    const firstDay = new Date(cal.viewYear, cal.viewMonth, 1).getDay(); // 0=Sun
+    const daysInMonth = new Date(cal.viewYear, cal.viewMonth+1, 0).getDate();
+    // empty cells before 1st
+    for (let i = 0; i < firstDay; i++) {
+        const c = document.createElement('div'); c.className = 'cal-cell cal-empty'; grid.appendChild(c);
+    }
+    for (let d = 1; d <= daysInMonth; d++) {
+        const c = document.createElement('div');
+        c.className = 'cal-cell';
+        c.textContent = d;
+        const isSel = cal.selDay===d && cal.selMonth===cal.viewMonth && cal.selYear===cal.viewYear;
+        if (isSel) c.classList.add('cal-selected');
+        c.onclick = () => selectDate(cal.viewYear, cal.viewMonth, d);
+        grid.appendChild(c);
+    }
+}
+
+function selectDate(y, m, d) {
+    cal.selYear=y; cal.selMonth=m; cal.selDay=d;
+    const monthStr = MONTHS[m];
+    const displayStr = `${monthStr} ${d}, ${y}`;
+    document.getElementById('dateDisplayText').textContent = displayStr;
+    document.getElementById('dateDisplay').classList.remove('placeholder');
+    document.getElementById('birthdate').value = displayStr;
+    renderCalGrid();
+    // Auto-compute age
+    computeAge(y, m, d);
+    // Close after short delay so user sees selection
+    setTimeout(closeCalendar, 200);
+}
+
+function computeAge(birthY, birthM, birthD) {
+    // Event date: April 29, 2026
+    const eventDate = new Date(2026, 3, 29);
+    let age = eventDate.getFullYear() - birthY;
+    if (eventDate.getMonth() < birthM || (eventDate.getMonth()===birthM && eventDate.getDate()<birthD)) age--;
+    const el = document.getElementById('ageDisplay');
+    const ageInput = document.getElementById('age');
+    if (age >= 13 && age <= 21) {
+        el.textContent = `Age on event day: ${age} years old ✓`;
+        el.className = 'age-display valid';
+        ageInput.value = age;
+    } else if (age < 13) {
+        el.textContent = `You'll be ${age} — must be at least 13 by event day.`;
+        el.className = 'age-display invalid';
+        ageInput.value = '';
+    } else {
+        el.textContent = `You'll be ${age} — this rally is for ages 13–21.`;
+        el.className = 'age-display invalid';
+        ageInput.value = '';
+    }
+}
+
+initCalendar();
+
+/* ══════════════════════════════
+   MULTI-STEP FORM
+   ══════════════════════════════ */
+var currentStep = 1;
+var formData = {};
+var selectedPayment = '';
+
+function updateProgress(step) {
+    for (let i = 1; i <= 4; i++) {
+        const ps = document.getElementById('pstep'+i);
+        ps.classList.remove('active','done');
+        if (i < step)  ps.classList.add('done');
+        if (i === step) ps.classList.add('active');
+    }
+}
+
+function showStep(n) {
+    document.querySelectorAll('.form-step').forEach(s => s.classList.remove('active'));
+    document.getElementById('step'+n).classList.add('active');
+    currentStep = n;
+    updateProgress(n);
+    // Scroll form into view
+    setTimeout(() => { document.getElementById('registration').scrollIntoView({behavior:'smooth',block:'start'}); }, 60);
+}
+
+function shake(el) { el.classList.remove('shake'); void el.offsetWidth; el.classList.add('shake'); setTimeout(()=>el.classList.remove('shake'),500); }
+
+function goNext(step) {
+    if (step === 1) {
+        // Validate step 1
+        const lastName  = document.getElementById('lastName').value.trim();
+        const firstName = document.getElementById('firstName').value.trim();
+        const nickname  = document.getElementById('nickname').value.trim();
+        const birthdate = document.getElementById('birthdate').value;
+        const age       = document.getElementById('age').value;
+        const gender    = document.querySelector('input[name="gender"]:checked');
+
+        if (!lastName)  { shake(document.getElementById('lastName')); document.getElementById('lastName').focus(); return; }
+        if (!firstName) { shake(document.getElementById('firstName')); document.getElementById('firstName').focus(); return; }
+        if (!nickname)  { shake(document.getElementById('nickname')); document.getElementById('nickname').focus(); return; }
+        if (!birthdate) { shake(document.getElementById('dateDisplay')); alert('Please select your birthdate.'); return; }
+        if (!age) { alert('Your age is outside the allowed range (13–21). Please check your birthdate.'); return; }
+        if (!gender) { alert('Please select your gender.'); return; }
+        showStep(2);
+
+    } else if (step === 2) {
+        // Validate step 2
+        const address = document.getElementById('address').value.trim();
+        const contact = document.getElementById('contact').value.trim();
+        const email   = document.getElementById('email').value.trim();
+        const church  = document.getElementById('localChurch').value;
+        const role    = document.getElementById('role').value;
+        const otherChurch = document.getElementById('otherChurch').value.trim();
+
+        if (!address) { shake(document.getElementById('address')); document.getElementById('address').focus(); return; }
+        if (contact.length !== 11) { shake(document.getElementById('contact')); document.getElementById('contact').focus(); alert('Mobile number must be 11 digits.'); return; }
+        if (!email || !email.includes('@')) { shake(document.getElementById('email')); document.getElementById('email').focus(); return; }
+        if (!church) { shake(document.getElementById('localChurch')); alert('Please select your church.'); return; }
+        if (church === 'Others' && !otherChurch) { shake(document.getElementById('otherChurch')); document.getElementById('otherChurch').focus(); return; }
+        if (!role) { shake(document.getElementById('role')); alert('Please select your role.'); return; }
+        showStep(3);
+
+    } else if (step === 3) {
+        // Validate step 3
+        const accom = document.querySelector('input[name="accommodation"]:checked');
+        if (!accom) { alert('Please indicate if you will avail accommodation.'); return; }
+        showStep(4);
+    }
+}
+
+function goBack(step) {
+    showStep(step - 1);
+}
+
+/* ══════════════════════════════
+   CHURCH TOGGLE
+   ══════════════════════════════ */
+function handleChurchSelect() {
+    const val = document.getElementById('localChurch').value;
+    if (val === 'Others') {
+        document.getElementById('otherChurchSection').classList.remove('hidden');
+    } else {
+        document.getElementById('otherChurchSection').classList.add('hidden');
+        document.getElementById('otherChurch').value = '';
+    }
+}
+
+/* ══════════════════════════════
+   MEDICAL TOGGLE
+   ══════════════════════════════ */
+function handleMedical() {
+    if (document.getElementById('medYes').checked) {
+        document.getElementById('medicalDetail').classList.remove('hidden');
+    } else {
+        document.getElementById('medicalDetail').classList.add('hidden');
+        document.getElementById('medicalInfo').value = '';
+    }
+}
+
+/* ══════════════════════════════
+   CONSENT CHECKBOXES
+   ══════════════════════════════ */
+function toggleConsent(boxId, inputId) {
+    const box = document.getElementById(boxId);
+    const inp = document.getElementById(inputId);
+    const checked = box.classList.toggle('checked');
+    inp.value = checked ? 'Yes' : '';
+}
+
+/* ══════════════════════════════
+   SUBMIT → PAYMENT
+   ══════════════════════════════ */
+function handleSubmit() {
+    // Validate step 4
+    const guardianName = document.getElementById('guardianName').value.trim();
+    const guardianContact = document.getElementById('guardianContact').value.trim();
+    const medical = document.querySelector('input[name="medicalCondition"]:checked');
+    const medInfo = document.getElementById('medicalInfo').value.trim();
+    const cA = document.getElementById('consentA').value;
+    const cB = document.getElementById('consentB').value;
+    const cC = document.getElementById('consentC').value;
+    const sig = document.getElementById('guardianSignature').value.trim();
+
+    if (!guardianName) { shake(document.getElementById('guardianName')); document.getElementById('guardianName').focus(); return; }
+    if (guardianContact.length !== 11) { shake(document.getElementById('guardianContact')); document.getElementById('guardianContact').focus(); alert('Guardian mobile must be 11 digits.'); return; }
+    if (!medical) { alert('Please answer the medical conditions question.'); return; }
+    if (document.getElementById('medYes').checked && !medInfo) { shake(document.getElementById('medicalInfo')); document.getElementById('medicalInfo').focus(); return; }
+    if (!cA || !cB || !cC) { alert('Please check all three consent statements.'); return; }
+    if (!sig) { shake(document.getElementById('guardianSignature')); document.getElementById('guardianSignature').focus(); return; }
+
+    // Collect all form data
+    const fd = new FormData(document.getElementById('regForm'));
+    formData = Object.fromEntries(fd.entries());
+
+    const displayName = (formData.lastName + ', ' + formData.firstName).toUpperCase();
+    document.getElementById('paymentNameDisplay').textContent = displayName;
+    showOverlay('paymentPage');
+}
+
+/* ══════════════════════════════
+   OVERLAYS
+   ══════════════════════════════ */
+function showOverlay(id) {
+    document.querySelectorAll('.overlay-page').forEach(p => p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    document.body.style.overflow = 'hidden';
+    document.getElementById(id).scrollTop = 0;
+}
+function hideAllOverlays() {
+    document.querySelectorAll('.overlay-page').forEach(p => p.classList.remove('active'));
     document.body.style.overflow = '';
 }
-function scrollToSection(id) {
-    closeMenu();
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+function selectPayment(method) {
+    selectedPayment = method;
+    if (method === 'cash') { populateReceipt('cash'); showOverlay('receiptPage'); }
+    else { showOverlay('gcashPage'); }
 }
+function goBackToPayment() { showOverlay('paymentPage'); }
+function showReceipt(method) { populateReceipt(method); showOverlay('receiptPage'); }
 
-/* ── LOGO CRAWL — pure CSS infinite scroll, no JS ── */
+function generateRef() { return 'YTH26-' + Math.random().toString(36).toUpperCase().substr(2,6); }
 
-/* ── FORM ── */
-function show(id)   { document.getElementById(id).classList.remove('hidden'); }
-function hide(id)   { document.getElementById(id).classList.add('hidden'); }
-function req(id, v) { document.getElementById(id).required = v; }
-
-function handleFirstTime() {
-    const yes = document.getElementById('firstTimeYes').checked;
-    hide('whichChurchSection'); hide('outreachLocationSection'); hide('otherChurchSection');
-    if (yes) {
-        show('referralSection'); req('referral', true); hide('churchSection');
+function populateReceipt(method) {
+    const fullName = (formData.lastName + ', ' + formData.firstName).toUpperCase();
+    const church = formData.localChurch === 'Others' ? (formData.otherChurch||'Others') : (formData.localChurch||'—');
+    document.getElementById('rcptName').textContent     = fullName;
+    document.getElementById('rcptNickname').textContent = formData.nickname || '—';
+    document.getElementById('rcptAge').textContent      = formData.age || '—';
+    document.getElementById('rcptChurch').textContent   = church;
+    document.getElementById('rcptAccom').textContent    = formData.accommodation || '—';
+    document.getElementById('rcptRef').textContent      = generateRef();
+    const badge = document.getElementById('rcptPayBadge');
+    const reminder = document.getElementById('cashReminder');
+    if (method === 'cash') {
+        badge.textContent = 'Cash — Pay on Event Day';
+        badge.className = 'receipt-payment-badge cash-badge';
+        reminder.style.display = 'block';
     } else {
-        hide('referralSection'); req('referral', false); show('churchSection');
+        badge.textContent = 'GCash — Paid';
+        badge.className = 'receipt-payment-badge gcash-badge-style';
+        reminder.style.display = 'none';
     }
 }
-function handleChurchMembership() {
-    hide('outreachLocationSection'); hide('otherChurchSection');
-    if (document.getElementById('partOfChurchYes').checked) {
-        show('whichChurchSection'); req('whichChurch', true);
-    } else {
-        hide('whichChurchSection'); req('whichChurch', false);
-    }
-}
-function handleChurchSelection() {
-    const val = document.getElementById('whichChurch').value;
-    const isOutreach = val === 'Outreach Church';
-    const isOther    = val === 'Other';
 
-    isOutreach ? show('outreachLocationSection') : hide('outreachLocationSection');
-    req('outreachLocation', isOutreach);
-
-    isOther ? show('otherChurchSection') : hide('otherChurchSection');
-    req('otherChurch', isOther);
-
-    /* Reset sub-selections when top-level changes */
-    if (!isOutreach) document.getElementById('outreachLocation').value = '';
-    if (!isOther)    document.getElementById('otherChurch').value = '';
+function registerAnother() {
+    hideAllOverlays();
+    document.getElementById('regForm').reset();
+    // Reset calendar
+    cal.selYear=null; cal.selMonth=null; cal.selDay=null;
+    document.getElementById('dateDisplayText').textContent='Select date';
+    document.getElementById('dateDisplay').classList.add('placeholder');
+    document.getElementById('ageDisplay').textContent='';
+    document.getElementById('ageDisplay').className='age-display';
+    // Reset conditionals
+    document.getElementById('otherChurchSection').classList.add('hidden');
+    document.getElementById('medicalDetail').classList.add('hidden');
+    // Reset consents
+    ['cboxA','cboxB','cboxC'].forEach(id => document.getElementById(id).classList.remove('checked'));
+    ['consentA','consentB','consentC'].forEach(id => document.getElementById(id).value='');
+    formData = {}; selectedPayment = '';
+    showStep(1);
+    setTimeout(()=>{ document.getElementById('registration').scrollIntoView({behavior:'smooth',block:'start'}); },100);
 }
-function handleOutreachLocation() {
-    /* Nothing conditional downstream — placeholder for future logic */
-}
-function handleSubmit(e) {
-    e.preventDefault();
-    console.log('Registration:', Object.fromEntries(new FormData(e.target).entries()));
-    const msg = document.getElementById('successMessage');
-    msg.style.display = 'block';
-    msg.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    setTimeout(() => {
-        e.target.reset();
-        msg.style.display = 'none';
-        ['referralSection','churchSection','whichChurchSection','outreachLocationSection','otherChurchSection']
-            .forEach(id => hide(id));
-    }, 3500);
+
+function closeDone() {
+    hideAllOverlays();
+    registerAnother();
 }
 </script>
 </body>
