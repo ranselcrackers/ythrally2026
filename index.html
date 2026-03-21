@@ -92,9 +92,9 @@ body {
 
 /* ════════════════════════════════════════════════
    HERO — DESKTOP (> 860px)
-   Left: text panel, flex: 1 (takes remaining width)
-   Right: video panel, EXACTLY 4:3 aspect ratio,
-          sized to match the hero height.
+   Left: text column. Right: portrait video panel.
+   Video is 1080×1920 (9:16 vertical).
+   Panel height = 100vh. Panel width = 100vh × (9/16).
    ════════════════════════════════════════════════ */
 .hero {
     background: var(--black);
@@ -103,27 +103,21 @@ body {
     align-items: stretch;
     overflow: hidden;
     position: relative;
-    /* Height is driven by the 4:3 video panel.
-       The video panel width = hero height × (4/3).
-       We use min-height: 100vh as the floor. */
     min-height: 100vh;
 }
 
-/* LEFT panel — narrower text column, aligned with navbar logo indent */
+/* LEFT panel — fixed narrow text column ~30% */
 .hero-left {
-    /* Fixed width that mirrors the navbar left padding so title aligns with logo */
-    flex: 0 0 clamp(280px, 36vw, 560px);
+    flex: 0 0 clamp(260px, 30vw, 480px);
     display: flex;
     align-items: center;
-    /* Left padding matches navbar left padding exactly so headline aligns under logo */
     padding: clamp(100px,10vw,160px)
-             clamp(24px,2.8vw,44px)   /* right — snug to video edge */
+             clamp(24px,2.8vw,44px)
              clamp(60px,6vw,100px)
-             clamp(20px,3.6vw,60px);  /* left = same as navbar left padding */
+             clamp(20px,3.6vw,60px);
     position: relative;
     z-index: 2;
 }
-/* Subtle vertical rule at right edge where text meets video */
 .hero-left::after {
     content: '';
     position: absolute;
@@ -137,7 +131,6 @@ body {
 .hero-headline {
     font-family: 'Times New Roman', Times, serif;
     font-weight: 400;
-    /* Large — fills the text column width */
     font-size: clamp(52px,6.8vw,112px);
     line-height: .88;
     letter-spacing: -0.055em;
@@ -175,15 +168,12 @@ body {
 .btn:hover  { opacity: .80; transform: scale(1.03); }
 .btn:active { transform: scale(.97); }
 
-/* RIGHT panel — 4:3 dominant video panel.
-   Takes ALL remaining width after the text panel.
-   The video fills it with object-fit: cover. */
+/* RIGHT panel — 16:9 landscape video fills all remaining space */
 .hero-right {
-    flex: 1 1 auto;          /* fills all leftover space */
+    flex: 1 1 auto;
     position: relative;
     overflow: hidden;
     align-self: stretch;
-    /* No margin — flush against text panel */
     margin-left: 0;
 }
 
@@ -199,98 +189,137 @@ body {
     object-position: center center;
     border: none; display: block;
 }
-/* YouTube IFrame API player fills the wrapper */
+
+/* YouTube IFrame API — landscape 16:9 video covers the full panel.
+   The panel is wider than it is tall (landscape), so we anchor to width.
+   height = width × (9/16). If that's still shorter than panel, anchor to height instead. */
 #ytPlayer {
     position: absolute;
-    top: 50%; left: 50%;
-    /* 16:9 video scaled up to cover a 4:3 frame without letterboxing */
-    width: 177.78%;
-    height: 177.78%;
-    transform: translate(-50%, -50%);
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
     pointer-events: none;
 }
 #ytPlayer iframe {
-    width: 100%; height: 100%;
-    border: none; display: block;
+    position: absolute;
+    top: 50%; left: 50%;
+    /* Fill whichever dimension is the constraint */
+    width: 100%;
+    height: 56.25vw;      /* 9/16 of viewport width — landscape fill */
+    min-width: 177.78vh;  /* ensure it fills if panel is tall */
+    min-height: 100%;
+    transform: translate(-50%, -50%);
+    border: none;
+    display: block;
 }
 
-/* Desktop overlay: subtle left-edge blend into text panel */
+/* Desktop overlay: left-edge fade into text panel */
 .video-overlay {
     position: absolute; inset: 0;
     background: linear-gradient(
         to right,
-        rgba(10,10,10,.60)  0%,
-        rgba(10,10,10,.15) 28%,
-        rgba(10,10,10,.03) 60%,
+        rgba(10,10,10,.65)  0%,
+        rgba(10,10,10,.18) 30%,
+        rgba(10,10,10,.03) 65%,
         transparent        100%
     );
     pointer-events: none;
 }
 
 /* ════════════════════════════════════════════════
-   HERO — MOBILE / PORTRAIT (≤ 860px)
-   Video becomes fullscreen background.
-   Top of video = 100% opacity.
-   Text sits at bottom; black gradient fades UP
-   from the bottom so text is readable.
+   HERO — MOBILE PORTRAIT (≤ 860px)
+   Video at top, flush under transparent navbar.
+   Text sits BELOW the video — no overlay.
+   Gentle fade only at the bottom edge of the video.
    ════════════════════════════════════════════════ */
 @media (max-width: 860px) {
     .hero {
+        display: flex;
         flex-direction: column;
-        min-height: 100svh;
         position: relative;
+        background: var(--black);
+        min-height: 0;
     }
 
-    /* Video: absolute, fills entire hero */
+    /* Video first — exact 16:9 intrinsic ratio, no black gaps */
     .hero-right {
+        position: relative;
+        width: 100%;
+        padding-top: 56.25%;  /* 9/16 × 100% = 16:9 */
+        flex: none;
+        overflow: hidden;
+        z-index: 1;
+        margin-top: 0;
+        order: 0;
+    }
+    .hero-video-wrapper {
         position: absolute;
         inset: 0;
-        flex: none;
+    }
+
+    /* Player fills the 16:9 box */
+    #ytPlayer {
+        position: absolute;
+        inset: 0;
         width: 100%;
         height: 100%;
-        z-index: 0;
+        pointer-events: none;
     }
-    .hero-video-wrapper { position: absolute; inset: 0; }
+    #ytPlayer iframe {
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%;
+        height: 100%;
+        min-width: unset;
+        min-height: unset;
+        transform: none;
+        border: none;
+        display: block;
+    }
 
-    /* object-position: top shows the most interesting part of 4:3 video */
-    .hero-video { object-position: center top; }
-
-    /* Overlay: TOP is completely transparent (video 100% visible),
-       BOTTOM fades to near-black where the headline sits */
+    /* Subtle fade only at bottom edge of video — not covering text */
     .video-overlay {
         background: linear-gradient(
             to bottom,
-            rgba(10,10,10,0)    0%,     /* fully transparent — video shows */
-            rgba(10,10,10,0)    25%,    /* still clear */
-            rgba(10,10,10,.40)  52%,    /* gentle start of fade */
-            rgba(10,10,10,.82)  72%,    /* heavy fade — headline area */
-            rgba(10,10,10,.95)  88%,
-            rgba(10,10,10,.98)  100%
+            transparent          0%,
+            transparent         70%,
+            rgba(10,10,10,.55)  88%,
+            rgba(10,10,10,.92) 100%
         );
     }
 
-    /* Text panel: on top, anchored to bottom of hero */
+    /* Text sits BELOW the video, normal document flow */
     .hero-left {
         position: relative;
+        order: 1;
         z-index: 2;
         flex: none;
         width: 100%;
-        align-self: flex-end;
-        /* padding-top creates space so layout is tall enough for video bg */
-        padding: 56vh clamp(24px,6vw,48px) clamp(44px,8vw,72px);
+        padding: clamp(32px,6vw,52px) clamp(24px,6vw,44px) clamp(40px,7vw,64px);
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
     }
     .hero-left::after { display: none; }
 
-    .hero-headline { font-size: clamp(48px,11vw,80px); }
+    .hero-headline {
+        font-size: clamp(40px,10vw,72px);
+        transform: scaleX(.78);
+        transform-origin: left center;
+    }
     .hero-date {
-        font-size: clamp(13px,3.5vw,18px);
-        color: rgba(255,255,255,.90);
+        font-size: clamp(12px,3.2vw,17px);
+        color: rgba(255,255,255,.85);
+    }
+    .btn {
+        padding: 14px 36px;
+        font-size: 11px;
     }
 }
 
 @media (max-width: 480px) {
-    .hero-headline { font-size: clamp(40px,12.5vw,58px); }
-    .hero-left { padding-left: 22px; padding-right: 22px; }
+    .hero-headline { font-size: clamp(34px,9.5vw,52px); }
+    .hero-left { padding-left: 20px; padding-right: 20px; }
 }
 
 /* ════════════════════════════
