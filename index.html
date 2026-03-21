@@ -111,9 +111,9 @@ body {
     padding-top: 0;
 }
 
-/* LEFT panel — fixed narrow text column ~30% */
+/* LEFT panel — narrower so video gets more space */
 .hero-left {
-    flex: 0 0 clamp(260px, 30vw, 480px);
+    flex: 0 0 clamp(240px, 26vw, 420px);
     display: flex;
     align-items: center;
     padding: clamp(100px,10vw,160px)
@@ -196,12 +196,10 @@ body {
     border: none; display: block;
 }
 
-/* YouTube IFrame API — must cover panel completely.
-   Panel is ~70vw wide × 100vh tall (landscape, wider than 16:9).
-   We oversize the iframe so it always covers:
-   - width-driven: height = width × (9/16)
-   - height-driven: width = height × (16/9)
-   We use the larger of both, centered. */
+/* YouTube IFrame API — oversize vertically to clip the player chrome.
+   YouTube injects a title bar (~60px) at top and a logo (~50px) at bottom.
+   We extend the iframe 200px beyond the panel on each side and clip with
+   overflow:hidden on hero-video-wrapper. This hides all YouTube UI. */
 #ytPlayer {
     position: absolute;
     inset: 0;
@@ -212,15 +210,14 @@ body {
 }
 #ytPlayer iframe {
     position: absolute;
-    top: 50%; left: 50%;
-    /* Oversize: always at least as wide as panel AND at least as tall */
-    width: 177.78%;    /* 16/9 × 100% of panel height */
-    height: 177.78%;   /* same — guarantees no black bar in either axis */
-    min-width: 100%;
-    min-height: 100%;
-    transform: translate(-50%, -50%);
+    /* Extend 200px beyond panel on all sides to clip YouTube chrome */
+    top: -200px;
+    left: -200px;
+    width: calc(100% + 400px);
+    height: calc(100% + 400px);
     border: none;
     display: block;
+    pointer-events: none;
 }
 
 /* Desktop overlay: left-edge fade into text panel */
@@ -270,24 +267,24 @@ body {
         top: 0; left: 0; right: 0; bottom: 0;
     }
 
-    /* Player fills the 16:9 box */
+    /* Player fills the 16:9 box, iframe oversized to clip YouTube chrome */
     #ytPlayer {
         position: absolute;
         inset: 0;
         width: 100%;
         height: 100%;
         pointer-events: none;
+        overflow: hidden;
     }
     #ytPlayer iframe {
         position: absolute;
-        top: 0; left: 0;
-        width: 100%;
-        height: 100%;
-        min-width: unset;
-        min-height: unset;
-        transform: none;
+        top: -200px;
+        left: -200px;
+        width: calc(100% + 400px);
+        height: calc(100% + 400px);
         border: none;
         display: block;
+        pointer-events: none;
     }
 
     /* Subtle fade only at bottom edge of video — not covering text */
