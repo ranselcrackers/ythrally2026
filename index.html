@@ -432,10 +432,10 @@ body {
 }
 
 .step-heading {
-    font-family: 'Times New Roman', Times, serif;
-    font-size: clamp(18px,1.8vw,26px);
-    font-weight: 400;
-    letter-spacing: -0.02em;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: clamp(20px,2vw,28px);
+    font-weight: 300;
+    letter-spacing: -0.01em;
     color: var(--black);
     margin-bottom: clamp(28px,3vw,44px);
     display: block;
@@ -445,6 +445,7 @@ body {
 label {
     display: block;
     margin-bottom: clamp(10px,0.9vw,16px);
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-size: clamp(11px,0.9vw,13px);
     text-transform: uppercase;
     letter-spacing: .20em;
@@ -461,13 +462,17 @@ textarea {
     border: none;
     border-bottom: 1.5px solid var(--black);
     background: transparent;
-    font-family: 'Courier New', monospace;
-    font-size: clamp(17px,1.4vw,22px);
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: clamp(19px,1.6vw,24px);
     color: var(--black);
     transition: border-color .3s;
     border-radius: 0;
     -webkit-appearance: none;
     appearance: none;
+}
+/* Name fields always uppercase */
+#lastName, #firstName, #nickname, #guardianName, #guardianSignature {
+    text-transform: uppercase;
 }
 select {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%230a0a0a'/%3E%3C/svg%3E");
@@ -489,7 +494,8 @@ textarea { resize: vertical; min-height: 56px; }
 }
 .radio-item label {
     margin-bottom: 0;
-    font-size: clamp(15px,1.2vw,18px);
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: clamp(16px,1.3vw,20px);
     cursor: pointer;
     text-transform: none;
     letter-spacing: 0;
@@ -711,10 +717,11 @@ textarea { resize: vertical; min-height: 56px; }
 }
 .consent-box.checked .consent-check-icon { opacity: 1; }
 .consent-text {
-    font-size: clamp(13px,1vw,15px);
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: clamp(14px,1.1vw,16px);
     line-height: 1.7;
     color: var(--black);
-    letter-spacing: .02em;
+    letter-spacing: .01em;
 }
 
 /* Error shake */
@@ -728,6 +735,11 @@ textarea { resize: vertical; min-height: 56px; }
 /* ════════════════════════════
    PAYMENT OVERLAY PAGES
    ════════════════════════════ */
+/* Force CAPS on name fields */
+#lastName, #firstName, #nickname, #guardianName, #guardianSignature, #otherChurch {
+    text-transform: uppercase;
+}
+
 .overlay-page {
     display: none;
     position: fixed;
@@ -742,6 +754,8 @@ textarea { resize: vertical; min-height: 56px; }
     from { opacity: 0; transform: translateY(20px); }
     to   { opacity: 1; transform: translateY(0); }
 }
+
+/* Default overlay inner (payment, gcash) */
 .overlay-inner {
     max-width: 560px;
     margin: 0 auto;
@@ -751,32 +765,131 @@ textarea { resize: vertical; min-height: 56px; }
     flex-direction: column;
     align-items: center;
 }
+
+/* ── Receipt page: wide on desktop, normal scroll on mobile ── */
+.receipt-overlay-inner {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: clamp(40px,5vw,72px) clamp(24px,5vw,80px);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Desktop: two-column receipt layout */
+@media (min-width: 860px) {
+    .receipt-overlay-inner {
+        padding: 64px 80px;
+    }
+    .receipt-top-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        margin-bottom: 48px;
+    }
+    .receipt-top-logo { height: 52px; width: auto; object-fit: contain; filter: brightness(0); opacity: .75; }
+    .receipt-top-title {
+        font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+        font-size: clamp(32px,3.2vw,48px);
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        color: var(--black);
+    }
+    .receipt-top-sub {
+        font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+        font-size: 11px;
+        font-weight: 500;
+        letter-spacing: .2em;
+        text-transform: uppercase;
+        color: #aaa;
+        text-align: right;
+        margin-top: 6px;
+    }
+    .receipt-two-col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 32px;
+        width: 100%;
+        align-items: start;
+    }
+    .receipt-col-left { display: flex; flex-direction: column; gap: 24px; }
+    .receipt-col-right { display: flex; flex-direction: column; gap: 24px; }
+    .receipt-bottom-bar {
+        display: flex;
+        gap: 16px;
+        width: 100%;
+        margin-top: 40px;
+    }
+    .receipt-bottom-bar .register-another-btn,
+    .receipt-bottom-bar .receipt-done-btn {
+        flex: 1;
+        margin-bottom: 0;
+    }
+}
+
+/* Mobile: single column, hide desktop top bar */
+@media (max-width: 859px) {
+    .receipt-top-bar { display: none; }
+    .receipt-mobile-header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 32px;
+        width: 100%;
+    }
+    .receipt-two-col { display: flex; flex-direction: column; gap: 20px; width: 100%; }
+    .receipt-bottom-bar {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        width: 100%;
+        margin-top: 32px;
+    }
+    .receipt-bottom-bar .register-another-btn,
+    .receipt-bottom-bar .receipt-done-btn {
+        margin-bottom: 0;
+    }
+}
+@media (min-width: 860px) {
+    .receipt-mobile-header { display: none; }
+}
 .overlay-logo {
-    height: 56px;
+    height: 52px;
     width: auto;
     object-fit: contain;
-    margin-bottom: 40px;
+    margin-bottom: 36px;
     filter: brightness(0);
-    opacity: .8;
+    opacity: .75;
 }
 .overlay-title {
-    font-family: 'Times New Roman', Times, serif;
-    font-size: clamp(28px,3.5vw,48px);
-    font-weight: 400;
-    letter-spacing: -0.04em;
-    transform: scaleX(.82);
-    transform-origin: center;
+    font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+    font-size: clamp(28px,3.5vw,44px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
     color: var(--black);
     text-align: center;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
 }
 .overlay-sub {
-    font-size: clamp(12px,0.9vw,14px);
-    letter-spacing: .22em;
+    font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: .18em;
     text-transform: uppercase;
-    color: #888;
+    color: #aaa;
     text-align: center;
-    margin-bottom: clamp(36px,4vw,56px);
+    margin-bottom: clamp(32px,4vw,52px);
+}
+
+/* ════════════════════
+   PAYMENT + RECEIPT
+   Helvetica throughout
+   ════════════════════ */
+:root {
+    --hv: Helvetica Neue, Helvetica, Arial, sans-serif;
 }
 
 /* ── Payment Method Selection ── */
@@ -784,71 +897,92 @@ textarea { resize: vertical; min-height: 56px; }
     background: var(--black);
     color: var(--white);
     width: 100%;
-    padding: 28px 32px;
+    padding: 36px 40px;
     text-align: center;
     margin-bottom: 40px;
 }
 .payment-amount-label {
+    font-family: var(--hv);
     font-size: 11px;
-    letter-spacing: .32em;
+    font-weight: 500;
+    letter-spacing: .22em;
     text-transform: uppercase;
-    color: rgba(255,255,255,.55);
-    margin-bottom: 8px;
+    color: rgba(255,255,255,.5);
+    margin-bottom: 12px;
     display: block;
 }
 .payment-amount-value {
-    font-family: 'Times New Roman', Times, serif;
-    font-size: clamp(40px,5vw,64px);
-    letter-spacing: -0.04em;
+    font-family: var(--hv);
+    font-size: clamp(52px,6vw,80px);
+    font-weight: 700;
+    letter-spacing: -0.03em;
     color: var(--white);
     display: block;
     line-height: 1;
 }
 .payment-name-display {
+    font-family: var(--hv);
     font-size: 13px;
-    letter-spacing: .18em;
+    font-weight: 400;
+    letter-spacing: .12em;
     text-transform: uppercase;
-    color: rgba(255,255,255,.5);
-    margin-top: 10px;
+    color: rgba(255,255,255,.45);
+    margin-top: 14px;
     display: block;
 }
-
 .payment-method-label {
+    font-family: var(--hv);
     font-size: 11px;
-    letter-spacing: .28em;
+    font-weight: 500;
+    letter-spacing: .2em;
     text-transform: uppercase;
-    color: #999;
+    color: #aaa;
     margin-bottom: 16px;
     text-align: center;
 }
 .payment-methods {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 16px;
+    gap: 12px;
     width: 100%;
     margin-bottom: 40px;
 }
 .payment-method-btn {
-    border: 1.5px solid var(--black);
-    background: transparent;
-    padding: 24px 16px;
+    border: 1.5px solid #d0ccc6;
+    background: #fff;
+    padding: 28px 16px 24px;
     cursor: pointer;
-    font-family: 'Courier New', monospace;
+    font-family: var(--hv);
     font-size: 13px;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: .22em;
+    letter-spacing: .14em;
     color: var(--black);
-    transition: all .25s;
+    transition: all .22s;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
+    gap: 14px;
+    line-height: 1;
 }
 .payment-method-btn:hover, .payment-method-btn.selected {
     background: var(--black);
+    border-color: var(--black);
     color: var(--white);
 }
-.payment-method-icon { font-size: 28px; line-height: 1; }
+/* SVG icon inside button */
+.payment-method-icon {
+    width: 32px;
+    height: 32px;
+    display: block;
+    flex-shrink: 0;
+}
+.payment-method-btn:hover .pay-icon-stroke,
+.payment-method-btn.selected .pay-icon-stroke { stroke: #fff; }
+.payment-method-btn:hover .pay-icon-fill,
+.payment-method-btn.selected .pay-icon-fill { fill: #fff; }
+.pay-icon-stroke { stroke: var(--black); fill: none; transition: stroke .22s; }
+.pay-icon-fill   { fill: var(--black); stroke: none; transition: fill .22s; }
 
 /* ── GCash QR Page ── */
 .gcash-qr-box {
@@ -859,64 +993,50 @@ textarea { resize: vertical; min-height: 56px; }
     align-items: center;
     justify-content: center;
     margin: 0 auto 24px;
-    background: #fafafa;
-    position: relative;
-    overflow: hidden;
+    background: #fff;
 }
-.gcash-qr-placeholder {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-}
-.gcash-qr-grid {
-    display: grid;
-    grid-template-columns: repeat(7,24px);
-    grid-template-rows: repeat(7,24px);
-    gap: 2px;
-}
-.qr-cell {
-    background: var(--black);
-    border-radius: 1px;
-}
-.qr-cell.light { background: transparent; }
 .gcash-label-box {
     text-align: center;
-    margin-bottom: 32px;
+    margin-bottom: 28px;
 }
 .gcash-name {
-    font-family: 'Times New Roman', Times, serif;
-    font-size: 20px;
-    letter-spacing: -0.02em;
+    font-family: var(--hv);
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: .01em;
     color: var(--black);
     display: block;
     margin-bottom: 4px;
 }
 .gcash-number {
-    font-size: 12px;
-    letter-spacing: .28em;
-    color: #888;
-    text-transform: uppercase;
+    font-family: var(--hv);
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: .12em;
+    color: #777;
 }
 .gcash-note {
-    font-size: 12px;
-    letter-spacing: .12em;
-    color: #888;
+    font-family: var(--hv);
+    font-size: 14px;
+    font-weight: 400;
+    color: #555;
     text-align: center;
-    line-height: 1.8;
+    line-height: 1.75;
     margin-bottom: 28px;
     max-width: 340px;
 }
 .gcash-badge {
     display: inline-block;
-    background: #007bff;
+    background: #0070f3;
     color: #fff;
+    font-family: var(--hv);
     font-size: 11px;
-    letter-spacing: .22em;
+    font-weight: 600;
+    letter-spacing: .18em;
     text-transform: uppercase;
-    padding: 6px 18px;
+    padding: 7px 20px;
     margin-bottom: 32px;
-    border-radius: 2px;
+    border-radius: 3px;
 }
 
 /* ── E-Receipt ── */
@@ -924,169 +1044,223 @@ textarea { resize: vertical; min-height: 56px; }
     width: 100%;
     border: 1.5px solid var(--black);
     padding: 0;
-    margin-bottom: 32px;
+    margin-bottom: 0;
+    background: #fff;
 }
 .receipt-header {
     background: var(--black);
     color: var(--white);
-    padding: 28px 32px;
+    padding: 32px 36px;
     text-align: center;
 }
 .receipt-event-name {
-    font-family: 'Times New Roman', Times, serif;
-    font-size: clamp(22px,3vw,36px);
-    letter-spacing: -0.03em;
+    font-family: var(--hv);
+    font-size: clamp(22px,2.4vw,34px);
+    font-weight: 700;
+    letter-spacing: .02em;
     display: block;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
 }
 .receipt-event-year {
-    font-size: 11px;
-    letter-spacing: .32em;
+    font-family: var(--hv);
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: .18em;
     text-transform: uppercase;
     color: rgba(255,255,255,.5);
 }
-.receipt-body { padding: 28px 32px; }
+.receipt-body { padding: 0 36px 28px; }
 .receipt-row {
     display: flex;
     justify-content: space-between;
-    align-items: baseline;
-    padding: 10px 0;
-    border-bottom: 1px solid #e2dfd8;
-    font-size: 13px;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid #ece9e4;
 }
 .receipt-row:last-child { border-bottom: none; }
 .receipt-row-label {
-    letter-spacing: .16em;
-    text-transform: uppercase;
-    color: #888;
+    font-family: var(--hv);
     font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: #999;
+    flex-shrink: 0;
 }
 .receipt-row-value {
+    font-family: var(--hv);
+    font-size: 14px;
+    font-weight: 600;
     color: var(--black);
-    font-weight: bold;
-    letter-spacing: .06em;
     text-align: right;
-    max-width: 60%;
+    max-width: 62%;
+    line-height: 1.4;
 }
 .receipt-total-row {
     display: flex;
     justify-content: space-between;
-    align-items: baseline;
-    padding: 18px 0 0;
-    margin-top: 4px;
+    align-items: center;
+    padding: 20px 36px 4px;
+    border-top: 1.5px solid var(--black);
+    margin-top: 8px;
 }
 .receipt-total-label {
-    font-family: 'Times New Roman', Times, serif;
-    font-size: 18px;
-    letter-spacing: -0.02em;
+    font-family: var(--hv);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: #555;
 }
 .receipt-total-value {
-    font-family: 'Times New Roman', Times, serif;
-    font-size: 28px;
-    letter-spacing: -0.04em;
+    font-family: var(--hv);
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--black);
+}
+.receipt-badge-row {
+    padding: 12px 36px 28px;
 }
 .receipt-payment-badge {
     display: inline-block;
-    border: 1.5px solid var(--black);
+    font-family: var(--hv);
     font-size: 10px;
-    letter-spacing: .28em;
+    font-weight: 700;
+    letter-spacing: .18em;
     text-transform: uppercase;
-    padding: 5px 14px;
-    margin-top: 12px;
+    padding: 6px 16px;
+    border-radius: 2px;
 }
-.receipt-payment-badge.cash-badge { border-color: #c8a96e; color: #8a7040; }
-.receipt-payment-badge.gcash-badge-style { border-color: #007bff; color: #007bff; }
+.receipt-payment-badge.cash-badge {
+    background: #fef9ee;
+    border: 1.5px solid #c8a96e;
+    color: #7a5e20;
+}
+.receipt-payment-badge.gcash-badge-style {
+    background: #eef4ff;
+    border: 1.5px solid #0070f3;
+    color: #0050b3;
+}
 
 /* Schedule */
 .schedule-wrapper {
     width: 100%;
-    margin-bottom: 32px;
+    margin-bottom: 0;
 }
 .schedule-title {
-    font-size: 11px;
-    letter-spacing: .32em;
+    font-family: var(--hv);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .24em;
     text-transform: uppercase;
-    color: #888;
-    margin-bottom: 16px;
-    text-align: center;
+    color: #aaa;
+    margin-bottom: 14px;
+    text-align: left;
+    padding-left: 2px;
 }
 .schedule-day {
     border: 1px solid #e2dfd8;
     margin-bottom: 8px;
+    background: #fff;
 }
 .schedule-day-header {
-    background: #f4f2ee;
-    border-bottom: 1px solid #e2dfd8;
-    padding: 10px 18px;
+    background: var(--black);
+    color: var(--white);
+    padding: 11px 18px;
+    font-family: var(--hv);
     font-size: 11px;
-    letter-spacing: .28em;
+    font-weight: 600;
+    letter-spacing: .14em;
     text-transform: uppercase;
-    color: var(--black);
-    font-weight: bold;
 }
 .schedule-sessions { padding: 0; }
 .schedule-session {
     display: flex;
     align-items: center;
-    padding: 12px 18px;
+    padding: 13px 18px;
     border-bottom: 1px solid #f0ede8;
-    font-size: 12px;
-    letter-spacing: .08em;
+    gap: 0;
 }
 .schedule-session:last-child { border-bottom: none; }
 .session-time {
-    color: #888;
-    min-width: 90px;
-    font-size: 11px;
-    letter-spacing: .16em;
+    font-family: var(--hv);
+    font-size: 12px;
+    font-weight: 500;
+    color: #999;
+    min-width: 80px;
+    letter-spacing: .06em;
 }
-.session-desc { color: var(--black); }
+.session-desc {
+    font-family: var(--hv);
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--black);
+    line-height: 1.4;
+}
 
 /* Cash reminder */
 .cash-reminder {
-    background: #fffbf0;
+    background: #fef9ee;
     border: 1.5px solid #c8a96e;
-    padding: 20px 24px;
+    border-radius: 2px;
+    padding: 18px 22px;
     width: 100%;
-    margin-bottom: 28px;
-    text-align: center;
+    margin-top: 16px;
+    margin-bottom: 0;
 }
-.cash-reminder-icon { font-size: 24px; margin-bottom: 8px; display: block; }
 .cash-reminder-text {
+    font-family: var(--hv);
     font-size: 13px;
-    letter-spacing: .08em;
-    color: #6b5430;
-    line-height: 1.7;
+    font-weight: 400;
+    color: #6b5020;
+    line-height: 1.75;
+    text-align: left;
+}
+.cash-reminder-text strong { font-weight: 700; }
+
+/* Receipt label above reminder */
+.cash-reminder-label {
+    font-family: var(--hv);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: #b08030;
+    display: block;
+    margin-bottom: 6px;
 }
 
 .register-another-btn {
     background: transparent;
     color: var(--black);
     border: 1.5px solid var(--black);
-    padding: 16px 44px;
-    font-family: 'Courier New', monospace;
-    font-size: 11px;
+    padding: 17px 44px;
+    font-family: var(--hv);
+    font-size: 12px;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: .3em;
+    letter-spacing: .18em;
     cursor: pointer;
-    transition: all .25s;
+    transition: all .22s;
     touch-action: manipulation;
     width: 100%;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
 }
 .register-another-btn:hover { background: var(--black); color: var(--white); }
 
 .receipt-done-btn {
     background: var(--black);
     color: var(--white);
-    border: none;
-    padding: 16px 44px;
-    font-family: 'Courier New', monospace;
-    font-size: 11px;
+    border: 1.5px solid var(--black);
+    padding: 17px 44px;
+    font-family: var(--hv);
+    font-size: 12px;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: .3em;
+    letter-spacing: .18em;
     cursor: pointer;
-    transition: opacity .25s;
+    transition: opacity .22s;
     touch-action: manipulation;
     width: 100%;
     margin-bottom: 40px;
@@ -1575,11 +1749,27 @@ textarea { resize: vertical; min-height: 56px; }
         <p class="payment-method-label">Select payment method</p>
         <div class="payment-methods">
             <button class="payment-method-btn" onclick="selectPayment('cash')">
-                <span class="payment-method-icon">💵</span>
+                <!-- Cash / banknote icon -->
+                <svg class="payment-method-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="2" y="8" width="28" height="16" rx="2" class="pay-icon-stroke" stroke-width="1.8"/>
+                    <circle cx="16" cy="16" r="4" class="pay-icon-stroke" stroke-width="1.8"/>
+                    <circle cx="5.5" cy="12" r="1.5" class="pay-icon-fill"/>
+                    <circle cx="26.5" cy="20" r="1.5" class="pay-icon-fill"/>
+                </svg>
                 Cash
             </button>
             <button class="payment-method-btn" onclick="selectPayment('gcash')">
-                <span class="payment-method-icon">📱</span>
+                <!-- Phone / QR icon -->
+                <svg class="payment-method-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="9" y="2" width="14" height="28" rx="2.5" class="pay-icon-stroke" stroke-width="1.8"/>
+                    <line x1="9" y1="7" x2="23" y2="7" class="pay-icon-stroke" stroke-width="1.4"/>
+                    <line x1="9" y1="25" x2="23" y2="25" class="pay-icon-stroke" stroke-width="1.4"/>
+                    <rect x="13" y="11" width="3" height="3" class="pay-icon-fill" rx=".4"/>
+                    <rect x="17" y="11" width="3" height="3" class="pay-icon-fill" rx=".4"/>
+                    <rect x="13" y="15" width="3" height="3" class="pay-icon-fill" rx=".4"/>
+                    <rect x="17" y="15" width="1.5" height="1.5" class="pay-icon-fill" rx=".3"/>
+                    <rect x="18.5" y="16.5" width="1.5" height="1.5" class="pay-icon-fill" rx=".3"/>
+                </svg>
                 GCash
             </button>
         </div>
@@ -1674,113 +1864,139 @@ textarea { resize: vertical; min-height: 56px; }
      OVERLAY: E-RECEIPT
      ══════════════════════════════════════ -->
 <div class="overlay-page" id="receiptPage">
-    <div class="overlay-inner">
-        <img src="assets/images/yr26-logo.png" alt="YTH Rally" class="overlay-logo">
-        <h2 class="overlay-title">You're In!</h2>
-        <p class="overlay-sub">Registration confirmed</p>
+    <div class="receipt-overlay-inner">
 
-        <!-- Receipt -->
-        <div class="receipt-wrapper">
-            <div class="receipt-header">
-                <span class="receipt-event-name">YTH Rally 2026</span>
-                <span class="receipt-event-year">New Life Sta. Rosa · April 29 – May 1, 2026</span>
-            </div>
-            <div class="receipt-body">
-                <div class="receipt-row">
-                    <span class="receipt-row-label">Name</span>
-                    <span class="receipt-row-value" id="rcptName">—</span>
-                </div>
-                <div class="receipt-row">
-                    <span class="receipt-row-label">Nickname</span>
-                    <span class="receipt-row-value" id="rcptNickname">—</span>
-                </div>
-                <div class="receipt-row">
-                    <span class="receipt-row-label">Age</span>
-                    <span class="receipt-row-value" id="rcptAge">—</span>
-                </div>
-                <div class="receipt-row">
-                    <span class="receipt-row-label">Church</span>
-                    <span class="receipt-row-value" id="rcptChurch">—</span>
-                </div>
-                <div class="receipt-row">
-                    <span class="receipt-row-label">Accommodation</span>
-                    <span class="receipt-row-value" id="rcptAccom">—</span>
-                </div>
-                <div class="receipt-row">
-                    <span class="receipt-row-label">Reference No.</span>
-                    <span class="receipt-row-value" id="rcptRef">—</span>
-                </div>
-                <div class="receipt-total-row">
-                    <span class="receipt-total-label">Registration Fee</span>
-                    <span class="receipt-total-value">₱350</span>
-                </div>
-                <div>
-                    <span class="receipt-payment-badge" id="rcptPayBadge">Cash</span>
-                </div>
+        <!-- Desktop top bar -->
+        <div class="receipt-top-bar">
+            <img src="assets/images/yr26-logo.png" alt="YTH Rally" class="receipt-top-logo">
+            <div style="text-align:right;">
+                <div class="receipt-top-title">You're In!</div>
+                <div class="receipt-top-sub">Registration confirmed</div>
             </div>
         </div>
 
-        <!-- Cash reminder (shown only for cash payment) -->
-        <div class="cash-reminder" id="cashReminder">
-            <span class="cash-reminder-icon">💵</span>
-            <p class="cash-reminder-text">
-                You selected <strong>Cash</strong>. Please bring <strong>₱350</strong> and pay your ticket directly to your Youth Leader or Pastor on the day of the event.
-            </p>
+        <!-- Mobile header (centered, shown only on phones) -->
+        <div class="receipt-mobile-header">
+            <img src="assets/images/yr26-logo.png" alt="YTH Rally" class="overlay-logo" style="margin-bottom:20px;">
+            <h2 class="overlay-title">You're In!</h2>
+            <p class="overlay-sub">Registration confirmed</p>
         </div>
 
-        <!-- Schedule -->
-        <div class="schedule-wrapper">
-            <p class="schedule-title">Event Schedule</p>
+        <!-- Two-column body -->
+        <div class="receipt-two-col">
 
-            <div class="schedule-day">
-                <div class="schedule-day-header">April 29, 2026 · Wednesday</div>
-                <div class="schedule-sessions">
-                    <div class="schedule-session">
-                        <span class="session-time">7:00 PM</span>
-                        <span class="session-desc">Opening Night — Open to All</span>
+            <!-- LEFT: Receipt card -->
+            <div class="receipt-col-left">
+                <div class="receipt-wrapper">
+                    <div class="receipt-header">
+                        <span class="receipt-event-name">YTH Rally 2026</span>
+                        <span class="receipt-event-year">New Life Sta. Rosa · April 29 – May 1, 2026</span>
+                    </div>
+                    <div class="receipt-body">
+                        <div class="receipt-row">
+                            <span class="receipt-row-label">Name</span>
+                            <span class="receipt-row-value" id="rcptName">—</span>
+                        </div>
+                        <div class="receipt-row">
+                            <span class="receipt-row-label">Nickname</span>
+                            <span class="receipt-row-value" id="rcptNickname">—</span>
+                        </div>
+                        <div class="receipt-row">
+                            <span class="receipt-row-label">Age</span>
+                            <span class="receipt-row-value" id="rcptAge">—</span>
+                        </div>
+                        <div class="receipt-row">
+                            <span class="receipt-row-label">Church</span>
+                            <span class="receipt-row-value" id="rcptChurch">—</span>
+                        </div>
+                        <div class="receipt-row">
+                            <span class="receipt-row-label">Accommodation</span>
+                            <span class="receipt-row-value" id="rcptAccom">—</span>
+                        </div>
+                        <div class="receipt-row">
+                            <span class="receipt-row-label">Reference No.</span>
+                            <span class="receipt-row-value" id="rcptRef">—</span>
+                        </div>
+                        <div class="receipt-total-row">
+                            <span class="receipt-total-label">Registration Fee</span>
+                            <span class="receipt-total-value">₱350</span>
+                        </div>
+                        <div class="receipt-badge-row">
+                            <span class="receipt-payment-badge" id="rcptPayBadge">Cash</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cash reminder -->
+                <div class="cash-reminder" id="cashReminder">
+                    <span class="cash-reminder-label">Payment Reminder</span>
+                    <p class="cash-reminder-text">
+                        You selected <strong>Cash</strong>. Please bring <strong>₱350</strong> and pay your ticket directly to your Youth Leader or Pastor on the day of the event.
+                    </p>
+                </div>
+            </div>
+
+            <!-- RIGHT: Schedule -->
+            <div class="receipt-col-right">
+                <div class="schedule-wrapper" style="margin-bottom:0;">
+                    <p class="schedule-title">Event Schedule</p>
+
+                    <div class="schedule-day">
+                        <div class="schedule-day-header">April 29, 2026 · Wednesday</div>
+                        <div class="schedule-sessions">
+                            <div class="schedule-session">
+                                <span class="session-time">7:00 PM</span>
+                                <span class="session-desc">Opening Night — Open to All</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="schedule-day">
+                        <div class="schedule-day-header">April 30, 2026 · Thursday</div>
+                        <div class="schedule-sessions">
+                            <div class="schedule-session">
+                                <span class="session-time">9:00 AM</span>
+                                <span class="session-desc">Morning Session</span>
+                            </div>
+                            <div class="schedule-session">
+                                <span class="session-time">1:30 PM</span>
+                                <span class="session-desc">Afternoon Session</span>
+                            </div>
+                            <div class="schedule-session">
+                                <span class="session-time">7:00 PM</span>
+                                <span class="session-desc">Evening Session</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="schedule-day">
+                        <div class="schedule-day-header">May 1, 2026 · Friday</div>
+                        <div class="schedule-sessions">
+                            <div class="schedule-session">
+                                <span class="session-time">9:00 AM</span>
+                                <span class="session-desc">Morning Session</span>
+                            </div>
+                            <div class="schedule-session">
+                                <span class="session-time">1:30 PM</span>
+                                <span class="session-desc">Afternoon Session</span>
+                            </div>
+                            <div class="schedule-session">
+                                <span class="session-time">7:00 PM</span>
+                                <span class="session-desc">Closing Night</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="schedule-day">
-                <div class="schedule-day-header">April 30, 2026 · Thursday</div>
-                <div class="schedule-sessions">
-                    <div class="schedule-session">
-                        <span class="session-time">9:00 AM</span>
-                        <span class="session-desc">Morning Session</span>
-                    </div>
-                    <div class="schedule-session">
-                        <span class="session-time">1:30 PM</span>
-                        <span class="session-desc">Afternoon Session</span>
-                    </div>
-                    <div class="schedule-session">
-                        <span class="session-time">7:00 PM</span>
-                        <span class="session-desc">Evening Session</span>
-                    </div>
-                </div>
-            </div>
+        </div><!-- end two-col -->
 
-            <div class="schedule-day">
-                <div class="schedule-day-header">May 1, 2026 · Friday</div>
-                <div class="schedule-sessions">
-                    <div class="schedule-session">
-                        <span class="session-time">9:00 AM</span>
-                        <span class="session-desc">Morning Session</span>
-                    </div>
-                    <div class="schedule-session">
-                        <span class="session-time">1:30 PM</span>
-                        <span class="session-desc">Afternoon Session</span>
-                    </div>
-                    <div class="schedule-session">
-                        <span class="session-time">7:00 PM</span>
-                        <span class="session-desc">Closing Night</span>
-                    </div>
-                </div>
-            </div>
+        <!-- Action buttons -->
+        <div class="receipt-bottom-bar">
+            <button class="register-another-btn" onclick="registerAnother()">+ Register Another Attendee</button>
+            <a href="#home" class="receipt-done-btn" onclick="closeDone()">Back to Home</a>
         </div>
 
-        <button class="register-another-btn" onclick="registerAnother()">+ Register Another Attendee</button>
-        <a href="#home" class="receipt-done-btn" onclick="closeDone()">Back to Home</a>
     </div>
 </div>
 
@@ -2094,9 +2310,9 @@ function populateReceipt(method) {
     const fullName = (formData.lastName + ', ' + formData.firstName).toUpperCase();
     const church = formData.localChurch === 'Others' ? (formData.otherChurch||'Others') : (formData.localChurch||'—');
     document.getElementById('rcptName').textContent     = fullName;
-    document.getElementById('rcptNickname').textContent = formData.nickname || '—';
+    document.getElementById('rcptNickname').textContent = (formData.nickname || '—').toUpperCase();
     document.getElementById('rcptAge').textContent      = formData.age || '—';
-    document.getElementById('rcptChurch').textContent   = church;
+    document.getElementById('rcptChurch').textContent   = church.toUpperCase();
     document.getElementById('rcptAccom').textContent    = formData.accommodation || '—';
     document.getElementById('rcptRef').textContent      = generateRef();
     const badge = document.getElementById('rcptPayBadge');
