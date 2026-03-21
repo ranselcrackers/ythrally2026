@@ -41,11 +41,17 @@ body {
     position: fixed;
     top: 0; left: 0; right: 0;
     z-index: 1000;
-    transition: background .45s ease, box-shadow .45s ease;
+    /* Blur transparency always active */
+    background: rgba(10,10,10,0.25);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    transition: background .45s ease, box-shadow .45s ease, backdrop-filter .45s ease;
 }
 .navbar.scrolled {
-    background: rgba(244,242,238,0.97);
-    border-bottom: 1px solid var(--border);
+    background: rgba(244,242,238,0.75);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-bottom: 1px solid rgba(216,212,204,0.5);
     box-shadow: 0 2px 12px rgba(0,0,0,.07);
 }
 .logo { display: flex; align-items: center; text-decoration: none; flex-shrink: 0; }
@@ -767,6 +773,10 @@ textarea { resize: vertical; min-height: 56px; }
                 <span>Present Mark</span>
                 <span class="crawl-year">2026 ★</span>
             </div>
+            <div class="crawl-item">
+                <img src="assets/images/7.png" alt="2026">
+                <span>2026</span>
+            </div>
             <!-- Set 2 — exact duplicate for seamless CSS loop -->
             <div class="crawl-item" aria-hidden="true">
                 <img src="assets/images/1.png" alt="">
@@ -793,6 +803,10 @@ textarea { resize: vertical; min-height: 56px; }
                 <img src="assets/images/6.png" alt="">
                 <span>Present Mark</span>
                 <span class="crawl-year">2026 ★</span>
+            </div>
+            <div class="crawl-item" aria-hidden="true">
+                <img src="assets/images/7.png" alt="">
+                <span>2026</span>
             </div>
         </div>
     </div>
