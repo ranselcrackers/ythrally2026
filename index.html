@@ -342,12 +342,13 @@ body {
 }
 .crawl-label {
     text-align: center;
-    font-size: clamp(11px,0.85vw,14px);
-    letter-spacing: .42em;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: clamp(18px, 2.2vw, 36px);
+    letter-spacing: .12em;
     text-transform: uppercase;
-    /* readable dark grey — not faint */
-    color: #555;
+    color: var(--black);
     margin-bottom: clamp(24px,2.5vw,40px);
+    font-weight: 400;
 }
 .crawl-viewport {
     overflow: hidden;
@@ -365,39 +366,58 @@ body {
 
 .crawl-belt {
     display: flex;
-    position: relative;
-    will-change: left;
+    /* width of ONE set of items — JS not needed, CSS handles it */
+    width: max-content;
+    animation: crawl-scroll 30s linear infinite;
+}
+.crawl-belt:hover { animation-play-state: paused; }
+
+@keyframes crawl-scroll {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+    /* -50% works because the belt contains exactly 2 identical sets of items.
+       When the first set has fully scrolled off, we're at the start of the
+       second set — which looks identical. The loop is seamless. */
 }
 .crawl-item {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: clamp(6px,0.6vw,12px);
+    gap: clamp(4px,0.4vw,8px);
     padding: 0 clamp(32px,4.5vw,72px);
     border-right: 1px solid #ddd;
     flex-shrink: 0;
 }
 .crawl-item img {
-    height: clamp(44px,4.8vw,72px);
+    /* Portrait PNGs (1080×1920) — constrain by height, auto width */
+    height: clamp(56px,5.5vw,88px);
     width: auto;
-    filter: brightness(0);
-    opacity: .38;
+    filter: none;
+    opacity: 1;
     transition: opacity .4s;
     user-select: none;
     pointer-events: none;
     display: block;
+    object-fit: contain;
 }
-.crawl-item:hover img { opacity: .75; }
+.crawl-item:hover img { opacity: 1; }
 .crawl-item span {
     font-size: clamp(10px,0.75vw,13px);
-    letter-spacing: .28em;
+    letter-spacing: .22em;
     text-transform: uppercase;
-    /* readable — not washed out */
     color: #666;
     user-select: none;
+    line-height: 1.3;
+    text-align: center;
+}
+.crawl-item .crawl-year {
+    font-size: clamp(9px,0.65vw,11px);
+    letter-spacing: .28em;
+    color: #999;
 }
 .crawl-item.crawl-current img  { opacity: 1; }
 .crawl-item.crawl-current span { color: var(--black); font-weight: bold; }
+.crawl-item.crawl-current .crawl-year { color: #555; font-weight: normal; }
 
 /* ════════════════════════════
    THEME
@@ -715,32 +735,62 @@ textarea { resize: vertical; min-height: 56px; }
 
 <!-- LOGO CRAWL -->
 <section class="logo-crawl-section">
-    <p class="crawl-label">Five Years of Faith</p>
+    <p class="crawl-label">Four Years of Awakening</p>
     <div class="crawl-viewport">
         <div class="crawl-belt" id="crawlBelt">
-            <div class="crawl-item" data-year="2022">
-                <img src="assets/images/yr22-logo.png"
-                     onerror="this.src='assets/images/yr26-logo.png'" alt="2022">
+            <!-- Set 1 — original -->
+            <div class="crawl-item">
+                <img src="assets/images/1.png" alt="Original Mark 2022">
+                <span>Original Mark</span>
+                <span class="crawl-year">2022</span>
+            </div>
+            <div class="crawl-item">
+                <img src="assets/images/2.png" alt="2022">
                 <span>2022</span>
             </div>
-            <div class="crawl-item" data-year="2023">
-                <img src="assets/images/yr23-logo.png"
-                     onerror="this.src='assets/images/yr26-logo.png'" alt="2023">
+            <div class="crawl-item">
+                <img src="assets/images/3.png" alt="2023">
                 <span>2023</span>
             </div>
-            <div class="crawl-item" data-year="2024">
-                <img src="assets/images/yr24-logo.png"
-                     onerror="this.src='assets/images/yr26-logo.png'" alt="2024">
+            <div class="crawl-item">
+                <img src="assets/images/4.png" alt="2024">
                 <span>2024</span>
             </div>
-            <div class="crawl-item" data-year="2025">
-                <img src="assets/images/yr25-logo.png"
-                     onerror="this.src='assets/images/yr26-logo.png'" alt="2025">
+            <div class="crawl-item">
+                <img src="assets/images/5.png" alt="2025">
                 <span>2025</span>
             </div>
-            <div class="crawl-item crawl-current" data-year="2026">
-                <img src="assets/images/yr26-logo.png" alt="2026">
-                <span>2026 ★</span>
+            <div class="crawl-item crawl-current">
+                <img src="assets/images/6.png" alt="Present Mark 2026">
+                <span>Present Mark</span>
+                <span class="crawl-year">2026 ★</span>
+            </div>
+            <!-- Set 2 — exact duplicate for seamless CSS loop -->
+            <div class="crawl-item" aria-hidden="true">
+                <img src="assets/images/1.png" alt="">
+                <span>Original Mark</span>
+                <span class="crawl-year">2022</span>
+            </div>
+            <div class="crawl-item" aria-hidden="true">
+                <img src="assets/images/2.png" alt="">
+                <span>2022</span>
+            </div>
+            <div class="crawl-item" aria-hidden="true">
+                <img src="assets/images/3.png" alt="">
+                <span>2023</span>
+            </div>
+            <div class="crawl-item" aria-hidden="true">
+                <img src="assets/images/4.png" alt="">
+                <span>2024</span>
+            </div>
+            <div class="crawl-item" aria-hidden="true">
+                <img src="assets/images/5.png" alt="">
+                <span>2025</span>
+            </div>
+            <div class="crawl-item crawl-current" aria-hidden="true">
+                <img src="assets/images/6.png" alt="">
+                <span>Present Mark</span>
+                <span class="crawl-year">2026 ★</span>
             </div>
         </div>
     </div>
@@ -974,84 +1024,7 @@ function scrollToSection(id) {
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-/* ── LOGO CRAWL — true infinite portal ──
-   The "scrolled" counter only ever increases.
-   belt.style.left tracks −scrolled.
-   When the first child's right edge exits the left side,
-   it's re-appended at the end with margin-left corrected
-   so it sits gap-free after the previous last item.
-   No translateX reset = zero visible snap.
-*/
-(function initCrawl() {
-    const belt    = document.getElementById('crawlBelt');
-    const vp      = belt.parentElement;
-    if (!belt) return;
-
-    const SPEED = 48; // px / second
-
-    /* Snapshot originals, clear belt */
-    const originals = Array.from(belt.children);
-    originals.forEach(el => belt.removeChild(el));
-
-    /* Clone enough rounds so belt is always wider than viewport × 3 */
-    function fill() {
-        while (belt.scrollWidth < vp.clientWidth * 3) {
-            originals.forEach(src => {
-                const c = src.cloneNode(true);
-                c.style.marginLeft = '';
-                belt.appendChild(c);
-            });
-        }
-        /* one extra look-ahead buffer round */
-        originals.forEach(src => {
-            const c = src.cloneNode(true);
-            c.style.marginLeft = '';
-            belt.appendChild(c);
-        });
-    }
-    fill();
-
-    let scrolled = 0, lastTs = null, paused = false;
-
-    vp.addEventListener('mouseenter', () => { paused = true;  });
-    vp.addEventListener('mouseleave', () => { paused = false; });
-    vp.addEventListener('touchstart', () => { paused = true;  }, { passive: true });
-    vp.addEventListener('touchend',   () => { setTimeout(() => { paused = false; }, 800); }, { passive: true });
-
-    function tick(ts) {
-        if (lastTs !== null && !paused) {
-            scrolled += SPEED * (ts - lastTs) / 1000;
-            belt.style.left = '-' + scrolled + 'px';
-
-            /* Portal: re-queue any item that exited the left edge */
-            while (true) {
-                const first = belt.firstElementChild;
-                if (!first) break;
-                /* right edge in screen coords = offsetLeft + width - scrolled */
-                if (first.offsetLeft + first.offsetWidth - scrolled > 0) break;
-
-                const last    = belt.lastElementChild;
-                const lastEnd = last.offsetLeft + last.offsetWidth;
-
-                belt.removeChild(first);
-                first.style.marginLeft = '';
-                belt.appendChild(first);
-
-                /* Correct any gap or overlap caused by reflow */
-                const gap = lastEnd - first.offsetLeft;
-                if (Math.abs(gap) > 0.5) first.style.marginLeft = gap + 'px';
-            }
-        }
-        lastTs = ts;
-        requestAnimationFrame(tick);
-    }
-    requestAnimationFrame(tick);
-
-    /* Refill on resize / orientation change */
-    window.addEventListener('resize', () => {
-        if (belt.scrollWidth < vp.clientWidth * 2) fill();
-    }, { passive: true });
-})();
+/* ── LOGO CRAWL — pure CSS infinite scroll, no JS ── */
 
 /* ── FORM ── */
 function show(id)   { document.getElementById(id).classList.remove('hidden'); }
