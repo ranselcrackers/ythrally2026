@@ -18,6 +18,7 @@ html, body { margin: 0; padding: 0; }
     --white:  #f4f2ee;
     --border: #d8d4cc;
     --accent: #c8a96e;
+    --hv: Helvetica Neue, Helvetica, Arial, sans-serif;
 }
 html { scroll-behavior: smooth; }
 body {
@@ -170,6 +171,7 @@ body {
     align-self: stretch;
     margin: 0;
     background: var(--black);
+    isolation: isolate; /* creates stacking context — clips the iframe cleanly */
 }
 .hero-video-wrapper {
     position: absolute;
@@ -192,12 +194,26 @@ body {
 }
 #ytPlayer iframe {
     position: absolute;
-    top: 50%; left: 50%;
+    /* Push iframe up so top title bar is above container,
+       and down so bottom controls are below — clipped by overflow:hidden */
+    top: 50%;
+    left: 50%;
+    /* Extra height eats the ~60px top bar + ~60px bottom controls on all screen sizes */
     width:  calc(100% + 600px);
-    height: calc(100% + 600px);
+    height: calc(100% + 200px);
     transform: translate(-50%, -50%);
     border: none; display: block;
     pointer-events: none;
+}
+/* Desktop-specific: push iframe down more to fully hide bottom controls.
+   The bottom bar is ~50px; we shift the iframe up so it's clipped above the fold. */
+@media (min-width: 861px) {
+    #ytPlayer iframe {
+        width:  calc(100% + 400px);
+        height: calc(100% + 400px);
+        /* Shift slightly upward so the bottom controls clip below the panel edge */
+        transform: translate(-50%, calc(-50% - 60px));
+    }
 }
 .video-overlay {
     position: absolute; inset: 0;
@@ -572,10 +588,11 @@ textarea { resize: vertical; min-height: 56px; }
     color: var(--white);
     border: none;
     padding: clamp(15px,1.3vw,20px) clamp(36px,4vw,64px);
-    font-family: 'Courier New', monospace;
-    font-size: clamp(11px,0.9vw,13px);
+    font-family: var(--hv);
+    font-size: clamp(12px,1vw,14px);
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: .3em;
+    letter-spacing: .16em;
     cursor: pointer;
     transition: opacity .3s, transform .2s;
     touch-action: manipulation;
@@ -584,12 +601,13 @@ textarea { resize: vertical; min-height: 56px; }
 .next-btn:active { transform: scale(.97); }
 .back-btn {
     background: transparent;
-    color: #888;
+    color: #999;
     border: none;
-    font-family: 'Courier New', monospace;
-    font-size: clamp(11px,0.9vw,12px);
+    font-family: var(--hv);
+    font-size: clamp(11px,0.9vw,13px);
+    font-weight: 500;
     text-transform: uppercase;
-    letter-spacing: .22em;
+    letter-spacing: .14em;
     cursor: pointer;
     padding: 8px 0;
     transition: color .25s;
@@ -600,10 +618,11 @@ textarea { resize: vertical; min-height: 56px; }
     color: var(--white);
     border: none;
     padding: clamp(15px,1.3vw,20px) clamp(36px,4vw,64px);
-    font-family: 'Courier New', monospace;
-    font-size: clamp(11px,0.9vw,13px);
+    font-family: var(--hv);
+    font-size: clamp(12px,1vw,14px);
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: .3em;
+    letter-spacing: .16em;
     cursor: pointer;
     transition: opacity .3s, transform .2s;
     touch-action: manipulation;
@@ -825,6 +844,8 @@ textarea { resize: vertical; min-height: 56px; }
     display: flex;
     flex-direction: column;
     align-items: center;
+    text-align: center;
+    width: 100%;
 }
 
 /* ── Receipt page: wide on desktop, normal scroll on mobile ── */
@@ -949,9 +970,6 @@ textarea { resize: vertical; min-height: 56px; }
    PAYMENT + RECEIPT
    Helvetica throughout
    ════════════════════ */
-:root {
-    --hv: Helvetica Neue, Helvetica, Arial, sans-serif;
-}
 
 /* ── Payment Method Selection ── */
 .payment-amount-box {
@@ -1014,10 +1032,10 @@ textarea { resize: vertical; min-height: 56px; }
     padding: 28px 16px 24px;
     cursor: pointer;
     font-family: var(--hv);
-    font-size: 13px;
-    font-weight: 600;
+    font-size: 14px;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: .14em;
+    letter-spacing: .12em;
     color: var(--black);
     transition: all .22s;
     display: flex;
@@ -1045,39 +1063,84 @@ textarea { resize: vertical; min-height: 56px; }
 .pay-icon-stroke { stroke: var(--black); fill: none; transition: stroke .22s; }
 .pay-icon-fill   { fill: var(--black); stroke: none; transition: fill .22s; }
 
-/* ── GCash QR Page ── */
+/* ── GCash page specific buttons — clean Helvetica, easy to read ── */
+.gcash-primary-btn {
+    width: 100%;
+    background: var(--black);
+    color: var(--white);
+    border: none;
+    padding: 18px 24px;
+    font-family: var(--hv);
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: .03em;
+    text-transform: none;
+    cursor: pointer;
+    transition: opacity .25s, transform .2s;
+    touch-action: manipulation;
+    margin-bottom: 12px;
+    border-radius: 2px;
+    text-align: center;
+}
+.gcash-primary-btn:hover  { opacity: .80; }
+.gcash-primary-btn:active { transform: scale(.98); }
+.gcash-primary-btn:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+}
+
+.gcash-back-btn {
+    width: 100%;
+    background: transparent;
+    color: #777;
+    border: 1.5px solid #d8d4cc;
+    padding: 14px 24px;
+    font-family: var(--hv);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: .04em;
+    text-transform: none;
+    cursor: pointer;
+    transition: border-color .22s, color .22s;
+    touch-action: manipulation;
+    border-radius: 2px;
+    text-align: center;
+    margin-bottom: 0;
+}
+.gcash-back-btn:hover { border-color: var(--black); color: var(--black); }
 .gcash-qr-box {
-    width: 220px;
-    height: 220px;
+    width: 240px;
+    height: 240px;
     border: 1px solid #e2dfd8;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto 24px;
+    margin: 0 auto 28px;
     background: #fff;
-    padding: 10px;
-    border-radius: 4px;
-    box-shadow: 0 2px 12px rgba(0,0,0,.08);
+    padding: 12px;
+    border-radius: 6px;
+    box-shadow: 0 4px 20px rgba(0,0,0,.10);
 }
 .gcash-label-box {
     text-align: center;
-    margin-bottom: 28px;
+    margin-bottom: 24px;
+    width: 100%;
 }
 .gcash-name {
     font-family: var(--hv);
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 700;
     letter-spacing: .01em;
     color: var(--black);
     display: block;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
 }
 .gcash-number {
     font-family: var(--hv);
     font-size: 13px;
     font-weight: 400;
-    letter-spacing: .12em;
-    color: #777;
+    letter-spacing: .10em;
+    color: #888;
 }
 .gcash-note {
     font-family: var(--hv);
@@ -1085,9 +1148,9 @@ textarea { resize: vertical; min-height: 56px; }
     font-weight: 400;
     color: #555;
     text-align: center;
-    line-height: 1.75;
+    line-height: 1.8;
     margin-bottom: 28px;
-    max-width: 340px;
+    width: 100%;
 }
 .gcash-badge {
     display: inline-block;
@@ -1095,12 +1158,12 @@ textarea { resize: vertical; min-height: 56px; }
     color: #fff;
     font-family: var(--hv);
     font-size: 11px;
-    font-weight: 600;
-    letter-spacing: .18em;
+    font-weight: 700;
+    letter-spacing: .20em;
     text-transform: uppercase;
-    padding: 7px 20px;
-    margin-bottom: 32px;
-    border-radius: 3px;
+    padding: 7px 22px;
+    margin-bottom: 28px;
+    border-radius: 100px;
 }
 
 /* ── E-Receipt ── */
@@ -1299,12 +1362,12 @@ textarea { resize: vertical; min-height: 56px; }
     background: transparent;
     color: var(--black);
     border: 1.5px solid var(--black);
-    padding: 17px 44px;
+    padding: 18px 44px;
     font-family: var(--hv);
-    font-size: 12px;
-    font-weight: 600;
+    font-size: 13px;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: .18em;
+    letter-spacing: .14em;
     cursor: pointer;
     transition: all .22s;
     touch-action: manipulation;
@@ -1317,12 +1380,12 @@ textarea { resize: vertical; min-height: 56px; }
     background: var(--black);
     color: var(--white);
     border: 1.5px solid var(--black);
-    padding: 17px 44px;
+    padding: 18px 44px;
     font-family: var(--hv);
-    font-size: 12px;
-    font-weight: 600;
+    font-size: 13px;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: .18em;
+    letter-spacing: .14em;
     cursor: pointer;
     transition: opacity .22s;
     touch-action: manipulation;
@@ -1989,7 +2052,7 @@ textarea { resize: vertical; min-height: 56px; }
         <div class="gcash-badge">GCash</div>
 
         <!-- Step A: QR + Scan instructions -->
-        <div id="gcashStepA">
+        <div id="gcashStepA" style="width:100%;display:flex;flex-direction:column;align-items:center;">
             <div class="gcash-qr-box">
                 <img src="assets/images/gcashqr.png" alt="GCash QR Code" style="width:100%;height:100%;object-fit:contain;display:block;">
             </div>
@@ -2001,11 +2064,11 @@ textarea { resize: vertical; min-height: 56px; }
 
             <p class="gcash-note">
                 Scan the QR code and send exactly <strong>₱350</strong>.<br>
-                Once sent, take a <strong>screenshot of your GCash receipt</strong> — you'll upload it in the next step.
+                Once sent, take a screenshot of your <strong>GCash receipt</strong> — you'll upload it in the next step.
             </p>
 
-            <button class="submit-btn" style="width:100%;margin-bottom:12px;" onclick="gcashNextStep()">I've Sent the Payment — Upload Receipt →</button>
-            <button class="register-another-btn" onclick="goBackToPayment()">← Change Payment Method</button>
+            <button class="gcash-primary-btn" onclick="gcashNextStep()">I've Sent the Payment — Upload Receipt</button>
+            <button class="gcash-back-btn" onclick="goBackToPayment()">← Change Payment Method</button>
         </div>
 
         <!-- Step B: Upload screenshot -->
@@ -2041,8 +2104,8 @@ textarea { resize: vertical; min-height: 56px; }
                 </div>
             </div>
 
-            <button class="submit-btn" style="width:100%;margin-top:24px;margin-bottom:12px;" id="gcashSubmitBtn" onclick="submitGcashRegistration()">Submit Registration →</button>
-            <button class="register-another-btn" onclick="gcashBackStep()">← Back</button>
+            <button class="gcash-primary-btn" style="margin-top:24px;" id="gcashSubmitBtn" onclick="submitGcashRegistration()">Submit Registration</button>
+            <button class="gcash-back-btn" onclick="gcashBackStep()">← Back</button>
         </div>
     </div>
 </div>
@@ -2501,7 +2564,7 @@ async function submitGcashRegistration(){
         setProgress(100, 'Registration complete!');
         progressFill.className='submit-progress-bar-fill success';
 
-        btn.textContent='Submit Registration →';
+        btn.textContent='Submit Registration';
         btn.disabled=false;
 
         setTimeout(()=>{ populateReceipt('gcash'); showOverlay('receiptPage'); progressWrap.style.display='none'; }, 800);
@@ -2513,7 +2576,7 @@ async function submitGcashRegistration(){
         status.style.display='block';
         status.className='submit-status-box error';
         status.textContent='Error: '+err.message+'. Please try again.';
-        btn.textContent='Submit Registration →';
+        btn.textContent='Submit Registration';
         btn.disabled=false;
     }
 }
