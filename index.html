@@ -2230,8 +2230,11 @@ function selectPayment(method){
     selectedPayment=method;
     if(method==='cash'){
         populateReceipt('cash');
-        submitToSheets('cash', null, null); // submit cash registrations immediately
         showOverlay('receiptPage');
+        // Fire-and-forget cash submission (no receipt file needed)
+        submitToSheets('cash', null, null, null).catch(function(err){
+            console.error('Cash submission error:', err);
+        });
     } else {
         // reset gcash upload state
         gcashFileData=null; gcashFileName='';
@@ -2328,11 +2331,6 @@ async function submitGcashRegistration(){
 }
 
 async function submitToSheets(paymentMethod, base64File, mimeType, receiptFileName){
-    if(APPS_SCRIPT_URL==='https://script.google.com/macros/s/AKfycbyGgnBB7Ppf4vrpjCVDGODgmjm1MhO7Jq6amvcy_LZojAi-QckTSYCESaRz1aWG4Ig/exec'){
-        console.log('Apps Script URL not configured yet. Skipping submission.');
-        return;
-    }
-
     const church = formData.localChurch==='Others' ? (formData.otherChurch||'Others') : (formData.localChurch||'');
     const payload = {
         refNo:           generatedRef,
@@ -2355,21 +2353,23 @@ async function submitToSheets(paymentMethod, base64File, mimeType, receiptFileNa
         medicalInfo:     formData.medicalInfo||'',
         guardianSig:     (formData.guardianSignature||'').toUpperCase(),
         paymentMethod:   paymentMethod.toUpperCase(),
-        // GCash file fields
         gcashFile:       base64File || '',
         gcashMime:       mimeType || '',
         gcashFileName:   receiptFileName || ''
     };
 
+    // Send as text/plain to avoid CORS preflight — Apps Script handles this correctly
     const resp = await fetch(APPS_SCRIPT_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        method:  'POST',
+        headers: { 'Content-Type': 'text/plain' },
+        body:    JSON.stringify(payload)
     });
 
-    if(!resp.ok) throw new Error('Server returned '+resp.status);
-    const result = await resp.json();
-    if(result.status !== 'ok') throw new Error(result.message || 'Unknown error');
+    if(!resp.ok) throw new Error('Server returned ' + resp.status);
+    const text = await resp.text();
+    let result;
+    try { result = JSON.parse(text); } catch(ex) { result = { status: 'ok' }; }
+    if(result.status && result.status !== 'ok') throw new Error(result.message || 'Unknown error');
     return result;
 }
 
@@ -2414,343 +2414,6 @@ function registerAnother(){
     setTimeout(()=>{ document.getElementById('registration').scrollIntoView({behavior:'smooth',block:'start'}); },100);
 }
 function closeDone(){ hideAllOverlays(); registerAnother(); }
-</script>
-
-/* ══════════════════════════════
-   NAVBAR
-   ══════════════════════════════ */
-const navbar=document.getElementById('navbar'),navLinks=document.getElementById('navLinks'),menuToggle=document.getElementById('menuToggle'),navOverlay=document.getElementById('navOverlay');
-window.addEventListener('scroll',()=>{ navbar.classList.toggle('scrolled',window.scrollY>40); },{passive:true});
-function toggleMenu(){ const o=navLinks.classList.toggle('active'); menuToggle.classList.toggle('open',o); navOverlay.classList.toggle('active',o); document.body.style.overflow=o?'hidden':''; }
-function closeMenu(){ navLinks.classList.remove('active'); menuToggle.classList.remove('open'); navOverlay.classList.remove('active'); document.body.style.overflow=''; }
-function scrollToSection(id){ closeMenu(); const el=document.getElementById(id); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); }
-
-/* ══════════════════════════════
-   CALENDAR / DATE PICKER
-   ══════════════════════════════ */
-var cal = {
-    viewYear: 2010, viewMonth: 0,
-    selYear: null, selMonth: null, selDay: null,
-    open: false
-};
-
-const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-
-function initCalendar() {
-    // Populate year dropdown: 2003–2013 (ages 13–21 relative to event April 2026)
-    const ySel = document.getElementById('calYearSel');
-    ySel.innerHTML = '';
-    for (let y = 2013; y >= 2003; y--) {
-        const o = document.createElement('option'); o.value = y; o.textContent = y; ySel.appendChild(o);
-    }
-    cal.viewYear = 2010; cal.viewMonth = 0;
-    syncCalSelects(); renderCalGrid();
-}
-
-function syncCalSelects() {
-    document.getElementById('calMonthSel').value = cal.viewMonth;
-    document.getElementById('calYearSel').value  = cal.viewYear;
-}
-
-function toggleCalendar() {
-    cal.open = !cal.open;
-    document.getElementById('calendarPopup').classList.toggle('open', cal.open);
-    if (cal.open) {
-        // close on outside click
-        setTimeout(() => { document.addEventListener('click', outsideCalClick); }, 10);
-    } else {
-        document.removeEventListener('click', outsideCalClick);
-    }
-}
-function outsideCalClick(e) {
-    if (!document.getElementById('datePickerWrap').contains(e.target)) {
-        closeCalendar();
-    }
-}
-function closeCalendar() {
-    cal.open = false;
-    document.getElementById('calendarPopup').classList.remove('open');
-    document.removeEventListener('click', outsideCalClick);
-}
-
-function calNav(dir) {
-    cal.viewMonth += dir;
-    if (cal.viewMonth > 11) { cal.viewMonth = 0; cal.viewYear++; }
-    if (cal.viewMonth < 0)  { cal.viewMonth = 11; cal.viewYear--; }
-    // clamp to year range
-    cal.viewYear = Math.max(2003, Math.min(2013, cal.viewYear));
-    syncCalSelects(); renderCalGrid();
-}
-function calMonthChange() { cal.viewMonth = +document.getElementById('calMonthSel').value; renderCalGrid(); }
-function calYearChange()  { cal.viewYear  = +document.getElementById('calYearSel').value;  renderCalGrid(); }
-
-function renderCalGrid() {
-    const grid = document.getElementById('calGrid');
-    grid.innerHTML = '';
-    const firstDay = new Date(cal.viewYear, cal.viewMonth, 1).getDay(); // 0=Sun
-    const daysInMonth = new Date(cal.viewYear, cal.viewMonth+1, 0).getDate();
-    // empty cells before 1st
-    for (let i = 0; i < firstDay; i++) {
-        const c = document.createElement('div'); c.className = 'cal-cell cal-empty'; grid.appendChild(c);
-    }
-    for (let d = 1; d <= daysInMonth; d++) {
-        const c = document.createElement('div');
-        c.className = 'cal-cell';
-        c.textContent = d;
-        const isSel = cal.selDay===d && cal.selMonth===cal.viewMonth && cal.selYear===cal.viewYear;
-        if (isSel) c.classList.add('cal-selected');
-        c.onclick = () => selectDate(cal.viewYear, cal.viewMonth, d);
-        grid.appendChild(c);
-    }
-}
-
-function selectDate(y, m, d) {
-    cal.selYear=y; cal.selMonth=m; cal.selDay=d;
-    const monthStr = MONTHS[m];
-    const displayStr = `${monthStr} ${d}, ${y}`;
-    document.getElementById('dateDisplayText').textContent = displayStr;
-    document.getElementById('dateDisplay').classList.remove('placeholder');
-    document.getElementById('birthdate').value = displayStr;
-    renderCalGrid();
-    // Auto-compute age
-    computeAge(y, m, d);
-    // Close after short delay so user sees selection
-    setTimeout(closeCalendar, 200);
-}
-
-function computeAge(birthY, birthM, birthD) {
-    // Event date: April 29, 2026
-    const eventDate = new Date(2026, 3, 29);
-    let age = eventDate.getFullYear() - birthY;
-    if (eventDate.getMonth() < birthM || (eventDate.getMonth()===birthM && eventDate.getDate()<birthD)) age--;
-    const el = document.getElementById('ageDisplay');
-    const ageInput = document.getElementById('age');
-    if (age >= 13 && age <= 21) {
-        el.textContent = `Age on event day: ${age} years old ✓`;
-        el.className = 'age-display valid';
-        ageInput.value = age;
-    } else if (age < 13) {
-        el.textContent = `You'll be ${age} — must be at least 13 by event day.`;
-        el.className = 'age-display invalid';
-        ageInput.value = '';
-    } else {
-        el.textContent = `You'll be ${age} — this rally is for ages 13–21.`;
-        el.className = 'age-display invalid';
-        ageInput.value = '';
-    }
-}
-
-initCalendar();
-
-/* ══════════════════════════════
-   MULTI-STEP FORM
-   ══════════════════════════════ */
-var currentStep = 1;
-var formData = {};
-var selectedPayment = '';
-
-function updateProgress(step) {
-    for (let i = 1; i <= 4; i++) {
-        const ps = document.getElementById('pstep'+i);
-        ps.classList.remove('active','done');
-        if (i < step)  ps.classList.add('done');
-        if (i === step) ps.classList.add('active');
-    }
-}
-
-function showStep(n) {
-    document.querySelectorAll('.form-step').forEach(s => s.classList.remove('active'));
-    document.getElementById('step'+n).classList.add('active');
-    currentStep = n;
-    updateProgress(n);
-    // Scroll form into view
-    setTimeout(() => { document.getElementById('registration').scrollIntoView({behavior:'smooth',block:'start'}); }, 60);
-}
-
-function shake(el) { el.classList.remove('shake'); void el.offsetWidth; el.classList.add('shake'); setTimeout(()=>el.classList.remove('shake'),500); }
-
-function goNext(step) {
-    if (step === 1) {
-        // Validate step 1
-        const lastName  = document.getElementById('lastName').value.trim();
-        const firstName = document.getElementById('firstName').value.trim();
-        const nickname  = document.getElementById('nickname').value.trim();
-        const birthdate = document.getElementById('birthdate').value;
-        const age       = document.getElementById('age').value;
-        const gender    = document.querySelector('input[name="gender"]:checked');
-
-        if (!lastName)  { shake(document.getElementById('lastName')); document.getElementById('lastName').focus(); return; }
-        if (!firstName) { shake(document.getElementById('firstName')); document.getElementById('firstName').focus(); return; }
-        if (!nickname)  { shake(document.getElementById('nickname')); document.getElementById('nickname').focus(); return; }
-        if (!birthdate) { shake(document.getElementById('dateDisplay')); alert('Please select your birthdate.'); return; }
-        if (!age) { alert('Your age is outside the allowed range (13–21). Please check your birthdate.'); return; }
-        if (!gender) { alert('Please select your gender.'); return; }
-        showStep(2);
-
-    } else if (step === 2) {
-        // Validate step 2
-        const address = document.getElementById('address').value.trim();
-        const contact = document.getElementById('contact').value.trim();
-        const email   = document.getElementById('email').value.trim();
-        const church  = document.getElementById('localChurch').value;
-        const role    = document.getElementById('role').value;
-        const otherChurch = document.getElementById('otherChurch').value.trim();
-
-        if (!address) { shake(document.getElementById('address')); document.getElementById('address').focus(); return; }
-        if (contact.length !== 11) { shake(document.getElementById('contact')); document.getElementById('contact').focus(); alert('Mobile number must be 11 digits.'); return; }
-        if (!email || !email.includes('@')) { shake(document.getElementById('email')); document.getElementById('email').focus(); return; }
-        if (!church) { shake(document.getElementById('localChurch')); alert('Please select your church.'); return; }
-        if (church === 'Others' && !otherChurch) { shake(document.getElementById('otherChurch')); document.getElementById('otherChurch').focus(); return; }
-        if (!role) { shake(document.getElementById('role')); alert('Please select your role.'); return; }
-        showStep(3);
-
-    } else if (step === 3) {
-        // Validate step 3
-        const accom = document.querySelector('input[name="accommodation"]:checked');
-        if (!accom) { alert('Please indicate if you will avail accommodation.'); return; }
-        showStep(4);
-    }
-}
-
-function goBack(step) {
-    showStep(step - 1);
-}
-
-/* ══════════════════════════════
-   CHURCH TOGGLE
-   ══════════════════════════════ */
-function handleChurchSelect() {
-    const val = document.getElementById('localChurch').value;
-    if (val === 'Others') {
-        document.getElementById('otherChurchSection').classList.remove('hidden');
-    } else {
-        document.getElementById('otherChurchSection').classList.add('hidden');
-        document.getElementById('otherChurch').value = '';
-    }
-}
-
-/* ══════════════════════════════
-   MEDICAL TOGGLE
-   ══════════════════════════════ */
-function handleMedical() {
-    if (document.getElementById('medYes').checked) {
-        document.getElementById('medicalDetail').classList.remove('hidden');
-    } else {
-        document.getElementById('medicalDetail').classList.add('hidden');
-        document.getElementById('medicalInfo').value = '';
-    }
-}
-
-/* ══════════════════════════════
-   CONSENT CHECKBOXES
-   ══════════════════════════════ */
-function toggleConsent(boxId, inputId) {
-    const box = document.getElementById(boxId);
-    const inp = document.getElementById(inputId);
-    const checked = box.classList.toggle('checked');
-    inp.value = checked ? 'Yes' : '';
-}
-
-/* ══════════════════════════════
-   SUBMIT → PAYMENT
-   ══════════════════════════════ */
-function handleSubmit() {
-    // Validate step 4
-    const guardianName = document.getElementById('guardianName').value.trim();
-    const guardianContact = document.getElementById('guardianContact').value.trim();
-    const medical = document.querySelector('input[name="medicalCondition"]:checked');
-    const medInfo = document.getElementById('medicalInfo').value.trim();
-    const cA = document.getElementById('consentA').value;
-    const cB = document.getElementById('consentB').value;
-    const cC = document.getElementById('consentC').value;
-    const sig = document.getElementById('guardianSignature').value.trim();
-
-    if (!guardianName) { shake(document.getElementById('guardianName')); document.getElementById('guardianName').focus(); return; }
-    if (guardianContact.length !== 11) { shake(document.getElementById('guardianContact')); document.getElementById('guardianContact').focus(); alert('Guardian mobile must be 11 digits.'); return; }
-    if (!medical) { alert('Please answer the medical conditions question.'); return; }
-    if (document.getElementById('medYes').checked && !medInfo) { shake(document.getElementById('medicalInfo')); document.getElementById('medicalInfo').focus(); return; }
-    if (!cA || !cB || !cC) { alert('Please check all three consent statements.'); return; }
-    if (!sig) { shake(document.getElementById('guardianSignature')); document.getElementById('guardianSignature').focus(); return; }
-
-    // Collect all form data
-    const fd = new FormData(document.getElementById('regForm'));
-    formData = Object.fromEntries(fd.entries());
-
-    const displayName = (formData.lastName + ', ' + formData.firstName).toUpperCase();
-    document.getElementById('paymentNameDisplay').textContent = displayName;
-    showOverlay('paymentPage');
-}
-
-/* ══════════════════════════════
-   OVERLAYS
-   ══════════════════════════════ */
-function showOverlay(id) {
-    document.querySelectorAll('.overlay-page').forEach(p => p.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-    document.body.style.overflow = 'hidden';
-    document.getElementById(id).scrollTop = 0;
-}
-function hideAllOverlays() {
-    document.querySelectorAll('.overlay-page').forEach(p => p.classList.remove('active'));
-    document.body.style.overflow = '';
-}
-
-function selectPayment(method) {
-    selectedPayment = method;
-    if (method === 'cash') { populateReceipt('cash'); showOverlay('receiptPage'); }
-    else { showOverlay('gcashPage'); }
-}
-function goBackToPayment() { showOverlay('paymentPage'); }
-function showReceipt(method) { populateReceipt(method); showOverlay('receiptPage'); }
-
-function generateRef() { return 'YTH26-' + Math.random().toString(36).toUpperCase().substr(2,6); }
-
-function populateReceipt(method) {
-    const fullName = (formData.lastName + ', ' + formData.firstName).toUpperCase();
-    const church = formData.localChurch === 'Others' ? (formData.otherChurch||'Others') : (formData.localChurch||'—');
-    document.getElementById('rcptName').textContent     = fullName;
-    document.getElementById('rcptNickname').textContent = (formData.nickname || '—').toUpperCase();
-    document.getElementById('rcptAge').textContent      = formData.age || '—';
-    document.getElementById('rcptChurch').textContent   = church.toUpperCase();
-    document.getElementById('rcptAccom').textContent    = formData.accommodation || '—';
-    document.getElementById('rcptRef').textContent      = generateRef();
-    const badge = document.getElementById('rcptPayBadge');
-    const reminder = document.getElementById('cashReminder');
-    if (method === 'cash') {
-        badge.textContent = 'Cash — Pay on Event Day';
-        badge.className = 'receipt-payment-badge cash-badge';
-        reminder.style.display = 'block';
-    } else {
-        badge.textContent = 'GCash — Paid';
-        badge.className = 'receipt-payment-badge gcash-badge-style';
-        reminder.style.display = 'none';
-    }
-}
-
-function registerAnother() {
-    hideAllOverlays();
-    document.getElementById('regForm').reset();
-    // Reset calendar
-    cal.selYear=null; cal.selMonth=null; cal.selDay=null;
-    document.getElementById('dateDisplayText').textContent='Select date';
-    document.getElementById('dateDisplay').classList.add('placeholder');
-    document.getElementById('ageDisplay').textContent='';
-    document.getElementById('ageDisplay').className='age-display';
-    // Reset conditionals
-    document.getElementById('otherChurchSection').classList.add('hidden');
-    document.getElementById('medicalDetail').classList.add('hidden');
-    // Reset consents
-    ['cboxA','cboxB','cboxC'].forEach(id => document.getElementById(id).classList.remove('checked'));
-    ['consentA','consentB','consentC'].forEach(id => document.getElementById(id).value='');
-    formData = {}; selectedPayment = '';
-    showStep(1);
-    setTimeout(()=>{ document.getElementById('registration').scrollIntoView({behavior:'smooth',block:'start'}); },100);
-}
-
-function closeDone() {
-    hideAllOverlays();
-    registerAnother();
-}
 </script>
 </body>
 </html>
