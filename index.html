@@ -351,79 +351,135 @@ body {
     color: var(--black);
 }
 
-/* Progress bar */
+/* ── Step Progress Tracker ── */
 .form-progress {
-    display: flex;
-    align-items: center;
-    gap: 0;
-    margin-bottom: clamp(40px,4.5vw,68px);
-}
-.progress-step {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    flex: 1;
     position: relative;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: clamp(40px,4.5vw,64px);
+    margin-top: 8px;
 }
-.progress-step::after {
+
+/* The continuous track line behind all dots */
+.form-progress::before {
     content: '';
     position: absolute;
-    top: 10px;
-    left: 50%;
-    width: 100%;
+    top: 13px;
+    left: 13px;
+    right: 13px;
     height: 1.5px;
     background: #ddd;
     z-index: 0;
 }
+
+/* Filled portion of track — driven by JS via CSS variable */
+.form-progress::after {
+    content: '';
+    position: absolute;
+    top: 13px;
+    left: 13px;
+    height: 1.5px;
+    background: var(--black);
+    z-index: 0;
+    width: var(--progress-fill, 0%);
+    transition: width .45s cubic-bezier(.4,0,.2,1);
+}
+
+.progress-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+    z-index: 1;
+    flex: 0 0 auto;
+}
+
+/* Remove old pseudo-element approach */
+.progress-step::after { display: none; }
 .progress-step:last-child::after { display: none; }
+
 .progress-dot {
-    width: 20px;
-    height: 20px;
+    width: 26px;
+    height: 26px;
     border-radius: 50%;
-    border: 1.5px solid #ccc;
+    border: 2px solid #d0ccc8;
     background: var(--white);
     position: relative;
     z-index: 1;
     transition: all .35s ease;
     flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
+
+/* Inactive inner pulse */
+.progress-step:not(.active):not(.done) .progress-dot::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #d0ccc8;
+    transition: all .35s ease;
+}
+
+/* Active state */
 .progress-step.active .progress-dot {
     border-color: var(--black);
     background: var(--black);
+    box-shadow: 0 0 0 4px rgba(10,10,10,0.10);
 }
+.progress-step.active .progress-dot::before { display: none; }
+
+/* Done state */
 .progress-step.done .progress-dot {
     border-color: var(--black);
     background: var(--black);
 }
+.progress-step.done .progress-dot::before { display: none; }
 .progress-step.done .progress-dot::after {
-    content: '✓';
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--white);
-    font-size: 10px;
-    line-height: 1;
+    content: '';
+    display: block;
+    width: 5px;
+    height: 9px;
+    border: 2px solid var(--white);
+    border-top: none;
+    border-left: none;
+    transform: rotate(45deg) translate(-1px, -1px);
 }
-.progress-step.done::after { background: var(--black); }
+
+/* Labels */
 .progress-label {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    font-size: clamp(9px, 0.8vw, 11px);
+    font-size: 10px;
     font-weight: 500;
-    letter-spacing: .06em;
+    letter-spacing: .04em;
     text-transform: uppercase;
     color: #bbb;
     text-align: center;
-    line-height: 1.4;
-    transition: color .35s;
-    max-width: 72px;
-    white-space: normal;
-    word-break: normal;
+    line-height: 1.45;
+    transition: color .35s, font-weight .35s;
+    white-space: nowrap;
 }
-.progress-step.active .progress-label,
-.progress-step.done  .progress-label { color: var(--black); }
+
+/* First and last labels align to their edges */
+.progress-step:first-child .progress-label { text-align: left; }
+.progress-step:last-child  .progress-label { text-align: right; }
+
+.progress-step.active .progress-label { color: var(--black); font-weight: 700; }
+.progress-step.done   .progress-label { color: var(--black); font-weight: 500; }
+
+/* Mobile: shrink labels */
+@media (max-width: 480px) {
+    .progress-label { font-size: 8.5px; white-space: normal; max-width: 56px; }
+    .progress-step:first-child .progress-label,
+    .progress-step:last-child  .progress-label { text-align: center; }
+    .progress-dot { width: 22px; height: 22px; }
+    .form-progress::before { top: 11px; left: 11px; right: 11px; }
+    .form-progress::after  { top: 11px; left: 11px; }
+}
 
 /* Form steps */
 .form-step {
@@ -2217,6 +2273,7 @@ function computeAge(birthY,birthM,birthD){
     }
 }
 initCalendar();
+updateProgress(1); // set initial track fill
 
 /* ══════════════════════════════
    MULTI-STEP FORM
@@ -2230,6 +2287,10 @@ function updateProgress(step){
         if(i<step) ps.classList.add('done');
         if(i===step) ps.classList.add('active');
     }
+    // Drive the filled portion of the track line
+    // Steps: 1=0%, 2=33.3%, 3=66.6%, 4=100%
+    const fills = ['0%', '33.3%', '66.6%', '100%'];
+    document.getElementById('formProgress').style.setProperty('--progress-fill', fills[step-1]);
 }
 function showStep(n){
     document.querySelectorAll('.form-step').forEach(s=>s.classList.remove('active'));
