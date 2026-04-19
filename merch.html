@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Official Merch — YTH Rally 2026</title>
-<link rel="icon" type="image/png" href="assets/images/yr26-logo.png">
+<link rel="icon" type="image/png" href="assets/images/yr26-logo.png"> <!-- TODO: Replace with your logo filename -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
@@ -62,6 +62,20 @@ body{background:var(--white);font-family:var(--mono);color:var(--black);line-hei
   padding:clamp(120px,14vw,200px) clamp(32px,6vw,100px) clamp(48px,5vw,80px);
   position:relative;overflow:hidden;
 }
+.merch-hero-bg{
+  position:absolute;inset:0;z-index:0;
+  background:url('assets/images/merch/hero-bg.png') center/cover no-repeat;
+  animation:heroFadeIn 1.2s ease-out forwards;
+  opacity:0;
+}
+@keyframes heroFadeIn{
+  from{opacity:0;transform:scale(1.05);}
+  to{opacity:1;transform:scale(1);}
+}
+.merch-hero-overlay{
+  position:absolute;inset:0;z-index:1;
+  background:linear-gradient(90deg,rgba(10,10,10,0.92) 0%,rgba(10,10,10,0.6) 35%,rgba(10,10,10,0.2) 60%,transparent 100%);
+}
 .merch-hero::before{
   content:'MERCH';
   position:absolute;right:-2vw;top:50%;transform:translateY(-50%);
@@ -69,7 +83,7 @@ body{background:var(--white);font-family:var(--mono);color:var(--black);line-hei
   color:rgba(255,255,255,.03);font-weight:700;letter-spacing:-.05em;
   pointer-events:none;white-space:nowrap;
 }
-.merch-hero-content{position:relative;z-index:1;}
+.merch-hero-content{position:relative;z-index:2;}
 .merch-hero-eyebrow{
   font-family:var(--mono);font-size:clamp(10px,.85vw,13px);
   text-transform:uppercase;letter-spacing:.3em;color:var(--accent);margin-bottom:16px;
@@ -94,13 +108,14 @@ body{background:var(--white);font-family:var(--mono);color:var(--black);line-hei
 
 /* ══ PRODUCTS GRID ══ */
 .products-section{padding:clamp(60px,8vw,120px) clamp(32px,6vw,100px);}
+.products-container{max-width:1200px;margin:0 auto;}
 .section-label{
   font-size:11px;letter-spacing:.3em;text-transform:uppercase;
   color:#999;margin-bottom:clamp(40px,5vw,72px);
   display:flex;align-items:center;gap:20px;
 }
 .section-label::after{content:'';flex:1;height:1px;background:var(--border);}
-.products-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,3vw,48px);}
+.products-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,3vw,48px);max-width:1000px;margin:0 auto;}
 
 /* ══ PRODUCT CARD ══ */
 .product-card{display:flex;flex-direction:column;}
@@ -117,11 +132,19 @@ body{background:var(--white);font-family:var(--mono);color:var(--black);line-hei
   display:flex;align-items:center;justify-content:center;
   position:relative;overflow:hidden;
 }
+.carousel-slide img{
+  position:absolute;
+  top:0;left:0;
+  width:100%;height:100%;
+  object-fit:cover;
+  object-position:center;
+}
 /* Placeholder slides */
 .placeholder-slide{
   width:100%;height:100%;
-  display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;
+  display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;
 }
+.placeholder-slide.show-placeholder{display:flex;}
 .ph-moss{background:linear-gradient(160deg,#3a4e2e 0%,#5a7248 50%,#2e3d22 100%);}
 .ph-black{background:linear-gradient(160deg,#1a1a1a 0%,#2d2d2d 50%,#0d0d0d 100%);}
 .placeholder-label{
@@ -139,8 +162,10 @@ body{background:var(--white);font-family:var(--mono);color:var(--black);line-hei
   color:#fff;width:40px;height:40px;border-radius:50%;
   display:flex;align-items:center;justify-content:center;
   cursor:pointer;font-size:16px;z-index:5;
-  transition:background .3s;
+  transition:background .3s,opacity .3s;
+  opacity:0;
 }
+.product-carousel:hover .carousel-btn{opacity:1;}
 .carousel-btn:hover{background:rgba(255,255,255,.22);}
 .carousel-btn.prev{left:12px;}
 .carousel-btn.next{right:12px;}
@@ -495,7 +520,8 @@ body{background:var(--white);font-family:var(--mono);color:var(--black);line-hei
 
 /* Large tablets and small laptops */
 @media(max-width:1024px){
-  .products-grid{grid-template-columns:repeat(2,1fr);gap:20px;}
+  .products-container{max-width:100%;}
+  .products-grid{grid-template-columns:repeat(2,1fr);gap:20px;max-width:100%;}
   .merch-hero{min-height:45vh;padding-top:clamp(100px,12vw,140px);}
   .merch-hero-title{font-size:clamp(40px,6vw,80px);}
   .product-info{padding:16px 0;}
@@ -526,6 +552,7 @@ body{background:var(--white);font-family:var(--mono);color:var(--black);line-hei
   .merch-hero-sub{font-size:clamp(10px,1.2vw,12px);max-width:320px;}
   .preorder-banner{flex-direction:column;text-align:center;gap:8px;padding:12px 20px;font-size:10px;}
   .products-section{padding:clamp(40px,8vw,60px) clamp(20px,5vw,40px);}
+  .products-container{padding:0;}
   .section-label{margin-bottom:clamp(24px,5vw,40px);}
   .product-carousel{aspect-ratio:4/5;}
   .product-info{padding:16px 0 20px;}
@@ -722,6 +749,7 @@ body{background:var(--white);font-family:var(--mono);color:var(--black);line-hei
 <!-- NAVBAR -->
 <nav class="navbar" id="navbar">
   <a href="index.html" class="logo">
+    <!-- TODO: Replace with your logo filename -->
     <img src="assets/images/yr26-logo.png" alt="YTH Rally 2026" class="logo-img">
   </a>
   <ul class="nav-links" id="navLinks">
@@ -736,6 +764,8 @@ body{background:var(--white);font-family:var(--mono);color:var(--black);line-hei
 
 <!-- MERCH HERO -->
 <section class="merch-hero">
+  <div class="merch-hero-bg"></div>
+  <div class="merch-hero-overlay"></div>
   <div class="merch-hero-content">
     <div class="merch-hero-eyebrow">YTH Rally 2026 · Official Collection</div>
     <h1 class="merch-hero-title">Official<br>Merch</h1>
@@ -751,30 +781,35 @@ body{background:var(--white);font-family:var(--mono);color:var(--black);line-hei
 
 <!-- PRODUCTS SECTION -->
 <section class="products-section">
-  <div class="section-label">Select Your Merch</div>
-  <div class="products-grid">
+  <div class="products-container">
+    <div class="section-label">Select Your Merch</div>
+    <div class="products-grid">
 
     <!-- PRODUCT 1: MOSS GREEN -->
     <div class="product-card" id="card-moss">
       <div class="product-carousel" id="carousel-moss">
         <div class="product-tag">It Only Takes One</div>
         <div class="carousel-track" id="track-moss">
-          <!-- Slide 1 -->
+          <!-- TODO: Change the filename below to your actual image -->
+          <!-- Slide 1: Front View -->
           <div class="carousel-slide">
+            <img src="assets/images/merch/moss-front.jpg" alt="Moss Green Front" onerror="this.style.display='none';this.nextElementSibling.classList.add('show-placeholder');">
             <div class="placeholder-slide ph-moss">
               <div class="placeholder-label">Front View</div>
               <div class="placeholder-tag">Moss Green Shirt</div>
             </div>
           </div>
-          <!-- Slide 2 -->
+          <!-- Slide 2: Back View -->
           <div class="carousel-slide">
+            <img src="assets/images/merch/moss-back.jpg" alt="Moss Green Back" onerror="this.style.display='none';this.nextElementSibling.classList.add('show-placeholder');">
             <div class="placeholder-slide ph-moss" style="filter:brightness(.85)">
               <div class="placeholder-label">Back View</div>
               <div class="placeholder-tag">Moss Green Shirt</div>
             </div>
           </div>
-          <!-- Slide 3 -->
+          <!-- Slide 3: Detail -->
           <div class="carousel-slide">
+            <img src="assets/images/merch/moss-detail.jpg" alt="Moss Green Detail" onerror="this.style.display='none';this.nextElementSibling.classList.add('show-placeholder');">
             <div class="placeholder-slide ph-moss" style="filter:brightness(.7)">
               <div class="placeholder-label">Detail</div>
               <div class="placeholder-tag">Moss Green Shirt</div>
@@ -818,19 +853,26 @@ body{background:var(--white);font-family:var(--mono);color:var(--black);line-hei
       <div class="product-carousel" id="carousel-black">
         <div class="product-tag" style="background:var(--white);color:var(--black);">Be the Altar</div>
         <div class="carousel-track" id="track-black">
+          <!-- TODO: Change the filename below to your actual image -->
+          <!-- Slide 1: Front View -->
           <div class="carousel-slide">
+            <img src="assets/images/merch/black-front.jpg" alt="Black Front" onerror="this.style.display='none';this.nextElementSibling.classList.add('show-placeholder');">
             <div class="placeholder-slide ph-black">
               <div class="placeholder-label">Front View</div>
               <div class="placeholder-tag">Black Shirt</div>
             </div>
           </div>
+          <!-- Slide 2: Back View -->
           <div class="carousel-slide">
+            <img src="assets/images/merch/black-back.jpg" alt="Black Back" onerror="this.style.display='none';this.nextElementSibling.classList.add('show-placeholder');">
             <div class="placeholder-slide ph-black" style="filter:brightness(.75)">
               <div class="placeholder-label">Back View</div>
               <div class="placeholder-tag">Black Shirt</div>
             </div>
           </div>
+          <!-- Slide 3: Detail -->
           <div class="carousel-slide">
+            <img src="assets/images/merch/black-detail.jpg" alt="Black Detail" onerror="this.style.display='none';this.nextElementSibling.classList.add('show-placeholder');">
             <div class="placeholder-slide ph-black" style="filter:brightness(.6)">
               <div class="placeholder-label">Detail</div>
               <div class="placeholder-tag">Black Shirt</div>
@@ -868,14 +910,16 @@ body{background:var(--white);font-family:var(--mono);color:var(--black);line-hei
     </div>
 
   </div>
+  </div>
 </section>
 
 <!-- GROUP PHOTO SECTION -->
 <section class="group-section" id="group-photo">
   <div class="group-photo-frame">
     <div class="group-photo-placeholder">
-      <!-- Replace the src below with your actual group photo path -->
-      <img src="assets/images/group-merch.jpg" alt="Merch Group Photo">
+      <!-- TODO: Replace with your group merch photo filename -->
+      <!-- <img src="assets/images/your-group-photo.png" alt="Group Photo"> -->
+      <img src="assets/images/merch/group-merch.jpg" alt="Merch Group Photo">
       <div style="font-family:var(--serif);font-size:clamp(18px,2.5vw,32px);color:rgba(255,255,255,.08);text-transform:uppercase;letter-spacing:.1em;text-align:center;padding:40px;">Group Photo<br>Coming Soon</div>
     </div>
     <div class="group-upload-hint">
@@ -952,6 +996,8 @@ body{background:var(--white);font-family:var(--mono);color:var(--black);line-hei
         </div>
 
         <div class="gcash-qr-section" id="gcashQrSection">
+          <!-- TODO: Replace with your GCash QR code filename -->
+          <!-- <img src="assets/images/your-gcash-qr.png" alt="GCash QR Code" ...> -->
           <img src="assets/images/gcashqr.png" alt="GCash QR Code" class="gcash-qr-img" onerror="this.style.background='#f0f0f0';this.style.padding='20px';">
           <div class="gcash-qr-note">
             Scan using your GCash app<br>
@@ -1108,6 +1154,27 @@ function slideCarousel(id, dir){
   updateCarousel(id);
 }
 function goToSlide(id, idx){ carousels[id]=idx; updateCarousel(id); }
+
+/* ══ AUTO-SWIPE CAROUSEL ══ */
+let autoSwipeInterval;
+function startAutoSwipe(){
+  autoSwipeInterval = setInterval(()=>{
+    slideCarousel('moss', 1);
+    slideCarousel('black', 1);
+  }, 4000); // Swipe every 4 seconds
+}
+function stopAutoSwipe(){
+  clearInterval(autoSwipeInterval);
+}
+// Start auto-swipe on page load
+startAutoSwipe();
+// Stop auto-swipe when user interacts, restart after inactivity
+document.querySelectorAll('.carousel-btn, .carousel-dot').forEach(el=>{
+  el.addEventListener('click', ()=>{
+    stopAutoSwipe();
+    setTimeout(startAutoSwipe, 4000);
+  });
+});
 
 /* ══ SIZE + PRICE ══ */
 function selectSize(product, size, price){
