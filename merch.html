@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Official Merch — YTH Rally 2026</title>
+<link rel="icon" type="image/png" href="assets/images/yr26-logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+:root{
+  --black:#0a0a0a;
+  --white:#f4f2ee;
+  --border:#d8d4cc;
+  --accent:#c8a96e;
+  --moss:#4a5e3a;
+  --moss-light:#8a9e78;
+  --red-dark:#8b1a1a;
+  --mono:'DM Mono',monospace;
+  --serif:'Playfair Display',serif;
+  --hv:'Helvetica Neue',Helvetica,Arial,sans-serif;
+}
+body{background:var(--white);font-family:var(--mono);color:var(--black);line-height:1.6;-webkit-font-smoothing:antialiased;}
+
+/* ══ NAVBAR ══ */
+.navbar{
+  padding:clamp(14px,1.6vw,26px) clamp(20px,3.6vw,60px);
+  display:flex;justify-content:space-between;align-items:center;
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  background:transparent;
+  transition:background .45s ease,box-shadow .45s ease,backdrop-filter .45s ease;
+}
+.navbar.scrolled{
+  background:rgba(244,242,238,0.92);
+  backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  border-bottom:1px solid rgba(216,212,204,0.5);
+  box-shadow:0 2px 12px rgba(0,0,0,.07);
+}
+.logo{display:flex;align-items:center;text-decoration:none;}
+.logo-img{height:clamp(36px,4.5vw,72px);width:auto;display:block;filter:brightness(0) invert(1);opacity:.92;transition:filter .45s,opacity .45s;}
+.navbar.scrolled .logo-img{filter:brightness(0);opacity:.82;}
+.nav-links{display:flex;gap:clamp(18px,2.5vw,40px);list-style:none;}
+.nav-links a{font-size:clamp(10px,0.85vw,13px);text-transform:uppercase;letter-spacing:.18em;color:rgba(255,255,255,.88);text-decoration:none;transition:opacity .3s;}
+.navbar.scrolled .nav-links a{color:var(--black);}
+.nav-links a:hover{opacity:.5;}
+.nav-links a.active{border-bottom:1px solid currentColor;padding-bottom:2px;}
+.menu-toggle{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:6px;}
+.menu-toggle span{width:26px;height:2px;background:#fff;transition:background .45s,transform .3s,opacity .3s;display:block;}
+.navbar.scrolled .menu-toggle span{background:var(--black);}
+.menu-toggle.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.menu-toggle.open span:nth-child(2){opacity:0;}
+.menu-toggle.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+
+/* ══ MERCH HERO ══ */
+.merch-hero{
+  background:var(--black);
+  min-height:55vh;
+  display:flex;align-items:flex-end;justify-content:flex-start;
+  padding:clamp(120px,14vw,200px) clamp(32px,6vw,100px) clamp(48px,5vw,80px);
+  position:relative;overflow:hidden;
+}
+.merch-hero::before{
+  content:'MERCH';
+  position:absolute;right:-2vw;top:50%;transform:translateY(-50%);
+  font-family:var(--serif);font-size:clamp(120px,20vw,280px);
+  color:rgba(255,255,255,.03);font-weight:700;letter-spacing:-.05em;
+  pointer-events:none;white-space:nowrap;
+}
+.merch-hero-content{position:relative;z-index:1;}
+.merch-hero-eyebrow{
+  font-family:var(--mono);font-size:clamp(10px,.85vw,13px);
+  text-transform:uppercase;letter-spacing:.3em;color:var(--accent);margin-bottom:16px;
+}
+.merch-hero-title{
+  font-family:var(--serif);font-size:clamp(52px,7vw,110px);
+  font-weight:400;letter-spacing:-.03em;line-height:.9;color:var(--white);margin-bottom:24px;
+}
+.merch-hero-sub{
+  font-size:clamp(11px,.9vw,13px);letter-spacing:.15em;text-transform:uppercase;
+  color:rgba(255,255,255,.5);max-width:420px;line-height:2;
+}
+
+/* ══ PRE-ORDER BANNER ══ */
+.preorder-banner{
+  background:var(--accent);color:var(--black);
+  padding:14px clamp(32px,6vw,100px);
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  font-size:12px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;
+}
+.preorder-banner span{opacity:.7;}
+
+/* ══ PRODUCTS GRID ══ */
+.products-section{padding:clamp(60px,8vw,120px) clamp(32px,6vw,100px);}
+.section-label{
+  font-size:11px;letter-spacing:.3em;text-transform:uppercase;
+  color:#999;margin-bottom:clamp(40px,5vw,72px);
+  display:flex;align-items:center;gap:20px;
+}
+.section-label::after{content:'';flex:1;height:1px;background:var(--border);}
+.products-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,3vw,48px);}
+
+/* ══ PRODUCT CARD ══ */
+.product-card{display:flex;flex-direction:column;}
+.product-carousel{
+  position:relative;background:var(--black);
+  aspect-ratio:3/4;overflow:hidden;cursor:pointer;
+}
+.carousel-track{
+  display:flex;height:100%;
+  transition:transform .55s cubic-bezier(.77,0,.175,1);
+}
+.carousel-slide{
+  min-width:100%;height:100%;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+}
+/* Placeholder slides */
+.placeholder-slide{
+  width:100%;height:100%;
+  display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;
+}
+.ph-moss{background:linear-gradient(160deg,#3a4e2e 0%,#5a7248 50%,#2e3d22 100%);}
+.ph-black{background:linear-gradient(160deg,#1a1a1a 0%,#2d2d2d 50%,#0d0d0d 100%);}
+.placeholder-label{
+  font-family:var(--serif);font-size:clamp(22px,3vw,42px);
+  color:rgba(255,255,255,.15);letter-spacing:-.02em;text-align:center;padding:20px;
+}
+.placeholder-tag{
+  font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(255,255,255,.3);
+}
+.carousel-btn{
+  position:absolute;top:50%;transform:translateY(-50%);
+  background:rgba(255,255,255,.12);backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,.2);
+  color:#fff;width:40px;height:40px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:16px;z-index:5;
+  transition:background .3s;
+}
+.carousel-btn:hover{background:rgba(255,255,255,.22);}
+.carousel-btn.prev{left:12px;}
+.carousel-btn.next{right:12px;}
+.carousel-dots{
+  position:absolute;bottom:14px;left:50%;transform:translateX(-50%);
+  display:flex;gap:6px;z-index:5;
+}
+.carousel-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:rgba(255,255,255,.35);cursor:pointer;transition:background .3s,transform .3s;
+}
+.carousel-dot.active{background:#fff;transform:scale(1.3);}
+.product-tag{
+  position:absolute;top:16px;left:16px;z-index:4;
+  background:var(--accent);color:var(--black);
+  font-size:9px;letter-spacing:.25em;text-transform:uppercase;
+  padding:5px 10px;font-weight:500;
+}
+
+/* ══ PRODUCT INFO ══ */
+.product-info{padding:clamp(20px,2.5vw,36px) 0;border-bottom:1px solid var(--border);}
+.product-name{
+  font-family:var(--serif);font-size:clamp(22px,2.2vw,34px);
+  font-weight:400;line-height:1.1;margin-bottom:8px;
+}
+.product-color{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#888;margin-bottom:24px;}
+.product-price{
+  font-family:var(--serif);font-size:clamp(20px,1.8vw,28px);
+  margin-bottom:clamp(20px,2.5vw,32px);
+}
+.price-note{font-size:11px;letter-spacing:.1em;color:#888;margin-left:8px;font-family:var(--mono);}
+
+/* ══ SIZE PICKER ══ */
+.size-label{font-size:10px;letter-spacing:.25em;text-transform:uppercase;margin-bottom:14px;color:#666;}
+.size-options{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:clamp(20px,2.5vw,32px);}
+.size-btn{
+  width:44px;height:44px;border-radius:50%;
+  border:1px solid var(--border);background:transparent;
+  font-family:var(--mono);font-size:11px;letter-spacing:.05em;
+  cursor:pointer;transition:all .25s;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--black);position:relative;
+}
+.size-btn:hover{border-color:var(--black);}
+.size-btn.selected{border-color:var(--black);border-width:2px;background:var(--black);color:var(--white);}
+.size-btn.unavailable{opacity:.3;cursor:not-allowed;text-decoration:line-through;}
+.size-btn .size-xl{font-size:9px;}
+
+/* ══ QTY & ADD TO CART ══ */
+.add-row{display:flex;align-items:center;gap:16px;}
+.qty-control{
+  display:flex;align-items:center;gap:0;
+  border:1px solid var(--border);
+}
+.qty-btn{
+  width:36px;height:44px;background:transparent;border:none;
+  font-size:16px;cursor:pointer;transition:background .2s;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);
+}
+.qty-btn:hover{background:#f0ede8;}
+.qty-val{
+  width:40px;text-align:center;font-family:var(--mono);font-size:14px;
+  border-left:1px solid var(--border);border-right:1px solid var(--border);
+  height:44px;line-height:44px;
+}
+.btn-add{
+  flex:1;background:var(--black);color:var(--white);
+  border:none;padding:0 24px;height:44px;
+  font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+  cursor:pointer;transition:opacity .3s,transform .2s;white-space:nowrap;
+}
+.btn-add:hover{opacity:.82;}
+.btn-add:active{transform:scale(.98);}
+.btn-add:disabled{opacity:.35;cursor:not-allowed;}
+
+/* ══ GROUP PHOTO SECTION ══ */
+.group-section{margin:0;position:relative;overflow:hidden;background:var(--black);}
+.group-photo-frame{
+  width:100%;
+  min-height:clamp(320px,45vw,680px);
+  display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+}
+.group-photo-placeholder{
+  width:100%;height:100%;min-height:inherit;
+  background:linear-gradient(160deg,#111 0%,#1e1e1e 50%,#0d0d0d 100%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;
+}
+.group-photo-placeholder img{width:100%;height:100%;object-fit:cover;display:block;position:absolute;top:0;left:0;}
+.group-upload-hint{
+  position:absolute;bottom:clamp(24px,3vw,48px);left:clamp(32px,6vw,100px);z-index:2;
+}
+.group-upload-label{
+  font-family:var(--serif);font-size:clamp(28px,4vw,64px);
+  color:rgba(255,255,255,.12);font-weight:400;
+}
+.group-upload-sub{font-size:11px;letter-spacing:.25em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-top:8px;}
+/* Replace the placeholder img once you add real group photo: */
+/* .group-photo-placeholder img { display: block; } */
+
+/* ══ CART DRAWER ══ */
+.cart-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:2000;
+  opacity:0;pointer-events:none;transition:opacity .35s;
+}
+.cart-overlay.open{opacity:1;pointer-events:all;}
+.cart-drawer{
+  position:fixed;top:0;right:0;width:min(480px,100vw);height:100vh;
+  background:var(--white);z-index:2001;
+  display:flex;flex-direction:column;
+  transform:translateX(100%);transition:transform .45s cubic-bezier(.77,0,.175,1);
+  box-shadow:-4px 0 40px rgba(0,0,0,.15);
+}
+.cart-overlay.open .cart-drawer{transform:translateX(0);}
+.cart-header{
+  padding:clamp(24px,3vw,40px) clamp(24px,3vw,40px) 20px;
+  border-bottom:1px solid var(--border);
+  display:flex;justify-content:space-between;align-items:center;
+}
+.cart-title{font-family:var(--hv);font-size:18px;font-weight:600;letter-spacing:-.01em;}
+.cart-close{
+  background:none;border:1px solid var(--border);width:36px;height:36px;
+  border-radius:50%;cursor:pointer;font-size:14px;font-family:var(--hv);
+  display:flex;align-items:center;justify-content:center;transition:background .2s;
+}
+.cart-close:hover{background:#f0ede8;}
+.cart-items{flex:1;overflow-y:auto;padding:24px clamp(24px,3vw,40px);}
+.cart-empty{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  height:100%;gap:12px;color:#aaa;text-align:center;
+}
+.cart-empty-text{font-family:var(--hv);font-size:11px;letter-spacing:.12em;text-transform:uppercase;}
+.cart-item{
+  display:flex;gap:16px;padding:20px 0;border-bottom:1px solid var(--border);
+  align-items:flex-start;
+}
+.cart-item-swatch{
+  width:56px;height:56px;border-radius:4px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+}
+.swatch-moss{background:linear-gradient(135deg,#4a5e3a,#6a7e5a);}
+.swatch-black{background:linear-gradient(135deg,#1a1a1a,#333);}
+.swatch-letter{font-family:var(--hv);font-size:9px;letter-spacing:.12em;color:rgba(255,255,255,.5);text-transform:uppercase;}
+.cart-item-info{flex:1;}
+.cart-item-name{font-family:var(--hv);font-size:14px;font-weight:500;margin-bottom:4px;letter-spacing:-.01em;}
+.cart-item-meta{font-family:var(--hv);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#888;margin-bottom:8px;}
+.cart-item-price{font-family:var(--hv);font-size:13px;font-weight:600;}
+.cart-item-remove{
+  background:none;border:none;cursor:pointer;color:#bbb;font-size:16px;font-family:var(--hv);
+  transition:color .2s;padding:0;
+}
+.cart-item-remove:hover{color:var(--black);}
+.cart-footer{
+  padding:clamp(20px,2.5vw,32px) clamp(24px,3vw,40px);
+  border-top:1px solid var(--border);
+}
+.cart-total-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;}
+.cart-total-label{font-family:var(--hv);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#666;}
+.cart-total-amount{font-family:var(--hv);font-size:28px;font-weight:600;letter-spacing:-.02em;}
+.btn-checkout{
+  width:100%;background:var(--black);color:var(--white);
+  border:none;padding:18px;font-family:var(--hv);
+  font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;
+  cursor:pointer;transition:opacity .3s;
+}
+.btn-checkout:hover{opacity:.82;}
+.btn-checkout:disabled{opacity:.35;cursor:not-allowed;}
+
+/* ══ CART FAB ══ */
+.cart-fab{
+  position:fixed;bottom:clamp(24px,3vw,40px);right:clamp(24px,3vw,40px);
+  background:var(--black);color:var(--white);
+  width:56px;height:56px;border-radius:50%;border:none;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;z-index:500;box-shadow:0 4px 20px rgba(0,0,0,.25);
+  transition:transform .2s,box-shadow .2s;
+}
+.cart-fab:hover{transform:scale(1.08);box-shadow:0 6px 30px rgba(0,0,0,.3);}
+.cart-fab svg{width:22px;height:22px;}
+.cart-badge{
+  position:absolute;top:-4px;right:-4px;
+  background:var(--accent);color:var(--black);
+  width:20px;height:20px;border-radius:50%;
+  font-size:10px;font-weight:600;
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;transform:scale(0);transition:opacity .3s,transform .3s;
+}
+.cart-badge.visible{opacity:1;transform:scale(1);}
+
+/* ══ CHECKOUT OVERLAY ══ */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:3000;
+  opacity:0;pointer-events:none;transition:opacity .35s;
+  display:flex;align-items:center;justify-content:center;padding:20px;
+}
+.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal-box{
+  background:var(--white);width:min(620px,100%);max-height:90vh;
+  overflow-y:auto;position:relative;
+  animation:modalIn .4s cubic-bezier(.77,0,.175,1) both;
+}
+@keyframes modalIn{from{transform:translateY(40px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+.modal-top{
+  background:var(--black);color:var(--white);
+  padding:clamp(24px,3vw,40px);
+  position:relative;
+}
+.modal-close{
+  position:absolute;top:20px;right:20px;
+  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);
+  color:#fff;width:32px;height:32px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:13px;font-family:var(--hv);transition:background .2s;
+}
+.modal-close:hover{background:rgba(255,255,255,.2);}
+.modal-step-label{font-family:var(--hv);font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;font-weight:500;}
+.modal-title{font-family:var(--hv);font-size:clamp(22px,2.5vw,32px);font-weight:700;letter-spacing:-.03em;line-height:1.1;}
+.modal-body{padding:clamp(28px,3.5vw,48px);}
+
+/* Payment options */
+.payment-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:32px;}
+.payment-option{
+  border:2px solid var(--border);padding:24px 20px;
+  cursor:pointer;transition:all .25s;display:flex;flex-direction:column;gap:8px;
+  text-align:left;background:transparent;
+}
+.payment-option:hover{border-color:var(--black);}
+.payment-option.selected{border-color:var(--black);background:#f8f7f4;}
+.payment-option-name{font-family:var(--hv);font-size:15px;font-weight:600;letter-spacing:-.01em;}
+.payment-option-desc{font-family:var(--hv);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#888;line-height:1.7;}
+
+/* GCash QR */
+.gcash-qr-section{
+  display:none;border:1px solid var(--border);padding:32px;
+  text-align:center;margin-bottom:24px;
+}
+.gcash-qr-section.show{display:block;}
+.gcash-qr-img{width:200px;height:200px;object-fit:contain;margin:0 auto 16px;}
+.gcash-qr-note{font-family:var(--hv);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#666;line-height:1.9;}
+
+/* Form */
+.form-divider{height:1px;background:var(--border);margin:32px 0;}
+.form-group{margin-bottom:28px;}
+.form-label{display:block;font-family:var(--hv);font-size:10px;letter-spacing:.25em;text-transform:uppercase;margin-bottom:10px;color:#555;font-weight:500;}
+.form-input{
+  width:100%;padding:14px 0;border:none;border-bottom:2px solid var(--black);
+  background:transparent;font-family:var(--hv);font-size:15px;font-weight:400;
+  transition:border-color .3s;text-transform:uppercase;letter-spacing:.02em;
+}
+.form-input:focus{outline:none;border-bottom-color:#666;}
+.form-input::placeholder{text-transform:none;color:transparent;}
+
+/* Cart summary in modal */
+.order-summary{margin-bottom:28px;}
+.order-summary-title{font-family:var(--hv);font-size:10px;letter-spacing:.25em;text-transform:uppercase;margin-bottom:16px;color:#666;font-weight:500;}
+.order-line{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #ece9e3;font-family:var(--hv);font-size:12px;letter-spacing:.01em;}
+.order-line:last-child{border-bottom:none;}
+.order-total-line{display:flex;justify-content:space-between;padding:16px 0;font-family:var(--hv);font-size:20px;font-weight:700;letter-spacing:-.02em;border-top:2px solid var(--black);margin-top:8px;}
+
+/* Receipt ticket */
+.receipt-section{display:none;}
+.receipt-section.show{display:block;}
+.ticket{
+  border:1px solid var(--border);position:relative;margin-top:40px;
+}
+.ticket-header{background:var(--black);color:var(--white);padding:24px 28px;}
+.ticket-ref{font-family:var(--hv);font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--accent);margin-bottom:6px;font-weight:500;}
+.ticket-event{font-family:var(--hv);font-size:20px;font-weight:700;letter-spacing:-.02em;}
+.ticket-body{padding:28px;}
+.ticket-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #ece9e3;font-family:var(--hv);font-size:13px;}
+.ticket-row:last-child{border-bottom:none;}
+.ticket-key{color:#888;letter-spacing:.12em;text-transform:uppercase;font-size:10px;font-weight:500;}
+.ticket-val{font-weight:500;text-align:right;max-width:60%;}
+.ticket-badge{
+  display:inline-block;padding:5px 12px;font-family:var(--hv);font-size:10px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;
+  margin-top:16px;
+}
+.badge-cash{background:#f5f0e8;color:#6b4c1a;border:1px solid #e8d9b8;}
+.badge-gcash{background:#e8f0e8;color:#1a5e1a;border:1px solid #b8d9b8;}
+.ticket-perforated{
+  border-top:2px dashed var(--border);padding:20px 28px;
+  background:#faf9f7;font-family:var(--hv);font-size:12px;line-height:1.9;color:#666;
+}
+.ticket-perforated strong{color:var(--black);font-weight:600;}
+
+/* Loading screen */
+.loading-screen{
+  position:absolute;inset:0;background:var(--white);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:24px;z-index:10;opacity:0;pointer-events:none;transition:opacity .3s;
+}
+.loading-screen.active{opacity:1;pointer-events:all;}
+.loading-bar-track{width:200px;height:1px;background:var(--border);}
+.loading-bar-fill{height:100%;background:var(--black);width:0%;transition:width .08s linear;}
+.loading-label{font-family:var(--hv);font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:#999;}
+
+/* Receipt-only modal state */
+.modal-box.receipt-only .modal-top,
+.modal-box.receipt-only #stepDetails .modal-body > *:not(#receiptOnlyWrap){display:none;}
+
+/* Upload area */
+.upload-area{
+  border:1px dashed var(--border);padding:32px 20px;text-align:center;
+  cursor:pointer;transition:border-color .25s,background .25s;margin-bottom:0;
+  position:relative;
+}
+.upload-area:hover,.upload-area.drag-over{border-color:var(--black);background:#f8f7f4;}
+.upload-area input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.upload-area-label{font-family:var(--hv);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#888;line-height:2;}
+.upload-area-label strong{color:var(--black);font-weight:600;display:block;font-size:12px;margin-bottom:6px;}
+.upload-preview{display:none;margin-top:16px;position:relative;}
+.upload-preview img{max-width:100%;max-height:160px;object-fit:contain;border:1px solid var(--border);}
+.upload-preview-name{font-family:var(--hv);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#888;margin-top:8px;}
+.upload-clear{
+  position:absolute;top:6px;right:6px;background:var(--black);color:var(--white);
+  border:none;width:22px;height:22px;border-radius:50%;cursor:pointer;
+  font-family:var(--hv);font-size:11px;display:flex;align-items:center;justify-content:center;
+}
+
+/* Proceed button */
+.btn-proceed{
+  width:100%;background:var(--black);color:var(--white);
+  border:none;padding:18px;font-family:var(--hv);
+  font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;
+  cursor:pointer;transition:opacity .3s;margin-top:32px;
+}
+.btn-proceed:hover{opacity:.82;}
+.btn-proceed:disabled{opacity:.35;cursor:not-allowed;}
+
+/* ══ FOOTER ══ */
+.footer{
+  background:var(--black);color:#555;
+  padding:clamp(40px,5vw,72px) clamp(32px,6vw,100px);
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  flex-wrap:wrap;gap:16px;
+}
+
+/* ══ ADD TOAST ══ */
+.toast{
+  position:fixed;bottom:100px;right:clamp(24px,3vw,40px);z-index:600;
+  background:var(--black);color:var(--white);
+  padding:14px 20px;font-family:var(--hv);font-size:11px;letter-spacing:.15em;text-transform:uppercase;font-weight:500;
+  transform:translateY(20px);opacity:0;pointer-events:none;
+  transition:all .4s cubic-bezier(.77,0,.175,1);
+  max-width:280px;line-height:1.6;
+}
+.toast.show{transform:translateY(0);opacity:1;}
+
+/* ══ RESPONSIVE ══ */
+
+/* Large tablets and small laptops */
+@media(max-width:1024px){
+  .products-grid{grid-template-columns:repeat(2,1fr);gap:20px;}
+  .merch-hero{min-height:45vh;padding-top:clamp(100px,12vw,140px);}
+  .merch-hero-title{font-size:clamp(40px,6vw,80px);}
+  .product-info{padding:16px 0;}
+  .product-name{font-size:clamp(18px,2vw,28px);}
+  .product-price{font-size:clamp(16px,1.5vw,22px);}
+  .size-options{gap:8px;}
+  .size-btn{width:38px;height:38px;font-size:10px;}
+  .cart-drawer{width:min(400px,85vw);}
+  .modal-box{width:min(560px,95vw);}
+}
+
+/* Tablets (portrait) */
+@media(max-width:768px){
+  .products-grid{grid-template-columns:1fr;}
+  .payment-grid{grid-template-columns:1fr;}
+  .add-row{flex-wrap:wrap;}
+  .btn-add{width:100%;}
+  .nav-links{
+    position:fixed;top:70px;right:-100%;background:var(--white);
+    flex-direction:column;padding:32px;width:240px;
+    box-shadow:-2px 0 16px rgba(0,0,0,.1);transition:right .3s;
+  }
+  .nav-links.active{right:0;}
+  .nav-links a{color:var(--black)!important;}
+  .menu-toggle{display:flex;}
+  .merch-hero{min-height:40vh;padding:clamp(90px,15vw,120px) clamp(20px,5vw,40px) clamp(32px,6vw,48px);}
+  .merch-hero-title{font-size:clamp(36px,8vw,56px);}
+  .merch-hero-sub{font-size:clamp(10px,1.2vw,12px);max-width:320px;}
+  .preorder-banner{flex-direction:column;text-align:center;gap:8px;padding:12px 20px;font-size:10px;}
+  .products-section{padding:clamp(40px,8vw,60px) clamp(20px,5vw,40px);}
+  .section-label{margin-bottom:clamp(24px,5vw,40px);}
+  .product-carousel{aspect-ratio:4/5;}
+  .product-info{padding:16px 0 20px;}
+  .product-name{font-size:clamp(20px,3vw,26px);}
+  .product-color{font-size:10px;margin-bottom:16px;}
+  .product-price{font-size:clamp(18px,2vw,22px);margin-bottom:16px;}
+  .size-label{margin-bottom:10px;}
+  .size-options{gap:8px;margin-bottom:16px;}
+  .size-btn{width:40px;height:40px;font-size:11px;}
+  .qty-control{height:40px;}
+  .qty-btn{width:32px;height:40px;}
+  .qty-val{width:36px;height:40px;line-height:40px;}
+  .btn-add{height:40px;font-size:10px;padding:0 16px;}
+  .group-photo-frame{min-height:clamp(240px,50vw,400px);}
+  .group-upload-label{font-size:clamp(20px,4vw,36px);}
+  .group-upload-sub{font-size:10px;}
+  .cart-fab{bottom:20px;right:20px;width:48px;height:48px;}
+  .cart-fab svg{width:18px;height:18px;}
+  .cart-badge{width:18px;height:18px;font-size:9px;}
+  .cart-drawer{width:100%;}
+  .cart-header{padding:20px;}
+  .cart-title{font-size:16px;}
+  .cart-items{padding:16px 20px;}
+  .cart-item{padding:16px 0;}
+  .cart-item-swatch{width:48px;height:48px;}
+  .cart-item-name{font-size:13px;}
+  .cart-item-meta{font-size:9px;}
+  .cart-item-price{font-size:12px;}
+  .cart-footer{padding:16px 20px;}
+  .cart-total-amount{font-size:22px;}
+  .btn-checkout{padding:14px;font-size:10px;}
+  .modal-overlay{padding:12px;}
+  .modal-box{width:100%;max-height:92vh;}
+  .modal-top{padding:20px;}
+  .modal-title{font-size:clamp(20px,3vw,26px);}
+  .modal-body{padding:20px;}
+  .payment-grid{gap:12px;}
+  .payment-option{padding:16px 14px;}
+  .payment-option-name{font-size:14px;}
+  .payment-option-desc{font-size:9px;line-height:1.5;}
+  .gcash-qr-section{padding:20px;}
+  .gcash-qr-img{width:160px;height:160px;}
+  .gcash-qr-note{font-size:10px;}
+  .form-divider{margin:24px 0;}
+  .form-group{margin-bottom:20px;}
+  .form-label{font-size:9px;}
+  .form-input{font-size:14px;padding:12px 0;}
+  .order-summary{margin-bottom:20px;}
+  .order-line{font-size:11px;padding:8px 0;}
+  .order-total-line{font-size:16px;padding:12px 0;}
+  .ticket{margin-top:24px;}
+  .ticket-header{padding:18px 20px;}
+  .ticket-ref{font-size:9px;}
+  .ticket-event{font-size:16px;}
+  .ticket-body{padding:18px 20px;}
+  .ticket-row{font-size:12px;padding:8px 0;}
+  .ticket-key{font-size:9px;}
+  .ticket-badge{font-size:9px;padding:4px 10px;}
+  .ticket-perforated{padding:16px 20px;font-size:11px;}
+  .btn-proceed{padding:14px;font-size:10px;margin-top:20px;}
+  .loading-screen{gap:16px;}
+  .loading-bar-track{width:160px;}
+  .loading-label{font-size:9px;}
+  .upload-area{padding:20px 14px;}
+  .upload-area-label{font-size:9px;line-height:1.8;}
+  .upload-area-label strong{font-size:11px;margin-bottom:4px;}
+  .toast{bottom:80px;right:16px;padding:12px 16px;font-size:10px;max-width:240px;}
+  .footer{padding:clamp(28px,6vw,40px) clamp(20px,5vw,40px);font-size:9px;}
+}
+
+/* Large phones */
+@media(max-width:480px){
+  .navbar{padding:clamp(12px,2vw,18px) clamp(16px,4vw,24px);}
+  .logo-img{height:clamp(28px,5vw,40px);}
+  .nav-links{top:56px;padding:24px;width:200px;}
+  .nav-links a{font-size:clamp(9px,1.2vw,11px);}
+  .menu-toggle{gap:4px;}
+  .menu-toggle span{width:22px;}
+  .merch-hero-eyebrow{font-size:clamp(9px,1.2vw,11px);letter-spacing:.2em;margin-bottom:10px;}
+  .merch-hero-title{font-size:clamp(32px,10vw,48px);margin-bottom:16px;}
+  .merch-hero-sub{font-size:clamp(9px,1.4vw,11px);line-height:1.8;max-width:280px;}
+  .preorder-banner{font-size:9px;padding:10px 16px;}
+  .section-label{font-size:10px;letter-spacing:.25em;}
+  .products-section{padding:clamp(32px,8vw,48px) clamp(16px,4vw,24px);}
+  .product-name{font-size:clamp(18px,4vw,22px);}
+  .product-color{font-size:9px;}
+  .product-price{font-size:clamp(16px,2.5vw,18px);}
+  .size-btn{width:36px;height:36px;font-size:10px;}
+  .qty-btn{width:28px;height:36px;font-size:14px;}
+  .qty-val{width:32px;height:36px;line-height:36px;font-size:12px;}
+  .btn-add{height:36px;font-size:9px;padding:0 12px;}
+  .group-photo-frame{min-height:clamp(200px,55vw,320px);}
+  .group-upload-label{font-size:clamp(16px,5vw,24px);}
+  .group-upload-sub{font-size:9px;}
+  .cart-fab{bottom:16px;right:16px;width:44px;height:44px;}
+  .cart-fab svg{width:16px;height:16px;}
+  .cart-badge{width:16px;height:16px;font-size:8px;}
+  .cart-header{padding:16px;}
+  .cart-title{font-size:14px;}
+  .cart-close{width:32px;height:32px;font-size:12px;}
+  .cart-items{padding:12px 16px;}
+  .cart-item-swatch{width:44px;height:44px;}
+  .cart-item-name{font-size:12px;}
+  .cart-item-meta{font-size:8px;}
+  .cart-item-price{font-size:11px;}
+  .cart-item-remove{font-size:14px;}
+  .cart-footer{padding:12px 16px;}
+  .cart-total-label{font-size:9px;}
+  .cart-total-amount{font-size:18px;}
+  .btn-checkout{padding:12px;font-size:9px;}
+  .modal-top{padding:16px;}
+  .modal-step-label{font-size:9px;}
+  .modal-title{font-size:clamp(18px,4vw,22px);}
+  .modal-close{top:14px;right:14px;width:28px;height:28px;font-size:11px;}
+  .modal-body{padding:16px;}
+  .payment-option{padding:14px 12px;}
+  .payment-option-name{font-size:13px;}
+  .payment-option-desc{font-size:8px;}
+  .gcash-qr-img{width:140px;height:140px;}
+  .gcash-qr-note{font-size:9px;}
+  .form-divider{margin:20px 0;}
+  .form-group{margin-bottom:16px;}
+  .form-label{font-size:8px;}
+  .form-input{font-size:13px;padding:10px 0;}
+  .order-summary-title{font-size:9px;margin-bottom:12px;}
+  .order-line{font-size:10px;padding:6px 0;}
+  .order-total-line{font-size:14px;padding:10px 0;}
+  .ticket{margin-top:20px;}
+  .ticket-header{padding:14px 16px;}
+  .ticket-ref{font-size:8px;}
+  .ticket-event{font-size:14px;}
+  .ticket-body{padding:14px 16px;}
+  .ticket-row{font-size:11px;padding:6px 0;}
+  .ticket-key{font-size:8px;}
+  .ticket-val{max-width:55%;}
+  .ticket-badge{font-size:8px;padding:3px 8px;margin-top:12px;}
+  .ticket-perforated{padding:12px 16px;font-size:10px;line-height:1.7;}
+  .btn-proceed{padding:12px;font-size:9px;margin-top:16px;}
+  .loading-screen{gap:12px;}
+  .loading-bar-track{width:140px;}
+  .loading-label{font-size:8px;}
+  .upload-area{padding:16px 12px;}
+  .upload-area-label{font-size:8px;}
+  .upload-area-label strong{font-size:10px;}
+  .upload-preview img{max-height:120px;}
+  .toast{bottom:70px;right:12px;padding:10px 14px;font-size:9px;max-width:220px;}
+  .footer{flex-direction:column;text-align:center;gap:8px;padding:clamp(24px,6vw,32px) clamp(16px,4vw,24px)!important;font-size:8px;}
+}
+
+/* Small phones */
+@media(max-width:360px){
+  .merch-hero{min-height:35vh;padding:clamp(80px,18vw,100px) clamp(14px,4vw,20px) clamp(24px,5vw,32px);}
+  .merch-hero-title{font-size:clamp(28px,12vw,40px);}
+  .merch-hero-sub{font-size:clamp(8px,1.6vw,10px);max-width:240px;}
+  .product-name{font-size:clamp(16px,5vw,18px);}
+  .size-btn{width:32px;height:32px;font-size:9px;}
+  .qty-btn{width:24px;height:32px;font-size:12px;}
+  .qty-val{width:28px;height:32px;line-height:32px;font-size:11px;}
+  .btn-add{height:32px;font-size:8px;}
+  .cart-fab{width:40px;height:40px;bottom:12px;right:12px;}
+  .cart-fab svg{width:14px;height:14px;}
+  .cart-badge{width:14px;height:14px;font-size:7px;}
+  .modal-body{padding:14px;}
+  .gcash-qr-img{width:120px;height:120px;}
+  .toast{max-width:200px;padding:8px 12px;font-size:8px;}
+}
+
+/* Landscape phones - optimize height */
+@media(max-height:500px) and (orientation:landscape){
+  .merch-hero{min-height:60vh;}
+  .products-section{padding:24px clamp(16px,4vw,24px);}
+  .product-carousel{aspect-ratio:16/9;}
+  .cart-fab{bottom:12px;right:12px;}
+}
+
+/* High DPI displays */
+@media(-webkit-min-device-pixel-ratio:2),(min-resolution:192dpi){
+  .product-carousel,.cart-item-swatch,.swatch-moss,.swatch-black{
+    -webkit-backface-visibility:hidden;
+    backface-visibility:hidden;
+  }
+}
+
+/* Print styles */
+@media print{
+  .navbar,.cart-fab,.cart-overlay,.modal-overlay,.toast,.footer{display:none!important;}
+  .products-section,.product-card,.product-info{page-break-inside:avoid;}
+  body{background:#fff;color:#000;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <a href="index.html" class="logo">
+    <img src="assets/images/yr26-logo.png" alt="YTH Rally 2026" class="logo-img">
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="index.html#registration">Register</a></li>
+    <li><a href="merch.html" class="active">Merch</a></li>
+  </ul>
+  <div class="menu-toggle" id="menuToggle" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- MERCH HERO -->
+<section class="merch-hero">
+  <div class="merch-hero-content">
+    <div class="merch-hero-eyebrow">YTH Rally 2026 · Official Collection</div>
+    <h1 class="merch-hero-title">Official<br>Merch</h1>
+    <p class="merch-hero-sub">Pre-order your piece before it's gone.<br>Limited quantities. Pickup on April 29.</p>
+  </div>
+</section>
+
+<!-- PRE-ORDER BANNER -->
+<div class="preorder-banner">
+  <div>Pre-Order Now Open — Limited Stock Only</div>
+  <span>April 29 Pickup</span>
+</div>
+
+<!-- PRODUCTS SECTION -->
+<section class="products-section">
+  <div class="section-label">Select Your Merch</div>
+  <div class="products-grid">
+
+    <!-- PRODUCT 1: MOSS GREEN -->
+    <div class="product-card" id="card-moss">
+      <div class="product-carousel" id="carousel-moss">
+        <div class="product-tag">It Only Takes One</div>
+        <div class="carousel-track" id="track-moss">
+          <!-- Slide 1 -->
+          <div class="carousel-slide">
+            <div class="placeholder-slide ph-moss">
+              <div class="placeholder-label">Front View</div>
+              <div class="placeholder-tag">Moss Green Shirt</div>
+            </div>
+          </div>
+          <!-- Slide 2 -->
+          <div class="carousel-slide">
+            <div class="placeholder-slide ph-moss" style="filter:brightness(.85)">
+              <div class="placeholder-label">Back View</div>
+              <div class="placeholder-tag">Moss Green Shirt</div>
+            </div>
+          </div>
+          <!-- Slide 3 -->
+          <div class="carousel-slide">
+            <div class="placeholder-slide ph-moss" style="filter:brightness(.7)">
+              <div class="placeholder-label">Detail</div>
+              <div class="placeholder-tag">Moss Green Shirt</div>
+            </div>
+          </div>
+        </div>
+        <button class="carousel-btn prev" onclick="slideCarousel('moss',-1)">&#8592;</button>
+        <button class="carousel-btn next" onclick="slideCarousel('moss',1)">&#8594;</button>
+        <div class="carousel-dots" id="dots-moss">
+          <span class="carousel-dot active" onclick="goToSlide('moss',0)"></span>
+          <span class="carousel-dot" onclick="goToSlide('moss',1)"></span>
+          <span class="carousel-dot" onclick="goToSlide('moss',2)"></span>
+        </div>
+      </div>
+      <div class="product-info">
+        <h2 class="product-name">It Only Takes One</h2>
+        <div class="product-color">Moss Green · Unisex Tee</div>
+        <div class="product-price" id="price-moss">₱500 <span class="price-note">/ piece</span></div>
+        <div class="size-label">Select Size</div>
+        <div class="size-options" id="sizes-moss">
+          <button class="size-btn" data-size="S" data-product="moss" onclick="selectSize('moss','S',500)">S</button>
+          <button class="size-btn" data-size="M" data-product="moss" onclick="selectSize('moss','M',500)">M</button>
+          <button class="size-btn" data-size="L" data-product="moss" onclick="selectSize('moss','L',500)">L</button>
+          <button class="size-btn" data-size="XL" data-product="moss" onclick="selectSize('moss','XL',600)"><span class="size-xl">XL</span></button>
+          <button class="size-btn" data-size="2XL" data-product="moss" onclick="selectSize('moss','2XL',600)"><span class="size-xl">2XL</span></button>
+          <button class="size-btn" data-size="3XL" data-product="moss" onclick="selectSize('moss','3XL',600)"><span class="size-xl">3XL</span></button>
+        </div>
+        <div class="add-row">
+          <div class="qty-control">
+            <button class="qty-btn" onclick="changeQty('moss',-1)">−</button>
+            <div class="qty-val" id="qty-moss">1</div>
+            <button class="qty-btn" onclick="changeQty('moss',1)">+</button>
+          </div>
+          <button class="btn-add" id="add-moss" onclick="addToCart('moss')" disabled>Add to Cart</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRODUCT 2: BLACK -->
+    <div class="product-card" id="card-black">
+      <div class="product-carousel" id="carousel-black">
+        <div class="product-tag" style="background:var(--white);color:var(--black);">Be the Altar</div>
+        <div class="carousel-track" id="track-black">
+          <div class="carousel-slide">
+            <div class="placeholder-slide ph-black">
+              <div class="placeholder-label">Front View</div>
+              <div class="placeholder-tag">Black Shirt</div>
+            </div>
+          </div>
+          <div class="carousel-slide">
+            <div class="placeholder-slide ph-black" style="filter:brightness(.75)">
+              <div class="placeholder-label">Back View</div>
+              <div class="placeholder-tag">Black Shirt</div>
+            </div>
+          </div>
+          <div class="carousel-slide">
+            <div class="placeholder-slide ph-black" style="filter:brightness(.6)">
+              <div class="placeholder-label">Detail</div>
+              <div class="placeholder-tag">Black Shirt</div>
+            </div>
+          </div>
+        </div>
+        <button class="carousel-btn prev" onclick="slideCarousel('black',-1)">&#8592;</button>
+        <button class="carousel-btn next" onclick="slideCarousel('black',1)">&#8594;</button>
+        <div class="carousel-dots" id="dots-black">
+          <span class="carousel-dot active" onclick="goToSlide('black',0)"></span>
+          <span class="carousel-dot" onclick="goToSlide('black',1)"></span>
+          <span class="carousel-dot" onclick="goToSlide('black',2)"></span>
+        </div>
+      </div>
+      <div class="product-info">
+        <h2 class="product-name">Be the Altar</h2>
+        <div class="product-color">Black · Unisex Tee</div>
+        <div class="product-price" id="price-black">₱500 <span class="price-note">/ piece</span></div>
+        <div class="size-label">Select Size</div>
+        <div class="size-options" id="sizes-black">
+          <button class="size-btn" data-size="S" data-product="black" onclick="selectSize('black','S',500)">S</button>
+          <button class="size-btn" data-size="M" data-product="black" onclick="selectSize('black','M',500)">M</button>
+          <button class="size-btn" data-size="L" data-product="black" onclick="selectSize('black','L',500)">L</button>
+          <button class="size-btn" data-size="XL" data-product="black" onclick="selectSize('black','XL',600)"><span class="size-xl">XL</span></button>
+        </div>
+        <div class="add-row">
+          <div class="qty-control">
+            <button class="qty-btn" onclick="changeQty('black',-1)">−</button>
+            <div class="qty-val" id="qty-black">1</div>
+            <button class="qty-btn" onclick="changeQty('black',1)">+</button>
+          </div>
+          <button class="btn-add" id="add-black" onclick="addToCart('black')" disabled>Add to Cart</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- GROUP PHOTO SECTION -->
+<section class="group-section" id="group-photo">
+  <div class="group-photo-frame">
+    <div class="group-photo-placeholder">
+      <!-- Replace the src below with your actual group photo path -->
+      <!-- <img src="assets/images/group-merch.jpg" alt="Merch Group Photo"> -->
+      <div style="font-family:var(--serif);font-size:clamp(18px,2.5vw,32px);color:rgba(255,255,255,.08);text-transform:uppercase;letter-spacing:.1em;text-align:center;padding:40px;">Group Photo<br>Coming Soon</div>
+    </div>
+    <div class="group-upload-hint">
+      <div class="group-upload-label">Together<br>in Revival</div>
+      <div class="group-upload-sub">YTH Rally 2026 · Official Merch</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div>© 2026 YTH Rally · All rights reserved</div>
+  <div>Official Merch Pre-Order</div>
+</footer>
+
+<!-- CART FAB -->
+<button class="cart-fab" onclick="openCart()">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/>
+    <path d="M16 10a4 4 0 01-8 0"/>
+  </svg>
+  <span class="cart-badge" id="cartBadge">0</span>
+</button>
+
+<!-- CART DRAWER -->
+<div class="cart-overlay" id="cartOverlay" onclick="closeCartOnBg(event)">
+  <div class="cart-drawer">
+    <div class="cart-header">
+      <div class="cart-title">Your Cart</div>
+      <button class="cart-close" onclick="closeCart()">✕</button>
+    </div>
+    <div class="cart-items" id="cartItems">
+      <div class="cart-empty">
+        <div class="cart-empty-text">Your cart is empty</div>
+      </div>
+    </div>
+    <div class="cart-footer">
+      <div class="cart-total-row">
+        <div class="cart-total-label">Total</div>
+        <div class="cart-total-amount" id="cartTotal">₱0</div>
+      </div>
+      <button class="btn-checkout" id="checkoutBtn" onclick="openCheckout()" disabled>Proceed to Pre-Order</button>
+    </div>
+  </div>
+</div>
+
+<!-- CHECKOUT MODAL -->
+<div class="modal-overlay" id="checkoutModal" onclick="closeModalOnBg(event)">
+  <div class="modal-box" id="modalBox">
+
+    <!-- Loading screen -->
+    <div class="loading-screen" id="loadingScreen">
+      <div class="loading-label" id="loadingLabel">Processing</div>
+      <div class="loading-bar-track"><div class="loading-bar-fill" id="loadingFill"></div></div>
+    </div>
+
+    <!-- STEP 1: Payment -->
+    <div id="stepPayment">
+      <div class="modal-top">
+        <button class="modal-close" onclick="closeCheckout()">✕</button>
+        <div class="modal-step-label">Step 1 of 2 · Payment</div>
+        <div class="modal-title">Choose Payment<br>Method</div>
+      </div>
+      <div class="modal-body">
+        <div class="payment-grid">
+          <button class="payment-option" id="opt-cash" onclick="selectPayment('cash')">
+            <div class="payment-option-name">Cash</div>
+            <div class="payment-option-desc">Pay upon pickup at the church on event day.</div>
+          </button>
+          <button class="payment-option" id="opt-gcash" onclick="selectPayment('gcash')">
+            <div class="payment-option-name">E-Wallet</div>
+            <div class="payment-option-desc">GCash transfer. Scan QR below to pay now.</div>
+          </button>
+        </div>
+
+        <div class="gcash-qr-section" id="gcashQrSection">
+          <img src="assets/images/gcashqr.png" alt="GCash QR Code" class="gcash-qr-img" onerror="this.style.background='#f0f0f0';this.style.padding='20px';">
+          <div class="gcash-qr-note">
+            Scan using your GCash app<br>
+            Amount: <strong id="qrAmount">₱0</strong><br>
+            Screenshot your receipt — you'll need it for confirmation.
+          </div>
+        </div>
+
+        <div class="form-divider"></div>
+
+        <div class="order-summary">
+          <div class="order-summary-title">Order Summary</div>
+          <div id="modalOrderLines"></div>
+          <div class="order-total-line">
+            <span>Total</span>
+            <span id="modalTotal">₱0</span>
+          </div>
+        </div>
+
+        <button class="btn-proceed" id="btnToDetails" onclick="goToDetails()" disabled>Continue to Details</button>
+      </div>
+    </div>
+
+    <!-- STEP 2: Details + Receipt -->
+    <div id="stepDetails" style="display:none;">
+      <div class="modal-top">
+        <button class="modal-close" onclick="closeCheckout()">✕</button>
+        <div class="modal-step-label">Step 2 of 2 · Your Details</div>
+        <div class="modal-title">Complete<br>Pre-Order</div>
+      </div>
+      <div class="modal-body">
+
+        <!-- Before form: summary -->
+        <div class="order-summary" id="detailsOrderSummary"></div>
+
+        <div class="form-divider"></div>
+
+        <div class="form-group">
+          <label class="form-label" for="fname">Full Name</label>
+          <input class="form-input" type="text" id="fname" oninput="this.value=this.value.toUpperCase()" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="fcontact">Contact Number</label>
+          <input class="form-input" type="tel" id="fcontact" maxlength="11" oninput="this.value=this.value.replace(/\D/g,'').slice(0,11)" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="femail">Email Address</label>
+          <input class="form-input" type="email" id="femail" oninput="this.value=this.value.toUpperCase()" required>
+        </div>
+
+        <!-- Receipt upload — only shown for GCash -->
+        <div class="form-group" id="receiptUploadGroup" style="display:none;">
+          <label class="form-label">GCash Receipt Screenshot</label>
+          <div class="upload-area" id="uploadArea" ondragover="uploadDragOver(event)" ondragleave="uploadDragLeave(event)" ondrop="uploadDrop(event)">
+            <input type="file" id="receiptFile" accept="image/*,.pdf" onchange="handleFileSelect(this)">
+            <div class="upload-area-label"><strong>Attach Receipt</strong>Drag & drop or click to upload<br>JPG, PNG or PDF</div>
+          </div>
+          <div class="upload-preview" id="uploadPreview">
+            <img id="previewImg" src="" alt="Receipt preview">
+            <button class="upload-clear" onclick="clearReceipt(event)">✕</button>
+            <div class="upload-preview-name" id="previewName"></div>
+          </div>
+        </div>
+
+        <button class="btn-proceed" onclick="submitPreorder()">Confirm Pre-Order</button>
+
+        <!-- Receipt Ticket — shown in its own full-modal state -->
+        <div class="receipt-section" id="receiptSection">
+          <div class="form-divider"></div>
+          <div class="ticket">
+            <div class="ticket-header">
+              <div class="ticket-ref">Pre-Order Confirmed · Ref <span id="rcptRef"></span></div>
+              <div class="ticket-event">YTH Rally 2026 — Official Merch</div>
+            </div>
+            <div class="ticket-body">
+              <div class="ticket-row">
+                <span class="ticket-key">Name</span>
+                <span class="ticket-val" id="rcptName"></span>
+              </div>
+              <div class="ticket-row">
+                <span class="ticket-key">Contact</span>
+                <span class="ticket-val" id="rcptContact"></span>
+              </div>
+              <div class="ticket-row">
+                <span class="ticket-key">Email</span>
+                <span class="ticket-val" id="rcptEmail"></span>
+              </div>
+              <div class="ticket-row">
+                <span class="ticket-key">Items</span>
+                <span class="ticket-val" id="rcptItems"></span>
+              </div>
+              <div class="ticket-row">
+                <span class="ticket-key">Total</span>
+                <span class="ticket-val" id="rcptTotal"></span>
+              </div>
+              <div class="ticket-row">
+                <span class="ticket-key">Payment</span>
+                <span class="ticket-val">
+                  <span class="ticket-badge" id="rcptPayBadge"></span>
+                </span>
+              </div>
+            </div>
+            <div class="ticket-perforated" id="rcptNote"></div>
+          </div>
+          <button class="btn-proceed" onclick="doneBtnClicked()" style="margin-top:20px;">Done</button>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyGgnBB7Ppf4vrpjCVDGODgmjm1MhO7Jq6amvcy_LZojAi-QckTSYCESaRz1aWG4Ig/exec'; // <-- paste your GAS URL here
+
+/* ══ STATE ══ */
+const cart = [];
+const state = {
+  moss: { size: null, qty: 1, price: 500 },
+  black: { size: null, qty: 1, price: 500 }
+};
+const carousels = { moss: 0, black: 0 };
+let selectedPayment = '';
+
+const PRODUCTS = {
+  moss: { name: 'It Only Takes One', color: 'Moss Green', swatch: 'swatch-moss', letter: 'MG' },
+  black: { name: 'Be the Altar', color: 'Black', swatch: 'swatch-black', letter: 'BA' }
+};
+
+/* ══ NAVBAR ══ */
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+});
+function toggleMenu(){
+  document.getElementById('menuToggle').classList.toggle('open');
+  document.getElementById('navLinks').classList.toggle('active');
+}
+
+/* ══ CAROUSEL ══ */
+function updateCarousel(id){
+  const idx = carousels[id];
+  document.getElementById('track-'+id).style.transform = `translateX(-${idx * 100}%)`;
+  document.querySelectorAll(`#dots-${id} .carousel-dot`).forEach((d,i)=>{
+    d.classList.toggle('active', i===idx);
+  });
+}
+function slideCarousel(id, dir){
+  const count = document.querySelectorAll(`#track-${id} .carousel-slide`).length;
+  carousels[id] = (carousels[id] + dir + count) % count;
+  updateCarousel(id);
+}
+function goToSlide(id, idx){ carousels[id]=idx; updateCarousel(id); }
+
+/* ══ SIZE + PRICE ══ */
+function selectSize(product, size, price){
+  // clear other selections
+  document.querySelectorAll(`#sizes-${product} .size-btn`).forEach(b=>b.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+  state[product].size = size;
+  state[product].price = price;
+  document.getElementById('price-'+product).innerHTML = `₱${price} <span class="price-note">/ piece</span>`;
+  document.getElementById('add-'+product).disabled = false;
+}
+
+/* ══ QTY ══ */
+function changeQty(product, delta){
+  state[product].qty = Math.max(1, state[product].qty + delta);
+  document.getElementById('qty-'+product).textContent = state[product].qty;
+}
+
+/* ══ CART ══ */
+function addToCart(product){
+  const { size, qty, price } = state[product];
+  const p = PRODUCTS[product];
+  const key = `${product}-${size}`;
+  const existing = cart.find(i=>i.key===key);
+  if(existing){ existing.qty += qty; }
+  else{ cart.push({ key, product, name: p.name, color: p.color, swatch: p.swatch, letter: p.letter, size, qty, price }); }
+  renderCart();
+  showToast(`${p.name} (${size}) added to cart`);
+}
+
+function renderCart(){
+  const el = document.getElementById('cartItems');
+  if(cart.length === 0){
+    el.innerHTML = `<div class="cart-empty"><div class="cart-empty-text">Your cart is empty</div></div>`;
+    document.getElementById('checkoutBtn').disabled = true;
+    document.getElementById('cartTotal').textContent = '₱0';
+    updateBadge(0);
+    return;
+  }
+  let total = 0, count = 0;
+  el.innerHTML = cart.map((item,idx) => {
+    total += item.price * item.qty;
+    count += item.qty;
+    return `<div class="cart-item">
+      <div class="cart-item-swatch ${item.swatch}"><span class="swatch-letter">${item.letter}</span></div>
+      <div class="cart-item-info">
+        <div class="cart-item-name">${item.name}</div>
+        <div class="cart-item-meta">${item.color} · Size ${item.size} · Qty ${item.qty}</div>
+        <div class="cart-item-price">₱${item.price * item.qty}</div>
+      </div>
+      <button class="cart-item-remove" onclick="removeFromCart(${idx})">✕</button>
+    </div>`;
+  }).join('');
+  document.getElementById('cartTotal').textContent = '₱'+total;
+  document.getElementById('checkoutBtn').disabled = false;
+  updateBadge(count);
+}
+
+function removeFromCart(idx){
+  cart.splice(idx,1);
+  renderCart();
+}
+
+function updateBadge(count){
+  const badge = document.getElementById('cartBadge');
+  badge.textContent = count;
+  badge.classList.toggle('visible', count > 0);
+}
+
+function openCart(){ document.getElementById('cartOverlay').classList.add('open'); }
+function closeCart(){ document.getElementById('cartOverlay').classList.remove('open'); }
+function closeCartOnBg(e){ if(e.target===document.getElementById('cartOverlay')) closeCart(); }
+
+/* ══ CHECKOUT ══ */
+function openCheckout(){
+  closeCart();
+  populateModalSummary();
+  document.getElementById('stepPayment').style.display='';
+  document.getElementById('stepDetails').style.display='none';
+  document.getElementById('receiptSection').classList.remove('show');
+  document.getElementById('checkoutModal').classList.add('open');
+  selectedPayment='';
+  document.getElementById('opt-cash').classList.remove('selected');
+  document.getElementById('opt-gcash').classList.remove('selected');
+  document.getElementById('gcashQrSection').classList.remove('show');
+  document.getElementById('btnToDetails').disabled=true;
+  // Reset step 2 visibility
+  document.querySelector('#stepDetails .modal-top').style.display='';
+  const body = document.querySelector('#stepDetails .modal-body');
+  Array.from(body.children).forEach(el=>{ el.style.display=''; });
+  document.getElementById('receiptUploadGroup').style.display='none';
+  receiptFileData=null; receiptFileName='';
+  if(document.getElementById('receiptFile')) document.getElementById('receiptFile').value='';
+  document.getElementById('uploadPreview').style.display='none';
+}
+function closeCheckout(){ document.getElementById('checkoutModal').classList.remove('open'); }
+function closeModalOnBg(e){ if(e.target===document.getElementById('checkoutModal')) closeCheckout(); }
+
+function populateModalSummary(){
+  let total=0;
+  const lines = cart.map(item=>{
+    total += item.price*item.qty;
+    return `<div class="order-line">
+      <span>${item.name} · ${item.color} · ${item.size} × ${item.qty}</span>
+      <span>₱${item.price*item.qty}</span>
+    </div>`;
+  }).join('');
+  document.getElementById('modalOrderLines').innerHTML = lines;
+  document.getElementById('modalTotal').textContent = '₱'+total;
+  document.getElementById('qrAmount').textContent = '₱'+total;
+}
+
+function selectPayment(method){
+  selectedPayment = method;
+  document.getElementById('opt-cash').classList.toggle('selected', method==='cash');
+  document.getElementById('opt-gcash').classList.toggle('selected', method==='gcash');
+  document.getElementById('gcashQrSection').classList.toggle('show', method==='gcash');
+  document.getElementById('btnToDetails').disabled = false;
+}
+
+function goToDetails(){
+  if(!selectedPayment) return;
+  document.getElementById('stepPayment').style.display='none';
+  document.getElementById('stepDetails').style.display='';
+  // Show/hide receipt upload based on payment
+  document.getElementById('receiptUploadGroup').style.display = selectedPayment==='gcash' ? '' : 'none';
+  // populate details summary
+  let total=0;
+  const lines = cart.map(item=>{
+    total += item.price*item.qty;
+    return `<div class="order-line">
+      <span>${item.name} (${item.color}) · ${item.size} × ${item.qty}</span>
+      <span>₱${item.price*item.qty}</span>
+    </div>`;
+  }).join('');
+  document.getElementById('detailsOrderSummary').innerHTML =
+    `<div class="order-summary-title">Order Summary</div>${lines}
+     <div class="order-total-line"><span>Total</span><span>₱${total}</span></div>`;
+  document.getElementById('modalBox').scrollTop=0;
+}
+
+/* ══ RECEIPT UPLOAD ══ */
+let receiptFileData = null;
+let receiptFileName = '';
+
+function uploadDragOver(e){ e.preventDefault(); document.getElementById('uploadArea').classList.add('drag-over'); }
+function uploadDragLeave(e){ document.getElementById('uploadArea').classList.remove('drag-over'); }
+function uploadDrop(e){
+  e.preventDefault(); document.getElementById('uploadArea').classList.remove('drag-over');
+  const file = e.dataTransfer.files[0]; if(file) processReceiptFile(file);
+}
+function handleFileSelect(input){ const file = input.files[0]; if(file) processReceiptFile(file); }
+
+function processReceiptFile(file){
+  if(file.size > 10*1024*1024){ showToast('File too large. Max 10MB.'); return; }
+  receiptFileName = file.name;
+  const reader = new FileReader();
+  reader.onload = function(e){
+    receiptFileData = e.target.result;
+    const prev = document.getElementById('uploadPreview');
+    const img = document.getElementById('previewImg');
+    prev.style.display = 'block';
+    if(file.type.startsWith('image/')){ img.src = receiptFileData; img.style.display = 'block'; }
+    else { img.style.display = 'none'; }
+    document.getElementById('previewName').textContent = file.name;
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearReceipt(e){
+  e.stopPropagation();
+  receiptFileData = null; receiptFileName = '';
+  document.getElementById('receiptFile').value = '';
+  document.getElementById('uploadPreview').style.display = 'none';
+  document.getElementById('previewImg').src = '';
+}
+
+/* ══ SUBMIT ══ */
+async function submitPreorder(){
+  const name    = document.getElementById('fname').value.trim();
+  const contact = document.getElementById('fcontact').value.trim();
+  const email   = document.getElementById('femail').value.trim();
+ 
+  if(!name || !contact || !email){ showToast('Please fill in all fields.'); return; }
+  if(contact.length < 11){ showToast('Contact number must be 11 digits.'); return; }
+  if(!email.includes('@') || !email.includes('.')){ showToast('Please enter a valid email address.'); return; }
+  if(selectedPayment === 'gcash' && !receiptFileData){ showToast('Please upload your GCash receipt.'); return; }
+ 
+  const ref          = 'MERCH-' + Date.now().toString(36).toUpperCase().slice(-6);
+  const total        = cart.reduce((s,i)=>s+i.price*i.qty, 0);
+  const itemsSummary = cart.map(i=>`${i.name} (${i.color}) ${i.size} ×${i.qty}`).join(', ');
+ 
+  // Build GCash receipt payload (strip the base64 data-URL prefix if present)
+  let gcashBase64 = '';
+  let gcashMime   = '';
+  let gcashFName  = '';
+  if(receiptFileData){
+    const parts = receiptFileData.split(',');
+    gcashBase64 = parts[1] || '';
+    const mimeMatch = receiptFileData.match(/data:(.*?);base64/);
+    gcashMime  = mimeMatch ? mimeMatch[1] : 'image/jpeg';
+    gcashFName = receiptFileName || (ref + '-receipt.jpg');
+  }
+ 
+  const payload = {
+    type:          'merch',
+    refNo:         ref,
+    timestamp:     new Date().toISOString(),
+    name:          name,
+    contact:       contact,
+    email:         email,
+    items:         itemsSummary,
+    total:         total,
+    paymentMethod: selectedPayment,   // 'cash' or 'gcash'
+    gcashFile:     gcashBase64,
+    gcashMime:     gcashMime,
+    gcashFileName: gcashFName,
+    notes:         '',
+    localChurch:   ''   // add an input field if you want to collect this
+  };
+ 
+  showLoading(async ()=>{
+    // ── Fire & forget to Google Sheets (non-blocking) ──
+    try {
+      await fetch(APPS_SCRIPT_URL, {
+        method:  'POST',
+        headers: { 'Content-Type': 'text/plain' },
+        body:    JSON.stringify(payload)
+      });
+    } catch(err){
+      // Silent fail — receipt still shows even if network hiccups
+      console.warn('GAS submit error:', err);
+    }
+ 
+    // ── Fill on-screen receipt ──
+    document.getElementById('rcptRef').textContent     = ref;
+    document.getElementById('rcptName').textContent    = name;
+    document.getElementById('rcptContact').textContent = contact;
+    document.getElementById('rcptEmail').textContent   = email;
+    document.getElementById('rcptItems').textContent   = itemsSummary;
+    document.getElementById('rcptTotal').textContent   = '₱'+total;
+ 
+    const badge = document.getElementById('rcptPayBadge');
+    const note  = document.getElementById('rcptNote');
+    if(selectedPayment==='cash'){
+      badge.textContent = 'Cash — Pay on Pickup';
+      badge.className   = 'ticket-badge badge-cash';
+      note.innerHTML    = `<strong>Payment Instructions:</strong><br>Your merch is reserved! Payment of <strong>₱${total}</strong> in cash shall be made at the church upon pickup on <strong>April 29, 2026</strong>. Present reference number <strong>${ref}</strong> at the merch booth.`;
+    } else {
+      badge.textContent = 'GCash — E-Wallet';
+      badge.className   = 'ticket-badge badge-gcash';
+      note.innerHTML    = `<strong>Payment Instructions:</strong><br>Thank you for your GCash payment! Your merch will be <strong>ready for pickup on April 29, 2026</strong> at the church. Show this confirmation and your GCash receipt at the merch booth. Reference: <strong>${ref}</strong>.`;
+    }
+ 
+    showReceiptOnly();
+  });
+}
+
+function showLoading(callback){
+  const screen = document.getElementById('loadingScreen');
+  const fill = document.getElementById('loadingFill');
+  const label = document.getElementById('loadingLabel');
+  screen.classList.add('active');
+  fill.style.transition = 'none'; fill.style.width = '0%';
+
+  const steps = [
+    { pct: 25, text: 'Verifying details', delay: 0 },
+    { pct: 55, text: 'Sending data to records', delay: 500 },
+    { pct: 80, text: 'Processing payment', delay: 1000 },
+    { pct: 100, text: 'Complete', delay: 1500 },
+  ];
+  steps.forEach(s=>{
+    setTimeout(()=>{
+      fill.style.transition = 'width .5s ease';
+      fill.style.width = s.pct+'%';
+      label.textContent = s.text;
+    }, s.delay);
+  });
+  setTimeout(()=>{
+    screen.classList.remove('active');
+    callback();
+  }, 2200);
+}
+
+function showReceiptOnly(){
+  // Hide all step 2 content except the receipt
+  const body = document.querySelector('#stepDetails .modal-body');
+  Array.from(body.children).forEach(el=>{
+    if(el.id !== 'receiptSection') el.style.display = 'none';
+  });
+  // Hide the step header too and replace with clean header
+  document.querySelector('#stepDetails .modal-top').style.display = 'none';
+  document.getElementById('receiptSection').classList.add('show');
+  document.getElementById('modalBox').scrollTop = 0;
+}
+
+function doneBtnClicked(){
+  closeCheckout();
+  resetAll();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function resetAll(){
+  cart.length=0;
+  renderCart();
+  document.getElementById('fname').value='';
+  document.getElementById('fcontact').value='';
+  document.getElementById('femail').value='';
+  receiptFileData = null; receiptFileName = '';
+  document.getElementById('receiptFile').value = '';
+  document.getElementById('uploadPreview').style.display = 'none';
+}
+
+/* ══ TOAST ══ */
+let toastTimer;
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.remove('show'), 2800);
+}
+</script>
+</body>
+</html>
