@@ -1352,22 +1352,20 @@ function clearReceipt(e){
   document.getElementById('previewImg').src = '';
 }
 
-/* ══ SUBMIT ══ */
 async function submitPreorder(){
   const name    = document.getElementById('fname').value.trim();
   const contact = document.getElementById('fcontact').value.trim();
-  const email   = document.getElementById('femail').value.trim();
- 
+  const email   = document.getElementById('femail').value.trim().toLowerCase();
+
   if(!name || !contact || !email){ showToast('Please fill in all fields.'); return; }
   if(contact.length < 11){ showToast('Contact number must be 11 digits.'); return; }
   if(!email.includes('@') || !email.includes('.')){ showToast('Please enter a valid email address.'); return; }
   if(selectedPayment === 'gcash' && !receiptFileData){ showToast('Please upload your GCash receipt.'); return; }
- 
+
   const ref          = 'MERCH-' + Date.now().toString(36).toUpperCase().slice(-6);
   const total        = cart.reduce((s,i)=>s+i.price*i.qty, 0);
   const itemsSummary = cart.map(i=>`${i.name} (${i.color}) ${i.size} ×${i.qty}`).join(', ');
- 
-  // Build GCash receipt payload (strip the base64 data-URL prefix if present)
+
   let gcashBase64 = '';
   let gcashMime   = '';
   let gcashFName  = '';
@@ -1378,7 +1376,7 @@ async function submitPreorder(){
     gcashMime  = mimeMatch ? mimeMatch[1] : 'image/jpeg';
     gcashFName = receiptFileName || (ref + '-receipt.jpg');
   }
- 
+
   const payload = {
     type:          'merch',
     refNo:         ref,
@@ -1388,49 +1386,70 @@ async function submitPreorder(){
     email:         email,
     items:         itemsSummary,
     total:         total,
-    paymentMethod: selectedPayment,   // 'cash' or 'gcash'
+    paymentMethod: selectedPayment,
     gcashFile:     gcashBase64,
     gcashMime:     gcashMime,
     gcashFileName: gcashFName,
     notes:         '',
-    localChurch:   ''   // add an input field if you want to collect this
+    localChurch:   ''
   };
- 
-  showLoading(async ()=>{
-    // ── Fire & forget to Google Sheets (non-blocking) ──
-    try {
-      await fetch(APPS_SCRIPT_URL, {
-        method:  'POST',
-        headers: { 'Content-Type': 'text/plain' },
-        body:    JSON.stringify(payload)
-      });
-    } catch(err){
-      // Silent fail — receipt still shows even if network hiccups
-      console.warn('GAS submit error:', err);
-    }
- 
-    // ── Fill on-screen receipt ──
-    document.getElementById('rcptRef').textContent     = ref;
-    document.getElementById('rcptName').textContent    = name;
-    document.getElementById('rcptContact').textContent = contact;
-    document.getElementById('rcptEmail').textContent   = email;
-    document.getElementById('rcptItems').textContent   = itemsSummary;
-    document.getElementById('rcptTotal').textContent   = '₱'+total;
- 
-    const badge = document.getElementById('rcptPayBadge');
-    const note  = document.getElementById('rcptNote');
-    if(selectedPayment==='cash'){
-      badge.textContent = 'Cash — Pay on Pickup';
-      badge.className   = 'ticket-badge badge-cash';
-      note.innerHTML    = `<strong>Payment Instructions:</strong><br>Your merch is reserved! Payment of <strong>₱${total}</strong> in cash shall be made at the church upon pickup on <strong>April 29, 2026</strong>. Present reference number <strong>${ref}</strong> at the merch booth.`;
-    } else {
-      badge.textContent = 'GCash — E-Wallet';
-      badge.className   = 'ticket-badge badge-gcash';
-      note.innerHTML    = `<strong>Payment Instructions:</strong><br>Thank you for your GCash payment! Your merch will be <strong>ready for pickup on April 29, 2026</strong> at the church. Show this confirmation and your GCash receipt at the merch booth. Reference: <strong>${ref}</strong>.`;
-    }
- 
-    showReceiptOnly();
-  });
+
+  // Show loading screen while sending data
+  const screen = document.getElementById('loadingScreen');
+  const fill = document.getElementById('loadingFill');
+  const label = document.getElementById('loadingLabel');
+  screen.classList.add('active');
+  fill.style.transition = 'none'; fill.style.width = '0%';
+  label.textContent = 'Sending your order...';
+
+  // Animate loading bar
+  setTimeout(()=>{
+    fill.style.transition = 'width 1.5s ease';
+    fill.style.width = '60%';
+  }, 100);
+
+  try {
+    const response = await fetch(APPS_SCRIPT_URL, {
+      method:  'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body:    JSON.stringify(payload)
+    });
+
+    // Complete the loading bar
+    fill.style.width = '100%';
+    label.textContent = 'Order confirmed!';
+
+    // Small delay to show completion
+    await new Promise(r => setTimeout(r, 500));
+  } catch(err){
+    console.warn('GAS submit error:', err);
+    label.textContent = 'Sending... (may take a moment)';
+    // Continue anyway - show receipt even if network fails
+  }
+
+  screen.classList.remove('active');
+
+  // Populate receipt
+  document.getElementById('rcptRef').textContent     = ref;
+  document.getElementById('rcptName').textContent    = name;
+  document.getElementById('rcptContact').textContent = contact;
+  document.getElementById('rcptEmail').textContent   = email;
+  document.getElementById('rcptItems').textContent   = itemsSummary;
+  document.getElementById('rcptTotal').textContent   = '₱'+total;
+
+  const badge = document.getElementById('rcptPayBadge');
+  const note  = document.getElementById('rcptNote');
+  if(selectedPayment==='cash'){
+    badge.textContent = 'Cash — Pay on Pickup';
+    badge.className   = 'ticket-badge badge-cash';
+    note.innerHTML    = `<strong>Payment Instructions:</strong><br>Your merch is reserved! Payment of <strong>₱${total}</strong> in cash shall be made at the church upon pickup on <strong>April 29, 2026</strong>. Present reference number <strong>${ref}</strong> at the merch booth.`;
+  } else {
+    badge.textContent = 'GCash — E-Wallet';
+    badge.className   = 'ticket-badge badge-gcash';
+    note.innerHTML    = `<strong>Payment Instructions:</strong><br>Thank you for your GCash payment! Your merch will be <strong>ready for pickup on April 29, 2026</strong> at the church. Show this confirmation and your GCash receipt at the merch booth. Reference: <strong>${ref}</strong>.`;
+  }
+
+  showReceiptOnly();
 }
 
 function showLoading(callback){
