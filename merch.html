@@ -1045,7 +1045,7 @@ body{background:var(--white);font-family:var(--mono);color:var(--black);line-hei
         </div>
         <div class="form-group">
           <label class="form-label" for="femail">Email Address</label>
-          <input class="form-input" type="email" id="femail" oninput="this.value=this.value.toUpperCase()" required>
+          <input class="form-input" type="email" id="femail" oninput="this.value=this.value.toUpperCase()">
         </div>
 
         <!-- Receipt upload — only shown for GCash -->
@@ -1357,9 +1357,9 @@ async function submitPreorder(){
   const contact = document.getElementById('fcontact').value.trim();
   const email   = document.getElementById('femail').value.trim().toLowerCase();
 
-  if(!name || !contact || !email){ showToast('Please fill in all fields.'); return; }
+  if(!name || !contact){ showToast('Please fill in all required fields.'); return; }
   if(contact.length < 11){ showToast('Contact number must be 11 digits.'); return; }
-  if(!email.includes('@') || !email.includes('.')){ showToast('Please enter a valid email address.'); return; }
+  if(email && (!email.includes('@') || !email.includes('.'))){ showToast('Please enter a valid email address.'); return; }
   if(selectedPayment === 'gcash' && !receiptFileData){ showToast('Please upload your GCash receipt.'); return; }
 
   const ref          = 'MERCH-' + Date.now().toString(36).toUpperCase().slice(-6);
